@@ -1,0 +1,149 @@
+[
+    {
+        "id":"1",
+        "snippet":"Personal Website for a C-suite Executive",
+        "client":"C-suite Executive at a Leading Financial Institution",
+        "title":"Website Design ",
+        "image":"/images/case-studies/c-suite.png",
+        "bgColor": true,
+        "heading":"C-suite Executive at a Leading Financial Institution",
+        "challenge":{
+            "title":"Need for a professional personal online presence ",
+            "description":"Our client, a prominent C-suite executive at a leading financial institution, recognized the need for a professional personal website to enhance their personal branding and online visibility"
+        },
+        "solution":{
+            "head":"Developed a custom personal website",
+            "steps": [
+                {
+                    "title":"Step 1 Title",
+                    "items":[
+                        "Description of the first item",
+                        "Description of the first item"
+                    ]
+                },
+                {
+                    "title":"Step 2 Title",
+                    "items":[
+                        "Description of the first item",
+                        "Description of the first item"
+                    ]
+                },
+                {
+                    "title":"Step 3 Title",
+                    "items":[
+                        "Description of the first item",
+                        "Description of the first item"
+                    ]
+                }
+
+            ]
+        },
+        "result":{
+            "head":"Enhanced personal branding and online visibility",
+            "show": [
+                "Developed a modern, responsive website that showcases the executive's professional achievements and thought leadership.",
+                "Integrated a content management system (CMS) to allow easy updates and content creation.",
+                "Implemented SEO best practices to improve search engine rankings and increase online visibility."
+            ]
+        }
+    },
+    {
+        "id":"2",
+        "snippet":"Branding for Elderly Companionship Service",
+        "client":"On-Demand Companion App for Elderly",
+        "title":"Website Design ",
+        "bgColor": false,
+        "image":"/images/case-studies/branding-elderly.png",
+        "heading":"C-suite Executive at a Leading Financial Institution",
+        "challenge":{
+            "title":"Establishing a strong brand identity ",
+            "description":"Our client, a leading provider of companionship services for the elderly in the UK, sought toestablish a brand identity that conveys compassion, trustworthiness, and inclusivity.They needed a logo and branding strategy that resonates with bothelderly users and their families, while also appealing to potential young companions"
+        },
+        "solution":{
+            "head":"Developed a comprehensive branding strategy that reflects the client's values and target audience:",
+            "steps": [
+                {
+                    "title":"Step 1 Title",
+                    "items":[
+                        "Description of the first item",
+                        "Description of the first item"
+                    ]
+                },
+                {
+                    "title":"Step 2 Title",
+                    "items":[
+                        "Description of the first item",
+                        "Description of the first item"
+                    ]
+                },
+                {
+                    "title":"Step 3 Title",
+                    "items":[
+                        "Description of the first item",
+                        "Description of the first item"
+                    ]
+                }
+
+            ]
+        },
+        "result":{
+            "head":"Ensured consistent application of the brand guideline",
+            "show": [
+                "Developed a modern, responsive website that showcases the executive's professional achievements and thought leadership.",
+                "Integrated a content management system (CMS) to allow easy updates and content creation.",
+                "Implemented SEO best practices to improve search engine rankings and increase online visibility."
+            ]
+        }
+    },
+    {
+        "id":"3",
+        "snippet":"Business Plan and Pitch Deck for a Food Tech Startup",
+        "client":"Food Tech Startup",
+        "title":"Food Tech Startup",
+        "image":"/images/case-studies/case-study-business-plan.png",
+        "bgColor": true,
+        "heading":"C-suite Executive at a Leading Financial Institution",
+        "challenge":{
+            "title":"Need for investment and business direction",
+            "description":"The client, a food tech startup, faced a significant challenge in attracting investmentand defining a clear business direction. Despite having a revolutionary product idea, they lacked a comprehensive business plan and a compelling pitch deckto present to potential investors and partners."
+        },
+        "solution":{
+            "head":"Created a detailed business plan and a compelling pitch deck",
+            "steps": [
+                {
+                    "title":"Step 1 Title",
+                    "items":[
+                        "Description of the first item",
+                        "Description of the first item"
+                    ]
+                },
+                {
+                    "title":"Step 2 Title",
+                    "items":[
+                        "Description of the first item",
+                        "Description of the first item"
+                    ]
+                },
+                {
+                    "title":"Step 3 Title",
+                    "items":[
+                        "Description of the first item",
+                        "Description of the first item"
+                    ]
+                }
+
+            ]
+        },
+        "result":{
+            "head":"Successfully secured funding and strategic partnerships",
+            "show": [
+                "Developed a modern, responsive website that showcases the executive's professional achievements and thought leadership.",
+                "Integrated a content management system (CMS) to allow easy updates and content creation.",
+                "Implemented SEO best practices to improve search engine rankings and increase online visibility."
+            ]
+        }
+    }
+    
+    
+    
+]
