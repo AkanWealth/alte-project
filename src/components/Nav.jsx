@@ -5,16 +5,21 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faOutdent, faXmark } from "@fortawesome/free-solid-svg-icons";
 import Button from "./Button";
 import { AnimatePresence, motion } from "framer-motion";
+import QuoteModal from "./QuoteModal";
 
 const Nav = () => {
   const [inViewport] = useViewport("1024px");
   const [isOpen, setIsOpen] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const { pathname } = useLocation();
   const mainPath = pathname.split("/")[1] || "home";
 
   const setNavState = () => {
     if (inViewport) return;
     setIsOpen((isOpen) => !isOpen);
+  };
+  const toggleModal = () => {
+    setShowModal(!showModal);  // Toggle the modal state
   };
 
   return (
@@ -91,10 +96,11 @@ const Nav = () => {
                 Case Studies
               </NavLink>
             </menu>
-            <Button>Request a Quote</Button>
+            <Button clickHandler={toggleModal}>Request a Quote</Button>
           </motion.div>
         )}
       </AnimatePresence>
+      {showModal && <QuoteModal onClose={toggleModal} />} 
     </nav>
   );
 };
