@@ -1,6 +1,6 @@
 import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { IconButton, IconOnlyButton } from "../../components/Button";
-import Service from "../../components/Service";
+import Service from "../../components/service";
 import Testimonial from "../../components/Testimonial";
 import { TestimonialsContent } from "../../contents/testimonials";
 import { servicesContent } from "../../contents/services";
@@ -164,8 +164,8 @@ const Home = () => {
           </div>
         </div>
       </section>
-      <section className="bg-sec-50">
-        <div className="inner px-5 py-6 md:py-16 lg:px-10 lg:py-24">
+      <section className="bg-sec-50 px-5 py-6 md:py-16 lg:px-10 lg:py-24">
+        <div className="inner">
           <h2 className="mb-8 text-center font-raleway text-2xl font-bold text-pry-500 md:mb-10 md:text-4xl lg:mb-14 lg:text-5xl">
             Explore Our Services
           </h2>
@@ -177,14 +177,14 @@ const Home = () => {
         </div>
       </section>
       <section className="bg-pry-500 px-5 py-6 md:py-16 lg:px-10 lg:py-24">
-        <div className="inner">
-          <h2 className="mb-8 text-center font-raleway text-2xl font-bold text-white md:mb-10 md:text-start md:text-4xl lg:mb-14 lg:text-5xl">
+        <div className="inner flex flex-col items-center">
+          <h2 className="mb-8 text-center font-raleway text-2xl font-bold text-white md:mb-10 md:self-start md:text-start md:text-4xl lg:mb-14 lg:text-5xl">
             What Our Clients Say?
           </h2>
-          <div className="flex flex-col gap-6 md:flex-row md:flex-wrap lg:gap-12">
+          <div className="grid grid-rows-[auto_auto_auto] items-center gap-6 md:grid-cols-3 md:grid-rows-1 lg:gap-12">
             {TestimonialsContent.map((testimonial) => (
               <Testimonial
-                relativeStyles="shrink grow basis-96"
+                relativeStyles="h-full"
                 data={testimonial}
                 key={testimonial.name}
               />

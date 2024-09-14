@@ -73,6 +73,7 @@ const Swipers = ({ slidesData }) => {
         },
         1024: {
           slidesPerView: 3,
+          spaceBetween: 50,
         },
       }}
     >

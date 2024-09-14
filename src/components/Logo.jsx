@@ -1,10 +1,15 @@
 import { Link } from "react-router-dom";
 
-const Logo = ({ relativeStyles }) => {
+const Logo = ({ relativeStyles, img = "/logo.png", clickHandler }) => {
   return (
-    <Link to="/" aria-label="Alte Consulting home" className="w-fit">
+    <Link
+      to="/"
+      aria-label="Alte Consulting home"
+      className="w-fit"
+      onClick={clickHandler}
+    >
       <img
-        src="/logo.png"
+        src={img}
         alt="Alto Consulting logo"
         className={`${
           relativeStyles || "max-h-[55.88px] w-full max-w-20 lg:max-w-[120px]"

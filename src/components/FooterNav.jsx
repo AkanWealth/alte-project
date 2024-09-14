@@ -1,6 +1,10 @@
 import { Link } from "react-router-dom";
+import { useCookiesContext } from "../contexts/CookiesContext";
+import { TextButton } from "./Button";
 
 const FooterNav = ({ relativeStyles }) => {
+  const { setDisplayCookies, setToShow } = useCookiesContext();
+
   return (
     <div
       className={`${relativeStyles} flex flex-row flex-wrap-reverse gap-6 font-inter text-white`}
@@ -41,7 +45,14 @@ const FooterNav = ({ relativeStyles }) => {
               <a href="#">Contact Us</a>
             </li>
             <li>
-              <a href="#">Cookie policy</a>
+              <TextButton
+                clickHandler={() => {
+                  setDisplayCookies(true);
+                  setToShow("preferences");
+                }}
+              >
+                Cookie policy
+              </TextButton>
             </li>
           </ul>
         </div>

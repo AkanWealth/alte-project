@@ -1,11 +1,11 @@
-import studylists from "../../case-studies.json"
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
-import { IconButton } from "./Button";
-import CaseStudyListing from "./CaseStudyListing";
-const CaseStudyListings = () => {
+import { IconButton } from "../../components/Button";
+import { caseStudiesContent } from "../../contents/caseStudies";
+import CaseStudyListing from "../../components/CaseStudyListing";
 
-    return (
-      <main>
+const CaseStudies = () => {
+  return (
+    <main>
       <section className="grid min-h-[450px] place-content-center bg-pry-500 bg-[url('/images/hero-bg.png')] bg-cover bg-right bg-no-repeat px-5 py-8 md:py-12 lg:px-10 lg:py-14 xl:py-20">
         <div className="inner flex flex-col-reverse gap-12">
           <div className="flex flex-col text-left text-white lg:items-center lg:text-center">
@@ -18,7 +18,12 @@ const CaseStudyListings = () => {
               through innovative technology and strategic consulting.
             </p>
             <div className="flex flex-row flex-wrap gap-3 lg:gap-6">
-              <IconButton rightIcon={faArrowRight}>
+              <IconButton
+                rightIcon={faArrowRight}
+                target="_blank"
+                rel="noreferrer"
+                link="https://calendar.google.com/calendar/appointments/schedules/AcZssZ00GcrPNO72R7ML0RTskXRADvJdJmiBJh_CP03IxNCaTERG0W5huuLvIC1gD9nUZCYDWjJR9qCo?gv=true"
+              >
                 Book a Discovery Call
               </IconButton>
               <IconButton variant="sec" rightIcon={faArrowRight}>
@@ -46,33 +51,16 @@ const CaseStudyListings = () => {
             Our Case Studies
           </h2>
         </div>
-        {studylists.map((studyCase) =>(
-        <div className={`px-5 py-8 md:py-12 lg:px-10 lg:py-14 xl:py-20 ${studyCase.bgColor ? 'bg-white' : 'bg-pry-500'}`}>
-                <CaseStudyListing 
-                key={studyCase.id} 
-                studyCase={studyCase}
-                />
-        </div>
-         ))}
-      </section>
-      
-      <section className="bg-sec-500 px-5 py-12 md:px-12 lg:py-20 xl:py-28">
-        <div className="inner">
-          <div className="mx-auto flex max-w-[1192px] flex-col items-center rounded-[32px] bg-pry-500 bg-[url('/images/backgrounds/letter.png')] bg-right-bottom bg-no-repeat p-8 md:p-12 lg:p-16">
-            <h2 className="mb-5 max-w-[40ch] text-center font-raleway text-2xl/[24px] font-bold text-white lg:mb-10 lg:text-4xl/[48px]">
-              Discover How Alte Can Help{" "}
-              <span className="text-sec-200">
-                Ready to Elevate Your Business?
-              </span>
-            </h2>
-            <IconButton rightIcon={faArrowRight}>
-              Book a Discovery Call
-            </IconButton>
-          </div>
-        </div>
+        {caseStudiesContent.map((caseStudy, index) => (
+          <CaseStudyListing
+            data={caseStudy}
+            bgColor={index % 2 === 0 ? "bg-white" : "bg-pry-500"}
+            key={caseStudy.id}
+          />
+        ))}
       </section>
     </main>
-    )
-  }
-  
-  export default CaseStudyListings
+  );
+};
+
+export default CaseStudies;

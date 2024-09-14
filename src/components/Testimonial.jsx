@@ -1,7 +1,7 @@
 const Testimonial = ({ relativeStyles, data }) => {
   return (
     <article
-      className={`${relativeStyles} rounded-lg bg-white px-8 py-6 font-inter`}
+      className={`${relativeStyles} w-full max-w-[381px] rounded-lg bg-white px-8 py-6 font-inter`}
     >
       <div className="mb-4 flex flex-row items-center gap-4 lg:gap-6">
         <img

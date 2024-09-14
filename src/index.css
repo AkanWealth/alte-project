@@ -7,3 +7,12 @@
     @apply mx-auto w-full max-w-screen-xl;
   }
 }
+.icon-title {
+  display: flex;
+  align-items: center; 
+}
+.icon-title {
+  width: 40px; 
+  height: auto;
+  margin-right: 10px; 
+}
