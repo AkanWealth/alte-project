@@ -25,60 +25,42 @@ const FooterNav = ({ relativeStyles }) => {
           <h3 className="text-base font-semibold uppercase lg:text-lg">
             Pages
           </h3>
-          <ul className="lg:gap-3text-sm flex flex-col gap-1 font-normal lg:text-base">
-            <li>
-              <a href="#">About us</a>
-            </li>
-            <li>
-              <a href="#">Services</a>
-            </li>
-            <li>
-              <a href="#">Case studies</a>
-            </li>
-            <li>
-              <a href="#">Career</a>
-            </li>
-            <li>
-              <a href="#">Blog</a>
-            </li>
-            <li>
-              <a href="#">Contact Us</a>
-            </li>
-            <li>
-              <TextButton
-                clickHandler={() => {
-                  setDisplayCookies(true);
-                  setToShow("preferences");
-                }}
-              >
-                Cookie policy
-              </TextButton>
-            </li>
+          <ul className="flex flex-col gap-1 text-sm font-normal lg:gap-3 lg:text-base">
+            <Link to="/about-us">About us</Link>
+            <Link to="our-services">Services</Link>
+            <Link to="/case-studies">Case studies</Link>
+            <Link to="/jobseekers">Career</Link>
+            <Link to="/blog">Blog</Link>
+            <Link to="/contact-us">Contact Us</Link>
+            <TextButton
+              clickHandler={() => {
+                setDisplayCookies(true);
+                setToShow("preferences");
+              }}
+            >
+              Cookie policy
+            </TextButton>
           </ul>
         </div>
         <div className="flex flex-col gap-1 lg:gap-3">
           <h3 className="text-base font-semibold uppercase lg:text-lg">
             Services
           </h3>
-          <ul className="lg:gap-3text-sm flex flex-col gap-1 font-normal lg:text-base">
-            <li>
-              <a href="#">Web Development</a>
-            </li>
-            <li>
-              <a href="#">Research and Analysis</a>
-            </li>
-            <li>
-              <a href="#">Mobile App Development</a>
-            </li>
-            <li>
-              <a href="#">Product Design</a>
-            </li>
-            <li>
-              <a href="#">Pitch Desk Creation</a>
-            </li>
-            <li>
-              <a href="#">Product Discovery</a>
-            </li>
+          <ul className="flex flex-col gap-1 text-sm font-normal lg:gap-3 lg:text-base">
+            <Link to="/our-services/#website-and-software-development">
+              Web Development
+            </Link>
+            <Link to="/our-services/#research-and-analysis">
+              Research and Analysis
+            </Link>
+            <Link to="/our-services/#mobile-app-development">
+              Mobile App Development
+            </Link>
+            <Link to="/our-services/#product-design">Product Design</Link>
+            <Link to="/our-services/#pitch-deck-creation">
+              Pitch Desk Creation
+            </Link>
+            <Link to="/our-services/#product-discovery">Product Discovery</Link>
           </ul>
         </div>
       </nav>

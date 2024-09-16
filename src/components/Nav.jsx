@@ -1,6 +1,6 @@
 import { NavLink, useLocation } from "react-router-dom";
 import useViewport from "../hooks/useViewPort";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBars,
@@ -19,6 +19,7 @@ const Nav = () => {
   const [showModal, setShowModal] = useState(false);
   const { pathname } = useLocation();
   const mainPath = pathname.split("/")[1] || "home";
+  const [openDropdown, setOpenDropdown] = useState(false);
 
   const setNavState = () => {
     if (inViewport) return;
@@ -28,6 +29,14 @@ const Nav = () => {
   const toggleModal = () => {
     setShowModal(!showModal); // Toggle the modal state
   };
+
+  const toggleDropdown = () => {
+    setOpenDropdown((prevOpenDropdown) => !prevOpenDropdown);
+  };
+
+  useEffect(() => {
+    setOpenDropdown(false);
+  }, [pathname]);
 
   return (
     <nav className="">
@@ -79,37 +88,45 @@ const Nav = () => {
                 >
                   Case Studies
                 </NavLink>
-                <details className="group relative">
-                  <summary className="flex cursor-pointer list-none flex-row items-center gap-2 hover:text-sec-300 group-open:text-sec-500">
+                <div className="group relative">
+                  <button
+                    onClick={toggleDropdown}
+                    className="flex cursor-pointer list-none flex-row items-center gap-2 hover:text-sec-300"
+                    aria-expanded={openDropdown}
+                  >
                     Careers
                     <FontAwesomeIcon
-                      icon={faChevronDown}
-                      className="size-4 group-open:hidden"
+                      icon={openDropdown ? faChevronUp : faChevronDown}
+                      className="size-4"
                     />
-                    <FontAwesomeIcon
-                      icon={faChevronUp}
-                      className="hidden size-4 group-open:block"
-                    />
-                  </summary>
-                  <div className="ml-5 mt-5 rounded-b-xl border border-white lg:absolute lg:top-16 lg:ml-0 lg:mt-0 lg:bg-white lg:p-5 lg:text-grey-900">
-                    <ul className="flex flex-col gap-3 border-l-2 border-pry-500 pl-3 *:w-max">
-                      <NavLink
-                        to="freelancers"
-                        className={`${mainPath === "freelancers" && "text-sec-500"} hover:text-sec-300`}
-                        onClick={setNavState}
-                      >
-                        Freelancers
-                      </NavLink>
-                      <NavLink
-                        to="jobseekers"
-                        className={`${mainPath === "jobseekers" && "text-sec-500"} hover:text-sec-300`}
-                        onClick={setNavState}
-                      >
-                        Job Seekers
-                      </NavLink>
-                    </ul>
-                  </div>
-                </details>
+                  </button>
+                  {openDropdown && (
+                    <div className="ml-5 mt-5 rounded-b-xl border border-white lg:absolute lg:top-16 lg:ml-0 lg:mt-0 lg:bg-white lg:p-5 lg:text-grey-900">
+                      <ul className="flex flex-col gap-3 border-l-2 border-pry-500 pl-3 *:w-max">
+                        <NavLink
+                          to="freelancers"
+                          className={`${mainPath === "freelancers" && "text-sec-500"} hover:text-sec-300`}
+                          onClick={() => {
+                            setNavState();
+                            setOpenDropdown(false);
+                          }}
+                        >
+                          Freelancers
+                        </NavLink>
+                        <NavLink
+                          to="jobseekers"
+                          className={`${mainPath === "jobseekers" && "text-sec-500"} hover:text-sec-300`}
+                          onClick={() => {
+                            setNavState();
+                            setOpenDropdown(false);
+                          }}
+                        >
+                          Job Seekers
+                        </NavLink>
+                      </ul>
+                    </div>
+                  )}
+                </div>
                 <NavLink
                   to="blog"
                   className={`${mainPath === "blog" && "bg text-sec-500"} hover:text-sec-300`}

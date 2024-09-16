@@ -60,7 +60,7 @@ const SwiperButtonNext = () => {
   );
 };
 
-const Swipers = ({ slidesData }) => {
+const Swipers = ({ children }) => {
   return (
     <Swiper
       className="flex cursor-grab flex-col items-center gap-10 px-1 py-2"
@@ -77,13 +77,7 @@ const Swipers = ({ slidesData }) => {
         },
       }}
     >
-      <div>
-        {slidesData.map((data, index) => (
-          <SwiperSlide className="grid h-full min-h-full" key={index}>
-            {data.content}
-          </SwiperSlide>
-        ))}
-      </div>
+      <div>{children}</div>
       <div className="flex flex-row items-center gap-8">
         <SwiperButtonPrev />
         <SwiperButtonNext />

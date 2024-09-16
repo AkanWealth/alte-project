@@ -1,10 +1,11 @@
-import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
-import { IconButton, IconOnlyButton } from "../../components/Button";
-import Service from "../../components/serviceItem";
+import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { IconButton } from "../../components/Button";
+import Service from "../../components/service";
 import Testimonial from "../../components/Testimonial";
 import { TestimonialsContent } from "../../contents/testimonials";
 import { servicesContent } from "../../contents/services";
 import Swipers from "../Swipers";
+import { SwiperSlide } from "swiper/react";
 
 const Home = () => {
   return (
@@ -169,11 +170,14 @@ const Home = () => {
           <h2 className="mb-8 text-center font-raleway text-2xl font-bold text-pry-500 md:mb-10 md:text-4xl lg:mb-14 lg:text-5xl">
             Explore Our Services
           </h2>
-          <Swipers
-            slidesData={servicesContent.map((content) => ({
-              content: <Service data={content} />,
-            }))}
-          />
+          <Swipers>
+            {servicesContent.map((data, index) => (
+              <SwiperSlide className="grid h-full min-h-full" key={index}>
+                {data.content}
+                <Service data={data} />
+              </SwiperSlide>
+            ))}
+          </Swipers>
         </div>
       </section>
       <section className="bg-pry-500 px-5 py-6 md:py-16 lg:px-10 lg:py-24">
