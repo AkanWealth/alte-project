@@ -10,24 +10,21 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import Button from "./Button";
 import { AnimatePresence, motion } from "framer-motion";
-import QuoteModal from "./QuoteModal";
 import Logo from "./Logo";
+import { useModalContext } from "../contexts/ModalContext";
+import QuoteForm from "./QuoteForm";
 
 const Nav = () => {
   const [inViewport] = useViewport("1024px");
   const [isOpen, setIsOpen] = useState(false);
-  const [showModal, setShowModal] = useState(false);
   const { pathname } = useLocation();
   const mainPath = pathname.split("/")[1] || "home";
   const [openDropdown, setOpenDropdown] = useState(false);
+  const { setModalComponent } = useModalContext();
 
   const setNavState = () => {
     if (inViewport) return;
     setIsOpen((isOpen) => !isOpen);
-  };
-
-  const toggleModal = () => {
-    setShowModal(!showModal); // Toggle the modal state
   };
 
   const toggleDropdown = () => {
@@ -142,14 +139,16 @@ const Nav = () => {
                   Contact Us
                 </NavLink>
               </menu>
-              <Button className="w-full lg:w-auto" clickHandler={toggleModal}>
+              <Button
+                className="w-full lg:w-auto"
+                clickHandler={() => setModalComponent(<QuoteForm />)}
+              >
                 Request a Quote
               </Button>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
-      {showModal && <QuoteModal onClose={toggleModal} />}
     </nav>
   );
 };

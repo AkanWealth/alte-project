@@ -29,7 +29,6 @@ const Button = ({
   target,
   rel,
   className = "",
-  disable,
   clickHandler,
   ...props
 }) => {

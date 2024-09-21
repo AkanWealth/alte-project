@@ -5,10 +5,13 @@ import { servicesContent } from "../../contents/services";
 import ServiceItem from "../../components/serviceItem";
 import { useLocation } from "react-router-dom";
 import useScrollToAnchor from "../../hooks/useScrollToAnchor";
+import QuoteForm from "../../components/QuoteForm";
+import { useModalContext } from "../../contexts/ModalContext";
 
 const OurServices = () => {
   const { hash } = useLocation();
   useScrollToAnchor({ hash });
+  const { setModalComponent } = useModalContext();
 
   return (
     <main>
@@ -34,7 +37,11 @@ const OurServices = () => {
               >
                 Book a Discovery Call
               </IconButton>
-              <IconButton variant="sec" rightIcon={faArrowRight}>
+              <IconButton
+                clickHandler={() => setModalComponent(<QuoteForm />)}
+                variant="sec"
+                rightIcon={faArrowRight}
+              >
                 Request a Quote
               </IconButton>
             </div>

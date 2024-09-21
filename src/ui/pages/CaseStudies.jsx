@@ -2,8 +2,11 @@ import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { IconButton } from "../../components/Button";
 import { caseStudiesContent } from "../../contents/caseStudies";
 import CaseStudyListing from "../../components/CaseStudyListing";
+import QuoteForm from "../../components/QuoteForm";
+import { useModalContext } from "../../contexts/ModalContext";
 
 const CaseStudies = () => {
+  const { setModalComponent } = useModalContext();
   return (
     <main>
       <section className="grid min-h-[450px] place-content-center bg-pry-500 bg-[url('/images/hero-bg.png')] bg-cover bg-right bg-no-repeat px-5 py-8 md:py-12 lg:px-10 lg:py-14 xl:py-20">
@@ -26,7 +29,11 @@ const CaseStudies = () => {
               >
                 Book a Discovery Call
               </IconButton>
-              <IconButton variant="sec" rightIcon={faArrowRight}>
+              <IconButton
+                clickHandler={() => setModalComponent(<QuoteForm />)}
+                variant="sec"
+                rightIcon={faArrowRight}
+              >
                 Request a Quote
               </IconButton>
             </div>

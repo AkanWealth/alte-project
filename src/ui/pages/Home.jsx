@@ -1,13 +1,16 @@
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { IconButton } from "../../components/Button";
-import Service from "../../components/serviceItem";
+import Service from "../../components/service";
 import Testimonial from "../../components/Testimonial";
 import { TestimonialsContent } from "../../contents/testimonials";
-import { servicesContent } from "../../contents/services";
+import { servicesContent } from "../../contents/Services";
 import Swipers from "../Swipers";
 import { SwiperSlide } from "swiper/react";
+import QuoteForm from "../../components/QuoteForm";
+import { useModalContext } from "../../contexts/ModalContext";
 
 const Home = () => {
+  const { setModalComponent } = useModalContext();
   return (
     <main>
       <section className="grid min-h-[450px] place-content-center bg-pry-500 bg-[url('/images/hero-bg.png')] bg-cover bg-right bg-no-repeat px-5 py-8 md:py-12 lg:px-10">
@@ -32,7 +35,11 @@ const Home = () => {
               >
                 Book a Discovery Call
               </IconButton>
-              <IconButton variant="sec" rightIcon={faArrowRight}>
+              <IconButton
+                clickHandler={() => setModalComponent(<QuoteForm />)}
+                variant="sec"
+                rightIcon={faArrowRight}
+              >
                 Request a Quote
               </IconButton>
             </div>

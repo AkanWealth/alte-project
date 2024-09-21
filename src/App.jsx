@@ -17,7 +17,11 @@ import ContactUs from "./ui/pages/ContactUs";
 import CaseStudies from "./ui/pages/CaseStudies";
 import CaseStudy from "./ui/pages/CaseStudy";
 import Freelancer from "./ui/pages/Freelancer";
+import FreelancerSignup from "./ui/pages/FreelancerSignup";
 import JobSeekers from "./ui/pages/JobSeekers";
+import VerifyEmail from "./ui/pages/VerifyEmail";
+import EmailVerified from "./ui/pages/EmailVerified";
+
 
 const routes = createBrowserRouter([
   {
@@ -63,6 +67,18 @@ const routes = createBrowserRouter([
       {
         path: "freelancers",
         element: <Freelancer />,
+      },
+      {
+        path: "freelancers/register",
+        element: <FreelancerSignup />,
+      },
+      {
+        path: "freelancers/verify-email",
+        element: <VerifyEmail />,
+      },
+      {
+        path: "freelancers/email-verified",
+        element: <EmailVerified />,
       },
       {
         path: "jobseekers",
