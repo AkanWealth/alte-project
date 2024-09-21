@@ -3,7 +3,7 @@ import { IconButton } from "../../components/Button";
 import Service from "../../components/serviceItem";
 import Testimonial from "../../components/Testimonial";
 import { TestimonialsContent } from "../../contents/testimonials";
-import { servicesContent } from "../../contents/Services";
+import { servicesContent } from "../../contents/Services.js";
 import Swipers from "../Swipers";
 import { SwiperSlide } from "swiper/react";
 import QuoteForm from "../../components/QuoteForm";
