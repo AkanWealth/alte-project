@@ -1,6 +1,6 @@
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { IconButton } from "../../components/Button";
-import Service from "../../components/serviceItem";
+import Service from "../../components/service";
 import Testimonial from "../../components/Testimonial";
 import { TestimonialsContent } from "../../contents/testimonials";
 import { servicesContent } from "../../contents/Services";
