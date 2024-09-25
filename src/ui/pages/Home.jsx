@@ -1,9 +1,9 @@
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { IconButton } from "../../components/Button";
-import Service from "../../components/serviceItem";
+import Service from "../../components/Service";
 import Testimonial from "../../components/Testimonial";
 import { TestimonialsContent } from "../../contents/testimonials";
-import { servicesContent } from "../../contents/services";
+import { servicesContent } from "../../contents/Services";
 import Swipers from "../Swipers";
 import { SwiperSlide } from "swiper/react";
 import QuoteForm from "../../components/QuoteForm";

@@ -1,66 +1,63 @@
-import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
-import { IconButton, TextButton } from "../components/Button";
+import { Link, useLocation } from "react-router-dom";
+import Button, { TextButton } from "../components/Button";
 import { useCookiesContext } from "../contexts/CookiesContext";
 import { useState } from "react";
 
 const Cookies = ({ relativeStyles }) => {
-  const {
-    displayCookies,
-    setDisplayCookies,
-    toShow,
-    setToShow,
-    cookiesPreference,
-    dispatch,
-  } = useCookiesContext();
+  const [toShow, setToShow] = useState("cookies");
+  const { cookiesInitiated, cookiesPreferences, dispatch } =
+    useCookiesContext();
+  const { pathname } = useLocation();
 
-  const handleSetCookies = () => {
-    setDisplayCookies(false);
-  };
-
-  if (!displayCookies) return null;
+  if (cookiesInitiated || pathname === "/policies/cookies-policy") return null;
 
   return (
     <div
-      className={`${relativeStyles} z-10 max-h-[calc(100vh-95px)] w-[calc(100%-16px-10px)] max-w-[640px] overflow-y-auto rounded-md bg-white px-10 py-8 shadow-[5px_15px_20px_0px_rgba(0,0,0,0.25)] lg:max-h-[calc(100vh-104px-10px)]`}
+      className={`${relativeStyles} z-10 max-h-[calc(100vh-105px)] w-[calc(100%-16px-10px)] max-w-[655px] overflow-y-auto rounded-md bg-white px-10 py-8 font-inter shadow-[5px_15px_20px_0px_rgba(0,0,0,0.25)] lg:max-h-[calc(100vh-104px-10px)]`}
     >
       {toShow === "cookies" && (
         <div className="flex flex-col items-start gap-5">
-          <h3 className="font-raleway text-3xl font-bold">
-            <img src="/images/cookies.png" alt="" className="mr-2 inline" />{" "}
+          <h3 className="text-3xl font-semibold text-pry-500">
+            <img
+              src="/images/cookies.png"
+              alt=""
+              className="mr-4 inline size-10"
+            />
             Cookies
           </h3>
-          <p className="font-raleway text-sm font-normal">
+          <p className="text-sm font-normal text-grey-400">
             We at Alte use cookies to collect information about you for
             functional purposes, statistical marketing and to manage your user
-            experience. You may not give us your consent for certain purposes by
-            selecting an option and you can withdraw your consent at any time
-            via the cookie icon.
+            experience.
           </p>
-          <div className="flex flex-wrap gap-3">
-            <IconButton
+          <p className="text-sm font-normal text-grey-400">
+            You can choose which types of cookies you allow by selecting
+            preferences below
+          </p>
+          <div className="flex w-full flex-wrap justify-between gap-3">
+            <Button
               variant="sec"
-              className="text-sec-500"
-              rightIcon={faArrowRight}
+              color="dark"
+              className="text-pry-500"
               clickHandler={() => {
                 dispatch({ type: "reject_all" });
-                handleSetCookies();
+                dispatch({ type: "initiate_cookies" });
               }}
             >
-              Reject All Cookies
-            </IconButton>
-            <IconButton
-              rightIcon={faArrowRight}
+              Decline Non-Essential Cookies
+            </Button>
+            <Button
               clickHandler={() => {
                 dispatch({ type: "accept_all" });
-                handleSetCookies();
+                dispatch({ type: "initiate_cookies" });
               }}
             >
-              Accept all cookies
-            </IconButton>
+              Accept All Cookies
+            </Button>
           </div>
           <TextButton
             clickHandler={() => setToShow("preferences")}
-            className="self-end text-right font-raleway text-sm font-normal underline"
+            className="self-end text-right text-lg font-normal text-pry-500 underline"
           >
             Cookie Preferences
           </TextButton>
@@ -68,388 +65,133 @@ const Cookies = ({ relativeStyles }) => {
       )}
       {toShow === "preferences" && (
         <div className="flex flex-col items-start gap-5">
-          <h3 className="font-raleway text-3xl font-bold">
+          <h3 className="text-3xl font-semibold">
             Customize your cookie Preferences
           </h3>
-          <div className="font-raleway text-sm font-normal underline">
-            <p className="mb-4 block">This website uses cookies.</p>
-            We use cookies to offer useful features and measure performance to
-            imrpove your experience.
-            <ul className="my-4 list-disc pl-4">
-              <li>By clicking Accept all you agree to use all cookies.</li>
-              <li>
-                By clicking confirm my choices, you agree only to the categories
-                you have selected
-              </li>
-            </ul>
-            <p className="block">
-              You can find further information in our Privacy Policy
-            </p>
-          </div>
-          <div className="flex flex-wrap gap-3">
+          <p className="text-sm font-normal text-grey-400">
+            This website uses cookies.
+            <span className="block">
+              We use cookies to enhance your experience and understand how our
+              site is used.
+            </span>
+          </p>
+          <ul className="list-disc pl-4 text-sm font-normal text-grey-400">
+            <li>By clicking Accept all you agree to use all cookies.</li>
+            <li>
+              By clicking confirm my choices, you agree only to the categories
+              you have selected
+            </li>
+          </ul>
+          <p className="text-sm font-normal text-grey-400">
+            You can find further information in our
+            <Link to="/policies/cookies-policy" className="ml-1 text-sec-500">
+              Cookies Policy
+            </Link>
+          </p>
+          <div className="flex flex-wrap gap-6">
             <label
-              htmlFor="necessary"
-              className="flex flex-row items-center gap-2 font-raleway text-sm font-semibold"
+              htmlFor="essential"
+              className="flex flex-row items-center gap-2 text-base font-normal"
             >
               <input
                 type="checkbox"
                 name=""
-                id="necessary"
-                checked={cookiesPreference.necessary}
+                id="essential"
+                checked={cookiesPreferences.essential}
                 onChange={() =>
                   dispatch({
-                    type: "set_necessary",
-                    payload: !cookiesPreference.necessary,
+                    type: "set_essential",
+                    payload: !cookiesPreferences.essential,
                   })
                 }
-                className="relative size-5 appearance-none overflow-hidden rounded-md border border-black bg-center after:absolute after:hidden after:size-full after:bg-[url('/icons/check.svg')] after:bg-[50%] after:bg-no-repeat checked:border-[hsla(0,0%,85%,1)] checked:bg-[hsla(0,0%,85%,1)] checked:after:inline"
+                className="relative size-6 appearance-none overflow-hidden rounded-md border border-[hsla(210,10%,58%,1)] bg-center after:absolute after:hidden after:size-full after:bg-[url('/icons/check.svg')] after:bg-[50%] after:bg-no-repeat checked:border-pry-500 checked:bg-pry-500 checked:after:inline"
               />
-              Necessary
+              Essential Cookies
             </label>
             <label
-              htmlFor="preferences"
-              className="flex flex-row items-center gap-2 font-raleway text-sm font-semibold"
+              htmlFor="performance"
+              className="flex flex-row items-center gap-2 text-base font-normal"
             >
               <input
                 type="checkbox"
                 name=""
-                id="preferences"
-                checked={cookiesPreference.preferences}
+                id="performance"
+                checked={cookiesPreferences.performance}
                 onChange={() =>
                   dispatch({
-                    type: "set_preferences",
-                    payload: !cookiesPreference.preferences,
+                    type: "set_performance",
+                    payload: !cookiesPreferences.performance,
                   })
                 }
-                className="relative size-5 appearance-none overflow-hidden rounded-md border border-black bg-center after:absolute after:hidden after:size-full after:bg-[url('/icons/check.svg')] after:bg-[50%] after:bg-no-repeat checked:border-[hsla(0,0%,85%,1)] checked:bg-[hsla(0,0%,85%,1)] checked:after:inline"
+                className="relative size-6 appearance-none overflow-hidden rounded-md border border-[hsla(210,10%,58%,1)] bg-center after:absolute after:hidden after:size-full after:bg-[url('/icons/check.svg')] after:bg-[50%] after:bg-no-repeat checked:border-pry-500 checked:bg-pry-500 checked:after:inline"
               />
-              Preferences
+              Performance Cookies
             </label>
             <label
-              htmlFor="statistics"
-              className="flex flex-row items-center gap-2 font-raleway text-sm font-semibold"
+              htmlFor="functionality"
+              className="flex flex-row items-center gap-2 text-base font-normal"
             >
               <input
                 type="checkbox"
                 name=""
-                id="statistics"
-                checked={cookiesPreference.statistics}
+                id="functionality"
+                checked={cookiesPreferences.functionality}
                 onChange={() =>
                   dispatch({
-                    type: "set_statistics",
-                    payload: !cookiesPreference.statistics,
+                    type: "set_functionality",
+                    payload: !cookiesPreferences.functionality,
                   })
                 }
-                className="relative size-5 appearance-none overflow-hidden rounded-md border border-black bg-center after:absolute after:hidden after:size-full after:bg-[url('/icons/check.svg')] after:bg-[50%] after:bg-no-repeat checked:border-[hsla(0,0%,85%,1)] checked:bg-[hsla(0,0%,85%,1)] checked:after:inline"
+                className="relative size-6 appearance-none overflow-hidden rounded-md border border-[hsla(210,10%,58%,1)] bg-center after:absolute after:hidden after:size-full after:bg-[url('/icons/check.svg')] after:bg-[50%] after:bg-no-repeat checked:border-pry-500 checked:bg-pry-500 checked:after:inline"
               />
-              Statistics
+              Functionality Cookies
             </label>
             <label
-              htmlFor="marketing"
-              className="flex flex-row items-center gap-2 font-raleway text-sm font-semibold"
+              htmlFor="advertising"
+              className="flex flex-row items-center gap-2 text-base font-normal"
             >
               <input
                 type="checkbox"
                 name=""
-                id="marketing"
-                checked={cookiesPreference.marketing}
+                id="advertising"
+                checked={cookiesPreferences.advertising}
                 onChange={() =>
                   dispatch({
-                    type: "set_marketing",
-                    payload: !cookiesPreference.marketing,
+                    type: "set_advertising",
+                    payload: !cookiesPreferences.advertising,
                   })
                 }
-                className="relative size-5 appearance-none overflow-hidden rounded-md border border-black bg-center after:absolute after:hidden after:size-full after:bg-[url('/icons/check.svg')] after:bg-[50%] after:bg-no-repeat checked:border-[hsla(0,0%,85%,1)] checked:bg-[hsla(0,0%,85%,1)] checked:after:inline"
+                className="relative size-6 appearance-none overflow-hidden rounded-md border border-[hsla(210,10%,58%,1)] bg-center after:absolute after:hidden after:size-full after:bg-[url('/icons/check.svg')] after:bg-[50%] after:bg-no-repeat checked:border-pry-500 checked:bg-pry-500 checked:after:inline"
               />
-              Marketing
-            </label>
-            <label
-              htmlFor="unclassified"
-              className="flex flex-row items-center gap-2 font-raleway text-sm font-semibold"
-            >
-              <input
-                type="checkbox"
-                name=""
-                id="unclassified"
-                checked={cookiesPreference.unclassified}
-                onChange={() =>
-                  dispatch({
-                    type: "set_unclassified",
-                    payload: !cookiesPreference.unclassified,
-                  })
-                }
-                className="relative size-5 appearance-none overflow-hidden rounded-md border border-black bg-center after:absolute after:hidden after:size-full after:bg-[url('/icons/check.svg')] after:bg-[50%] after:bg-no-repeat checked:border-[hsla(0,0%,85%,1)] checked:bg-[hsla(0,0%,85%,1)] checked:after:inline"
-              />
-              Unclassified
-            </label>
-            <label
-              htmlFor="functional"
-              className="flex flex-row items-center gap-2 font-raleway text-sm font-semibold"
-            >
-              <input
-                type="checkbox"
-                name=""
-                id="functional"
-                checked={cookiesPreference.functional}
-                onChange={() =>
-                  dispatch({
-                    type: "set_functional",
-                    payload: !cookiesPreference.functional,
-                  })
-                }
-                className="relative size-5 appearance-none overflow-hidden rounded-md border border-black bg-center after:absolute after:hidden after:size-full after:bg-[url('/icons/check.svg')] after:bg-[50%] after:bg-no-repeat checked:border-[hsla(0,0%,85%,1)] checked:bg-[hsla(0,0%,85%,1)] checked:after:inline"
-              />
-              Functional
+              Targeting/Advertising Cookies
             </label>
           </div>
-          <div className="flex flex-wrap gap-3">
-            <IconButton
-              rightIcon={faArrowRight}
-              clickHandler={() => handleSetCookies()}
-            >
-              Confirm my Choices
-            </IconButton>
-            <IconButton
+          <div className="flex w-full flex-wrap justify-between gap-3">
+            <TextButton
               variant="sec"
-              className="text-sec-500"
-              rightIcon={faArrowRight}
+              color="dark"
+              className="font-medium text-pry-500"
+              clickHandler={() => {
+                dispatch({ type: "reject_all" });
+                dispatch({ type: "initiate_cookies" });
+              }}
+            >
+              Reject all
+            </TextButton>
+            <Button
+              variant="sec"
+              color="dark"
+              className="text-pry-500"
               clickHandler={() => {
                 dispatch({ type: "accept_all" });
-                handleSetCookies();
+                dispatch({ type: "initiate_cookies" });
               }}
             >
               Accept All
-            </IconButton>
-          </div>
-          <TextButton
-            clickHandler={() => setToShow("info")}
-            className="text-right font-raleway text-sm font-normal underline"
-          >
-            More info
-          </TextButton>
-        </div>
-      )}
-      {toShow === "info" && (
-        <div className="flex flex-col items-start gap-5">
-          <h3 className="flex w-full items-center justify-between font-raleway text-3xl font-bold">
-            Manage Cookies
-            <img src="/images/cookies.png" alt="" className="ml-2 inline" />
-          </h3>
-          <div className="font-raleway text-sm font-normal">
-            Cookies are small text that can be used by websites to make the user
-            experience more efficient. The law states that we may store cookies
-            on your device if they are strictly necessaryfor the operation of
-            this site. For all other types of cookies, we need your permission.
-            This site uses various types of cookies. Some cookies are placed by
-            third party services that appear on our pages.
-            <div className="mt-4">
-              Your permission applies to the following domains:
-              <ul className="list-disc pl-4">
-                <li>cookieinfo.net</li>
-                <li>intranet.cookieinfo.net</li>
-              </ul>
-            </div>
-          </div>
-          <ul className="flex flex-col gap-4">
-            <li className="rounded-lg border-2 border-[hsla(235,14%,50%,1)] px-5 py-3">
-              <label
-                htmlFor="necessary"
-                className="flex flex-col gap-2 font-raleway"
-              >
-                <div className="flex flex-row justify-between gap-2">
-                  <span className="text-sm font-semibold">Necessary</span>
-                  <input
-                    type="checkbox"
-                    name=""
-                    id="necessary"
-                    checked={cookiesPreference.necessary}
-                    onChange={() =>
-                      dispatch({
-                        type: "set_necessary",
-                        payload: !cookiesPreference.necessary,
-                      })
-                    }
-                    className="relative size-5 appearance-none overflow-hidden rounded-md border-2 border-[hsla(235,14%,50%,1)] bg-center after:absolute after:hidden after:size-full after:bg-[url('/icons/check-black.svg')] after:bg-[50%] after:bg-no-repeat checked:after:inline"
-                  />
-                </div>
-                <p className="text-sm font-normal">
-                  Necessary cookies help make a website usable by enabing basic
-                  functions like page navigation and access to secure of the
-                  website. The website cannot function properly without these
-                  cookies.
-                </p>
-              </label>
-            </li>
-            <li className="rounded-lg border-2 border-[hsla(235,14%,50%,1)] px-5 py-3">
-              <label
-                htmlFor="preferences"
-                className="flex flex-col gap-2 font-raleway"
-              >
-                <div className="flex flex-row justify-between gap-2">
-                  <span className="text-sm font-semibold">Preferences</span>
-                  <input
-                    type="checkbox"
-                    name=""
-                    id="preferences"
-                    checked={cookiesPreference.preferences}
-                    onChange={() =>
-                      dispatch({
-                        type: "set_preferences",
-                        payload: !cookiesPreference.preferences,
-                      })
-                    }
-                    className="relative size-5 appearance-none overflow-hidden rounded-md border-2 border-[hsla(235,14%,50%,1)] bg-center after:absolute after:hidden after:size-full after:bg-[url('/icons/check-black.svg')] after:bg-[50%] after:bg-no-repeat checked:after:inline"
-                  />
-                </div>
-                <p className="text-sm font-normal">
-                  Preferences cookies enable a website to remember information
-                  that changes the way the website behaves or looks, like your
-                  referred langueage or region that you are in.
-                </p>
-              </label>
-            </li>
-            <li className="rounded-lg border-2 border-[hsla(235,14%,50%,1)] px-5 py-3">
-              <label
-                htmlFor="statistics"
-                className="flex flex-col gap-2 font-raleway"
-              >
-                <div className="flex flex-row justify-between gap-2">
-                  <span className="text-sm font-semibold">Statistics</span>
-                  <input
-                    type="checkbox"
-                    name=""
-                    id="statistics"
-                    checked={cookiesPreference.statistics}
-                    onChange={() =>
-                      dispatch({
-                        type: "set_statistics",
-                        payload: !cookiesPreference.statistics,
-                      })
-                    }
-                    className="relative size-5 appearance-none overflow-hidden rounded-md border-2 border-[hsla(235,14%,50%,1)] bg-center after:absolute after:hidden after:size-full after:bg-[url('/icons/check-black.svg')] after:bg-[50%] after:bg-no-repeat checked:after:inline"
-                  />
-                </div>
-                <p className="text-sm font-normal">
-                  Statistics cookies help website owners to understand how
-                  visitors interact wtih websites by collecting and reporting
-                  information anonymously.
-                </p>
-              </label>
-            </li>
-            <li className="rounded-lg border-2 border-[hsla(235,14%,50%,1)] px-5 py-3">
-              <label
-                htmlFor="marketing"
-                className="flex flex-col gap-2 font-raleway"
-              >
-                <div className="flex flex-row justify-between gap-2">
-                  <span className="text-sm font-semibold">Marketing</span>
-                  <input
-                    type="checkbox"
-                    name=""
-                    id="marketing"
-                    checked={cookiesPreference.marketing}
-                    onChange={() =>
-                      dispatch({
-                        type: "set_marketing",
-                        payload: !cookiesPreference.marketing,
-                      })
-                    }
-                    className="relative size-5 appearance-none overflow-hidden rounded-md border-2 border-[hsla(235,14%,50%,1)] bg-center after:absolute after:hidden after:size-full after:bg-[url('/icons/check-black.svg')] after:bg-[50%] after:bg-no-repeat checked:after:inline"
-                  />
-                </div>
-                <p className="text-sm font-normal">
-                  Marketing cookies are used to track visitors across websites.
-                  The interntion is to display ads that are relevant and
-                  engaging for the individual user and thereby more valueable
-                  for publishers and third party advertisers.
-                </p>
-              </label>
-            </li>
-            <li className="rounded-lg border-2 border-[hsla(235,14%,50%,1)] px-5 py-3">
-              <label
-                htmlFor="unclassified"
-                className="flex flex-col gap-2 font-raleway"
-              >
-                <div className="flex flex-row justify-between gap-2">
-                  <span className="text-sm font-semibold">Unclassified</span>
-                  <input
-                    type="checkbox"
-                    name=""
-                    id="unclassified"
-                    checked={cookiesPreference.unclassified}
-                    onChange={() =>
-                      dispatch({
-                        type: "set_unclassified",
-                        payload: !cookiesPreference.unclassified,
-                      })
-                    }
-                    className="relative size-5 appearance-none overflow-hidden rounded-md border-2 border-[hsla(235,14%,50%,1)] bg-center after:absolute after:hidden after:size-full after:bg-[url('/icons/check-black.svg')] after:bg-[50%] after:bg-no-repeat checked:after:inline"
-                  />
-                </div>
-                <p className="text-sm font-normal">
-                  Unclassified cookies are cookies that we are in the process of
-                  classifying, together with the providers of individual
-                  cookies.
-                </p>
-              </label>
-            </li>
-            <li className="rounded-lg border-2 border-[hsla(235,14%,50%,1)] px-5 py-3">
-              <label
-                htmlFor="functional"
-                className="flex flex-col gap-2 font-raleway"
-              >
-                <div className="flex flex-row justify-between gap-2">
-                  <span className="text-sm font-semibold">Functional</span>
-                  <input
-                    type="checkbox"
-                    name=""
-                    id="functional"
-                    checked={cookiesPreference.functional}
-                    onChange={() =>
-                      dispatch({
-                        type: "set_functional",
-                        payload: !cookiesPreference.functional,
-                      })
-                    }
-                    className="relative size-5 appearance-none overflow-hidden rounded-md border-2 border-[hsla(235,14%,50%,1)] bg-center after:absolute after:hidden after:size-full after:bg-[url('/icons/check-black.svg')] after:bg-[50%] after:bg-no-repeat checked:after:inline"
-                  />
-                </div>
-                <p className="text-sm font-normal">
-                  Necessary cookies help make a website usable by enabing basic
-                  functions like page navigation and access to secure of the
-                  website. The website cannot function properly without these
-                  cookies.
-                </p>
-              </label>
-            </li>
-          </ul>
-          <div className="flex flex-wrap items-center gap-3 self-end">
-            <TextButton
-              clickHandler={() => setToShow("preferences")}
-              className="font-raleway text-sm font-semibold text-sec-500"
-            >
-              Back
-            </TextButton>
-            <IconButton
-              variant="sec"
-              className="text-sec-500"
-              rightIcon={faArrowRight}
-              clickHandler={() => {
-                dispatch({ type: "reject_all" });
-                handleSetCookies();
-              }}
-            >
-              Decline
-            </IconButton>
-            <IconButton
-              rightIcon={faArrowRight}
-              clickHandler={() => {
-                dispatch({ type: "accept_all" });
-                handleSetCookies();
-              }}
-            >
-              Accept all cookies
-            </IconButton>
+            </Button>
+            <Button clickHandler={() => dispatch({ type: "initiate_cookies" })}>
+              Confirm my Choices
+            </Button>
           </div>
         </div>
       )}

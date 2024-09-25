@@ -1,10 +1,98 @@
-import React, { useEffect } from "react";
+import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { useModalContext } from "../contexts/ModalContext";
+import axios from "axios";
+import { useNavigate } from 'react-router-dom';
+
 
 const QuoteForm = () => {
+  const [formData, setFormData] = useState({
+    fullName: "",
+    businessName:"",
+    email: "",
+    phoneNumber: "",
+    policy: false,
+    
+  });
+
+  const [errors, setErrors] = useState({});
   const { setModalComponent } = useModalContext();
+  const [alertVisible, setAlertVisible] = useState(false);
+  const navigate = useNavigate();
+
+  
+  const validate = () => {
+    const newErrors = {};
+
+    // Full Name validation
+    if (!formData.fullName.trim()) {
+      newErrors.fullName = "Full Name is required";
+    }
+
+    // Business Name validation
+    if (!formData.businessName.trim()) {
+      newErrors.businessName = "Business Name is required";
+    }
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!formData.email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!emailRegex.test(formData.email)) {
+      newErrors.email = "Enter a valid email address";
+    }
+
+    // Phone validation
+    const phoneRegex = /^[0-9]{11}$/;
+    if (!formData.phoneNumber.trim()) {
+      newErrors.phoneNumber = "Phone Number is required";
+    } else if (!phoneRegex.test(formData.phoneNumber)) {
+      newErrors.phoneNumber = "Enter a valid 11-digit phone number";
+    }
+    if (!formData.policy) {
+      newErrors.policy = "You must agree to the terms and privacy policy";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value, checked, type: inputType } = e.target;
+    setFormData({
+      ...formData,
+      [name]: inputType === "checkbox" ? checked : value, 
+    });
+  };
+  
+
+  const submitForm = async () => {
+    try {
+      const response = await axios.post('https://altes.free.beeceptor.com/request-quote', formData);
+      console.log('Success:', response.data);
+      setModalComponent(null);  
+      navigate('/request-qoute/success');  
+    } catch (error) {
+      console.error('Error:', error);
+
+    }
+    
+  };
+  const handleValidation = async (event) => {
+    event.preventDefault();
+  
+    const isValid = validate(); 
+    
+    if (!isValid) {
+      setAlertVisible(true);
+    } else {
+      setAlertVisible(false);
+      await submitForm();
+
+    }
+  };
+  
   return (
     <div className="relative mx-auto max-h-[75vh] w-full max-w-lg overflow-y-auto rounded-lg bg-white p-6 shadow-lg sm:p-8 lg:max-w-2xl lg:p-10">
       <button
@@ -14,13 +102,30 @@ const QuoteForm = () => {
         <FontAwesomeIcon icon={faXmark} size="lg" />
       </button>
 
+      {alertVisible && (
+                <div className="mb-4 flex items-start justify-between rounded-md border border-[#DC6662] bg-[#FAE8E8] p-4 text-black">
+                  <div className="flex items-start">
+                    <img
+                      src="/images/freelancer/error.png"
+                      alt="Error Logo"
+                      className="mr-2 h-6 w-6"
+                    />{" "}
+                    {/* Logo */}
+                    <div className="font-raleway">
+                      <strong>Error</strong>
+                      <p>Complete all fields and try again.</p>
+                    </div>
+                  </div>
+                  <button onClick={() => setAlertVisible(false)}>✖️</button>
+                </div>
+              )}
       {/* Modal Header */}
       <h2 className="mb-4 font-raleway text-2xl font-semibold">
         Request a Free Quote
       </h2>
 
       {/* Modal Form */}
-      <form className="space-y-6">
+      <form className="space-y-6" onSubmit={handleValidation}>
         <div>
           <h3 className="mb-2 font-raleway font-semibold">
             1 of 3 - Personal Details
@@ -29,23 +134,58 @@ const QuoteForm = () => {
             <input
               type="text"
               placeholder="Full Name*"
-              className="w-full rounded-md border p-2"
+              name="fullName"
+              value={formData.fullName}
+              onChange={handleInputChange}
+              className={`w-full rounded-md border p-2 ${
+                errors.fullName ? "border-[#DC6662]" : "border-gray-300"
+              }`}
+
             />
+            {errors.fullName && (
+                    <p className="text-sm text-[#DC6662]">{errors.fullName}</p>
+                  )}
+
             <input
               type="text"
+              name="businessName"
               placeholder="Business Name*"
-              className="w-full rounded-md border p-2"
+              className={`w-full rounded-md border p-2 ${
+                errors.businessName ? "border-[#DC6662]" : "border-gray-300"
+              }`}
+              value={formData.businessName}
+              onChange={handleInputChange}
             />
+            {errors.businessName && (
+                    <p className="text-sm text-[#DC6662]">{errors.businessName}</p>
+                  )}
+
             <input
               type="email"
+              name="email"
               placeholder="Email Address*"
-              className="w-full rounded-md border p-2"
+              className={`w-full rounded-md border p-2 ${
+                errors.email ? "border-[#DC6662]" : "border-gray-300"
+              }`}
+              value={formData.email}
+              onChange={handleInputChange}
             />
+             {errors.email && (
+                    <p className="text-sm text-[#DC6662]">{errors.email}</p>
+                  )}
             <input
               type="tel"
+              name="phoneNumber"
               placeholder="Phone Number*"
-              className="w-full rounded-md border p-2"
+              value={formData.phoneNumber}
+              onChange={handleInputChange}
+              className={`w-full rounded-md border p-2 ${
+                errors.phoneNumber ? "border-[#DC6662]" : "border-gray-300"
+              }`}
             />
+             {errors.phoneNumber && (
+                    <p className="text-sm text-[#DC6662]">{errors.phoneNumber}</p>
+                  )}
           </div>
         </div>
 
@@ -146,11 +286,22 @@ const QuoteForm = () => {
         </div>
 
         <div className="mt-4 flex items-start space-x-2 font-raleway">
-          <input type="checkbox" className="mt-1" />
+          <input 
+          type="checkbox" 
+          name="policy" 
+          className="mt-1" 
+          checked={formData.policy}
+          onChange={handleInputChange}
+           />
+           
           <label className="text-sm">
             I agree to the terms of service and privacy policy.
           </label>
+          {errors.policy && (
+                    <p className="text-sm text-[#DC6662]">{errors.policy}</p>
+                  )}
         </div>
+        
 
         <div className="flex justify-end space-x-4 font-raleway">
           <button

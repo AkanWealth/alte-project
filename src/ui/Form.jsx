@@ -1,10 +1,11 @@
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { IconButton } from "../components/Button";
 import { useForm } from "react-hook-form";
-import { isMobilePhone } from "validator";
+import { isAlpha, isMobilePhone } from "validator";
 import isEmail from "validator/lib/isEmail";
 import toast from "react-hot-toast";
 import { ToastMessage } from "./ToastNotification";
+import { Link } from "react-router-dom";
 
 export const Form = () => {
   const {
@@ -43,7 +44,11 @@ export const Form = () => {
           className="block w-full rounded-lg border border-grey-400 bg-white p-2.5 font-inter text-sm font-normal text-black outline-none placeholder:text-xs placeholder:text-grey-100 lg:text-xl lg:placeholder:text-sm [&[aria-invalid=true]]:border-error-500"
           placeholder="Enter your full name"
           aria-invalid={errors.fullName ? true : false}
-          {...register("fullName", { required: "Name is required" })}
+          {...register("fullName", {
+            required: "Name is required",
+            validate: (value) =>
+              isAlpha(value) || "Kindly provide a valid name",
+          })}
         />
         {errors.fullName && (
           <p className="mt-2 font-inter text-xs font-normal text-error-500">
@@ -153,9 +158,12 @@ export const Form = () => {
           />
           <span>
             By submitting this form, you agree to our
-            <span className="ml-1 font-semibold text-sec-500">
+            <Link
+              to="/policies/privacy-policy"
+              className="ml-1 font-semibold text-sec-500"
+            >
               Privacy policy
-            </span>
+            </Link>
           </span>
         </div>
         {errors.privacyChecked && (

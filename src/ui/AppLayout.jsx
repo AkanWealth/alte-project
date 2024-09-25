@@ -5,6 +5,7 @@ import BookCall from "./BookCall";
 import { useEffect } from "react";
 import Cookies from "./Cookies";
 import { CookiesProvider } from "../contexts/CookiesContext";
+import { ToastNotification } from "./ToastNotification";
 import ModalProvider from "../contexts/ModalContext";
 
 const AppLayout = () => {
@@ -17,6 +18,7 @@ const AppLayout = () => {
   return (
     <CookiesProvider>
       <ModalProvider>
+        <ToastNotification />
         <div className="relative grid grid-cols-1 grid-rows-[auto_1fr_auto_auto]">
           <Header relativeStyles="col-start-1 col-end-2 row-start-1 row-end-2" />
           <div className="col-start-1 col-end-2 row-start-1 row-end-3 min-h-screen bg-white pt-[78.63px] lg:pt-[87.86px]">

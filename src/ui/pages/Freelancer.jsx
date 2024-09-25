@@ -129,10 +129,10 @@ const Freelancer = () => {
                       />
                     </div>
                     <div className="flex-1">
-                      <h3 className="mb-2 text-xl font-semibold text-white">
+                      <h3 className="mb-2 text-xl font-semibold text-white text-left">
                         Complete the Application form
                       </h3>
-                      <p className="text-white">
+                      <p className="text-white text-left">
                         Provide us with your details and portfolio showcasing
                         your best work.
                       </p>
@@ -148,10 +148,10 @@ const Freelancer = () => {
                       />
                     </div>
                     <div className="ml-4">
-                      <h3 className="mb-2 text-xl font-semibold text-white">
+                      <h3 className="mb-2 text-xl font-semibold text-white text-left">
                         Submit Your Application
                       </h3>
-                      <p className="text-white">
+                      <p className="text-white text-left">
                         Send us your completed form and any relevant documents.
                       </p>
                     </div>
@@ -166,10 +166,10 @@ const Freelancer = () => {
                       />
                     </div>
                     <div className="ml-4">
-                      <h3 className="mb-2 text-xl font-semibold text-white">
+                      <h3 className="mb-2 text-xl font-semibold text-white text-left">
                         We Review Your Application
                       </h3>
-                      <p className="text-white">
+                      <p className="text-white text-left">
                         Our team will review your application and get in touch
                         with potential opportunities.
                       </p>

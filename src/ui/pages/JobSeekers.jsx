@@ -1,18 +1,21 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Button from "../../components/Button";
+import Button, { IconButton } from "../../components/Button";
 import {
+  faArrowRight,
   faChevronDown,
   faCircleXmark,
   faGlobe,
   faMagnifyingGlass,
   faSliders,
+  faXmark,
 } from "@fortawesome/free-solid-svg-icons";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useState } from "react";
+import { useForm, Controller } from "react-hook-form";
 import { useSearchParams } from "react-router-dom";
 import JobPost from "../../components/JobPost";
 import Pagination from "../../components/Pagination";
 import { jobListings } from "../../contents/jobLists";
+import { useModalContext } from "../../contexts/ModalContext";
 
 const DropdownItem = ({ register, name, value }) => {
   return (
@@ -43,6 +46,156 @@ const FilterTag = ({ tag, handleSetTags }) => {
         />
       </button>
     </span>
+  );
+};
+
+const ResumeSubmittedModal = () => {
+  const { setModalComponent } = useModalContext();
+
+  return (
+    <div className="relative flex w-full max-w-[750px] flex-col items-center rounded-2xl bg-white px-5 py-10 lg:px-44">
+      <img
+        src="/joblist-checked.png"
+        alt=""
+        className="mb-20 w-full max-w-64"
+      />
+      <h3 className="mb-4 font-inter text-lg font-semibold text-black lg:text-2xl">
+        Resume Submitted Successfully!
+      </h3>
+      <p className="mb-8 w-full max-w-[40ch] text-center font-inter text-base font-normal">
+        Thank you for submitting your resume. We will update you on future
+        Openings. Make sure you are following us on all social media platforms
+      </p>
+      <Button clickHandler={() => setModalComponent(null)}>
+        Return to Jobs
+      </Button>
+      <button
+        className="absolute right-5 top-5"
+        onClick={() => setModalComponent(null)}
+      >
+        <FontAwesomeIcon icon={faXmark} className="size-6" />
+      </button>
+    </div>
+  );
+};
+
+const ResumeForm = () => {
+  const [resume, setResume] = useState();
+  const { setModalComponent } = useModalContext();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+    control,
+  } = useForm();
+
+  const handleFileUpload = (e) => {
+    if (e.target.files.length === 1) {
+      const file = e.target.files[0];
+      setResume(file);
+    }
+  };
+
+  const handleDrop = (e, field) => {
+    e.stopPropagation();
+    e.preventDefault();
+    const file = e.dataTransfer.files[0];
+    setResume(file);
+    field.onChange(file);
+  };
+
+  const onSubmit = (data) => {
+    console.log("Form Submitted: ", data);
+    console.log("Uploaded Resume: ", resume);
+    reset();
+    setResume(null);
+    setModalComponent(<ResumeSubmittedModal />);
+  };
+
+  return (
+    <form className="w-full" onSubmit={handleSubmit(onSubmit)}>
+      <Controller
+        name="resume"
+        control={control}
+        rules={{ required: "Resume is required" }}
+        render={({ field }) => (
+          <label
+            htmlFor="resume"
+            className="flex flex-col items-center rounded-lg border border-dashed border-pry-900 bg-white py-8"
+            onDrop={(e) => handleDrop(e, field)}
+            onDragOver={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+            }}
+          >
+            <input
+              type="file"
+              accept=".pdf,.doc,.docx"
+              id="resume"
+              className="hidden"
+              onChange={(e) => {
+                field.onChange(e.target.files[0]);
+                handleFileUpload(e);
+              }}
+            />
+            <span className="font rounded-2xl border px-2 py-2 font-inter text-lg font-medium text-pry-500">
+              Upload your Resume
+            </span>
+            <span className="mt-6 font-inter text-lg font-medium text-grey-900">
+              or Drag & drop here
+            </span>
+            {resume && (
+              <div className="mt-4">
+                <p className="text-gray-600 text-sm">
+                  Selected File: {resume.name}
+                </p>
+              </div>
+            )}
+            {errors.resume && (
+              <p className="mt-2 font-inter text-xs font-normal text-error-500">
+                {errors.resume.message}
+              </p>
+            )}
+          </label>
+        )}
+      />
+      <label
+        htmlFor="privacy-policy"
+        className="mt-6 flex flex-col font-inter text-base font-normal"
+      >
+        <div className="flex flex-row items-start gap-4">
+          <input
+            type="checkbox"
+            id="privacy-policy"
+            className="relative aspect-square min-w-5 appearance-none overflow-hidden rounded-md border border-black bg-center after:absolute after:hidden after:size-full after:bg-[url('/icons/check.svg')] after:bg-[50%] after:bg-no-repeat checked:border-pry-500 checked:bg-pry-500 checked:after:inline [&[aria-invalid=true]]:border-error-500"
+            {...register("privacyChecked", {
+              required: "Please check this field if you want to proceed",
+            })}
+          />
+          <span>
+            By submitting this form, you agree to our
+            <a
+              href="/policies/privacy-policy"
+              className="ml-1 font-semibold text-sec-500"
+            >
+              Privacy policy
+            </a>
+          </span>
+        </div>
+        {errors.privacyChecked && (
+          <p className="mt-2 font-inter text-xs font-normal text-error-500">
+            {errors.privacyChecked.message}
+          </p>
+        )}
+      </label>
+      <IconButton
+        rightIcon={faArrowRight}
+        className="mt-10 flex w-full items-center justify-center"
+      >
+        Submit Resume
+      </IconButton>
+    </form>
   );
 };
 
@@ -234,11 +387,22 @@ const JobSeekers = () => {
                   <fieldset className="absolute right-0 top-[calc(100%+8px)] w-max min-w-44 rounded-sm border border-[hsla(216,12%,92%,1)] bg-[hsla(0,0%,100%,1)] shadow-[0px_4px_6px_-1px_hsla(0,0%,0%,0.1)]">
                     <legend className="sr-only">Job Category/Industry</legend>
                     {[
-                      "Agriculture",
-                      "Health Care",
-                      "Finance",
-                      "Education",
-                      "Real Estate",
+                      "Accounting & finance",
+                      "Information technology",
+                      "Legal",
+                      "Human resources",
+                      "Procurement & supply chain",
+                      "Banking & Financial services",
+                      "Business Support",
+                      "Risk & compliance",
+                      "Sales & Commercial",
+                      "Projects & Transformation",
+                      "Tax",
+                      "Internal Vacancies",
+                      "Manufacturing & Engineering",
+                      "Marketing",
+                      "Recruitment",
+                      "Treasury",
                     ].map((item) => (
                       <DropdownItem
                         key={item}
@@ -287,104 +451,153 @@ const JobSeekers = () => {
       </section>
       <section className="px-5 py-12 md:py-24 lg:px-10">
         <div className="inner flex flex-col lg:items-center">
-          <h2 className="mb-4 font-inter text-3xl font-bold lg:mb-10 lg:text-5xl">
-            Latest Job Posts
-          </h2>
-          <ul className="flex flex-wrap gap-4">
-            <li>
-              <label
-                htmlFor="all"
-                onClick={() => {
-                  setJobTypeFilter("all");
-                  setCurrentPage(1);
-                }}
-                className="w-fit rounded-md border border-pry-500 px-2 py-1 font-raleway text-sm font-normal text-pry-500 has-[:checked]:bg-pry-500 has-[:checked]:text-white md:text-base lg:text-xl"
-              >
-                <input
-                  type="radio"
-                  id="all"
-                  name="jobType"
-                  value="all"
-                  checked={jobTypeFilter === "all"}
-                  className="hidden"
-                />
-                <FontAwesomeIcon icon={faGlobe} className="mr-1" />
-                All
-              </label>
-            </li>
-            <li>
-              <label
-                htmlFor="full-time"
-                onClick={() => {
-                  setJobTypeFilter("full-time");
-                  setCurrentPage(1);
-                }}
-                className="w-fit rounded-md border border-pry-500 px-2 py-1 font-raleway text-sm font-normal text-pry-500 has-[:checked]:bg-pry-500 has-[:checked]:text-white md:text-base lg:text-xl"
-              >
-                <input
-                  type="radio"
-                  id="full-time"
-                  name="jobType"
-                  value="full-time"
-                  checked={jobTypeFilter === "full-time"}
-                  className="hidden"
-                />
-                Full Time Roles
-              </label>
-            </li>
-            <li>
-              <label
-                htmlFor="contract"
-                onClick={() => {
-                  setJobTypeFilter("contract");
-                  setCurrentPage(1);
-                }}
-                className="w-fit rounded-md border border-pry-500 px-2 py-1 font-raleway text-sm font-normal text-pry-500 has-[:checked]:bg-pry-500 has-[:checked]:text-white md:text-base lg:text-xl"
-              >
-                <input
-                  type="radio"
-                  id="contract"
-                  name="jobType"
-                  value="contract"
-                  checked={jobTypeFilter === "contract"}
-                  className="hidden"
-                />
-                Contract Positions
-              </label>
-            </li>
-            <li>
-              <label
-                htmlFor="part-time"
-                onClick={() => {
-                  setJobTypeFilter("part-time");
-                  setCurrentPage(1);
-                }}
-                className="w-fit rounded-md border border-pry-500 px-2 py-1 font-raleway text-sm font-normal text-pry-500 has-[:checked]:bg-pry-500 has-[:checked]:text-white md:text-base lg:text-xl"
-              >
-                <input
-                  type="radio"
-                  id="part-time"
-                  name="jobType"
-                  value="part-time"
-                  checked={jobTypeFilter === "part-time"}
-                  className="hidden"
-                />
-                Part Time Opportunities
-              </label>
-            </li>
-          </ul>
+          {jobListings && jobListings.length > 0 ? (
+            <>
+              <h2 className="mb-4 font-inter text-3xl font-bold lg:mb-10 lg:text-5xl">
+                Latest Job Posts
+              </h2>
+              <ul className="flex flex-wrap gap-4">
+                <li>
+                  <label
+                    htmlFor="all"
+                    onClick={() => {
+                      setJobTypeFilter("all");
+                      setCurrentPage(1);
+                    }}
+                    className="w-fit rounded-md border border-pry-500 px-2 py-1 font-raleway text-sm font-normal text-pry-500 has-[:checked]:bg-pry-500 has-[:checked]:text-white md:text-base lg:text-xl"
+                  >
+                    <input
+                      type="radio"
+                      id="all"
+                      name="jobType"
+                      value="all"
+                      checked={jobTypeFilter === "all"}
+                      className="hidden"
+                    />
+                    <FontAwesomeIcon icon={faGlobe} className="mr-1" />
+                    All
+                  </label>
+                </li>
+                <li>
+                  <label
+                    htmlFor="full-time"
+                    onClick={() => {
+                      setJobTypeFilter("full-time");
+                      setCurrentPage(1);
+                    }}
+                    className="w-fit rounded-md border border-pry-500 px-2 py-1 font-raleway text-sm font-normal text-pry-500 has-[:checked]:bg-pry-500 has-[:checked]:text-white md:text-base lg:text-xl"
+                  >
+                    <input
+                      type="radio"
+                      id="full-time"
+                      name="jobType"
+                      value="full-time"
+                      checked={jobTypeFilter === "full-time"}
+                      className="hidden"
+                    />
+                    Full Time Roles
+                  </label>
+                </li>
+                <li>
+                  <label
+                    htmlFor="contract"
+                    onClick={() => {
+                      setJobTypeFilter("contract");
+                      setCurrentPage(1);
+                    }}
+                    className="w-fit rounded-md border border-pry-500 px-2 py-1 font-raleway text-sm font-normal text-pry-500 has-[:checked]:bg-pry-500 has-[:checked]:text-white md:text-base lg:text-xl"
+                  >
+                    <input
+                      type="radio"
+                      id="contract"
+                      name="jobType"
+                      value="contract"
+                      checked={jobTypeFilter === "contract"}
+                      className="hidden"
+                    />
+                    Contract Positions
+                  </label>
+                </li>
+                <li>
+                  <label
+                    htmlFor="part-time"
+                    onClick={() => {
+                      setJobTypeFilter("part-time");
+                      setCurrentPage(1);
+                    }}
+                    className="w-fit rounded-md border border-pry-500 px-2 py-1 font-raleway text-sm font-normal text-pry-500 has-[:checked]:bg-pry-500 has-[:checked]:text-white md:text-base lg:text-xl"
+                  >
+                    <input
+                      type="radio"
+                      id="part-time"
+                      name="jobType"
+                      value="part-time"
+                      checked={jobTypeFilter === "part-time"}
+                      className="hidden"
+                    />
+                    Part Time Opportunities
+                  </label>
+                </li>
+              </ul>
+            </>
+          ) : (
+            <>
+              <h2 className="font-inter text-xl font-semibold lg:text-3xl">
+                <span className="text-error-500">Oops!</span> Sorry there are no
+                Job posting at the moment
+              </h2>
+              <p className="mt-2 font-inter text-base font-normal text-grey-500 lg:mt-4 lg:text-lg">
+                Kindly upload your CV for future job Openings
+              </p>
+            </>
+          )}
           <div className="mt-8 flex w-full flex-col items-center lg:mt-20">
-            <ul className="mb-6 grid min-h-screen w-full grid-cols-[repeat(auto-fit,minmax(240px,max-content))] place-content-start gap-8 bg-sec-50 px-5 py-6 *:[flex:1] lg:mb-20 lg:gap-x-20 lg:gap-y-10 lg:px-14 lg:py-20">
-              {currentPageData.map((job, index) => (
-                <JobPost key={index} data={job} />
-              ))}
-            </ul>
-            <Pagination
-              currentPage={currentPage}
-              totalCount={filteredData.length}
-              pageSize={pageSize}
-              onPageChange={onPageChange}
-            />
+            <div className="mb-6 w-full bg-sec-50 px-5 py-3 lg:mb-20 lg:px-14 lg:py-10">
+              {jobListings && jobListings.length > 0 ? (
+                <>
+                  {(searchQuery ||
+                    (levels && levels.length > 0) ||
+                    (categories && categories.length > 0)) && (
+                    <p className="font-inter text-xl font-semibold lg:text-3xl">
+                      Search results for &quot;{searchQuery}
+                      {levels &&
+                        levels.length > 0 &&
+                        ` + ${levels.join(" + ")}`}
+                      {categories &&
+                        categories.length > 0 &&
+                        ` + ${categories.join(" + ")}`}
+                      &quot;
+                    </p>
+                  )}
+                  {filteredData.length > 0 ? (
+                    <ul className="grid min-h-screen grid-cols-[repeat(auto-fit,minmax(240px,max-content))] place-content-start gap-8 py-3 lg:mb-20 lg:gap-x-20 lg:gap-y-10 lg:py-10">
+                      {currentPageData.map((job, index) => (
+                        <JobPost key={index} data={job} />
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="py-3 font-inter text-base font-normal text-grey-400 lg:py-10 lg:text-xl">
+                      No results found
+                    </p>
+                  )}
+                </>
+              ) : (
+                <div className="mx-auto flex w-full max-w-[800px] flex-col items-center gap-6">
+                  <h3 className="w-full font-inter text-xl font-semibold lg:text-2xl">
+                    Resume*
+                  </h3>
+                  <ResumeForm />
+                </div>
+              )}
+            </div>
+            {jobListings.length > 0 && (
+              <Pagination
+                currentPage={currentPage}
+                totalCount={filteredData.length}
+                pageSize={pageSize}
+                onPageChange={onPageChange}
+              />
+            )}
           </div>
         </div>
       </section>

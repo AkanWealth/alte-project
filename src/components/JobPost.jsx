@@ -6,6 +6,7 @@ import { convertToTitleCase } from "../utils";
 
 const JobPost = ({ data }) => {
   const {
+    id,
     companyLogo,
     position,
     location,
@@ -61,7 +62,7 @@ const JobPost = ({ data }) => {
         {skills.length > 3 && <li>+{skills.length - 3}</li>}
       </ul>
 
-      <Button>View job</Button>
+      <Button link={`/jobseekers/${id}`}>View job</Button>
 
       <time
         className="mt-6 flex items-center text-xs"

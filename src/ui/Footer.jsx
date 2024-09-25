@@ -20,7 +20,6 @@ const Footer = ({ relativeStyles }) => {
         </section>
       </div>
       <Copyright relativeStyles="mt-auto" />
-      
     </footer>
   );
 };

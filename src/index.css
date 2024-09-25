@@ -8,20 +8,8 @@
   }
 }
 
-
-/* @layer utilities {
+@layer utilities {
   .toast-container {
     @apply fixed top-[105px] mx-5 max-w-screen-xl lg:top-[114px] lg:mx-6 xl:mx-auto !important;
   }
 }
-
-.icon-title {
-  display: flex;
-  align-items: center;
-}
-.icon-title {
-  width: 40px;
-  height: auto;
-  margin-right: 10px;
-} */
-

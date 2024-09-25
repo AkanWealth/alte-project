@@ -1,81 +1,97 @@
-import {
-  createContext,
-  useState,
-  useContext,
-  useEffect,
-  useReducer,
-} from "react";
+import { createContext, useContext, useEffect, useReducer } from "react";
 import { useCookies } from "react-cookie";
 
 const CookiesContext = createContext();
 
 export const useCookiesContext = () => useContext(CookiesContext);
 
-const initialPreference = {
-  necessary: true,
-  preferences: false,
-  statistics: false,
-  marketing: false,
-  unclassified: false,
-  functional: false,
+const initialUserCookies = {
+  initiated: false,
+  preferences: {
+    essential: true,
+    performance: false,
+    functionality: false,
+    advertising: false,
+  },
 };
 
 const reducer = (state, action) => {
   switch (action.type) {
-    case "set_necessary":
-      return { ...state, necessary: action.payload };
-    case "set_preferences":
-      return { ...state, preferences: action.payload };
-    case "set_statistics":
-      return { ...state, statistics: action.payload };
-    case "set_marketing":
-      return { ...state, marketing: action.payload };
-    case "set_unclassified":
-      return { ...state, unclassified: action.payload };
-    case "set_functional":
-      return { ...state, functional: action.payload };
+    case "initiate_cookies":
+      return {
+        ...state,
+        initiated: true,
+      };
+    case "set_essential":
+      return {
+        ...state,
+        preferences: { ...state.preferences, essential: action.payload },
+      };
+    case "set_performance":
+      return {
+        ...state,
+        preferences: { ...state.preferences, performance: action.payload },
+      };
+    case "set_functionality":
+      return {
+        ...state,
+        preferences: { ...state.preferences, functionality: action.payload },
+      };
+    case "set_advertising":
+      return {
+        ...state,
+        preferences: { ...state.preferences, advertising: action.payload },
+      };
     case "accept_all":
       return {
-        necessary: true,
-        preferences: true,
-        statistics: true,
-        marketing: true,
-        unclassified: true,
-        functional: true,
+        ...state,
+        preferences: {
+          essential: true,
+          performance: true,
+          functionality: true,
+          advertising: true,
+        },
+      };
+    case "reject_non_essential":
+      return {
+        ...state,
+        preferences: {
+          essential: true,
+          performance: false,
+          functionality: false,
+          advertising: false,
+        },
       };
     case "reject_all":
       return {
-        necessary: false,
-        preferences: false,
-        statistics: false,
-        marketing: false,
-        unclassified: false,
-        functional: false,
+        ...state,
+        preferences: {
+          essential: false,
+          performance: false,
+          functionality: false,
+          advertising: false,
+        },
       };
   }
 };
 
 export const CookiesProvider = ({ children }) => {
-  const [toShow, setToShow] = useState("cookies");
-  const [displayCookies, setDisplayCookies] = useState(true);
-  const [userCookies, setCookies] = useCookies(["cookiesPreference"]);
-  const [cookiesPreference, dispatch] = useReducer(
+  const [cookies, setCookies] = useCookies(["userCookies"]);
+  const [userCookies, dispatch] = useReducer(
     reducer,
-    userCookies.cookiesPreference || initialPreference,
+    cookies.userCookies || initialUserCookies,
   );
 
   useEffect(() => {
-    setCookies("cookiesPreference", JSON.stringify(cookiesPreference));
-  }, [cookiesPreference, setCookies]);
+    if (!userCookies.initiated) return;
+    setCookies("userCookies", JSON.stringify(userCookies));
+  }, [userCookies, setCookies]);
 
   return (
     <CookiesContext.Provider
       value={{
-        displayCookies,
-        setDisplayCookies,
-        toShow,
-        setToShow,
-        cookiesPreference,
+        cookiesInitiated: userCookies.initiated,
+        cookiesPreferences: userCookies.preferences,
         dispatch,
       }}
     >

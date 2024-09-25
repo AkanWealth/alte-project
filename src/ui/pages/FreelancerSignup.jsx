@@ -9,6 +9,8 @@ const FreelancerSignup = () => {
     password: "",
     confirm_password: "",
   });
+  
+
 
   const [errors, setErrors] = useState({});
   const [alertVisible, setAlertVisible] = useState(false);
@@ -51,7 +53,7 @@ const FreelancerSignup = () => {
 
    const submitForm = async () => {
     try {
-      const response = await axios.post('http://localhost:3000/freelancers/register', values);
+      const response = await axios.post('https://altes.free.beeceptor.com/freelancers/register', values);
       console.log('Success:', response.data);
       navigate('/freelancers/verify-email');  
     } catch (error) {

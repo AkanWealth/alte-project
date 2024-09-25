@@ -6,6 +6,7 @@ import {
 
 // App UI
 import AppLayout from "./ui/AppLayout";
+import Policies from "./ui/Policies";
 
 // Pages
 import Home from "./ui/pages/Home";
@@ -22,6 +23,10 @@ import JobSeekers from "./ui/pages/JobSeekers";
 import VerifyEmail from "./ui/pages/VerifyEmail";
 import EmailVerified from "./ui/pages/EmailVerified";
 
+import PrivacyPolicy from "./ui/pages/PrivacyPolicy";
+import CookiesPolicy from "./ui/pages/CookiesPolicy";
+import JobSeeker from "./ui/pages/JobSeeker";
+import QuoteSuccessPage from "./ui/pages/QuoteSuccessPage";
 
 const routes = createBrowserRouter([
   {
@@ -81,8 +86,34 @@ const routes = createBrowserRouter([
         element: <EmailVerified />,
       },
       {
+        path: "/request-qoute/success",
+        element: <QuoteSuccessPage />,
+      },
+      {
         path: "jobseekers",
         element: <JobSeekers />,
+      },
+      {
+        path: "jobseekers/:id",
+        element: <JobSeeker />,
+      },
+      {
+        path: "policies",
+        element: <Policies />,
+        children: [
+          {
+            index: true,
+            element: <Navigate to="privacy-policy" replace={true} />,
+          },
+          {
+            path: "privacy-policy",
+            element: <PrivacyPolicy />,
+          },
+          {
+            path: "cookies-policy",
+            element: <CookiesPolicy />,
+          },
+        ],
       },
     ],
   },

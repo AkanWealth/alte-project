@@ -53,7 +53,7 @@ const ContactUs = () => {
                 </a>
               </p>
               <p>
-                Open Time
+                Opening Times
                 <span className="mt-2 block text-sm font-normal md:mt-3 lg:mt-4">
                   Mondays - Fridays 8am-5pm
                 </span>
