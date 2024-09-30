@@ -1,7 +1,11 @@
-import { Link, useLocation } from "react-router-dom";
-import Button, { TextButton } from "../components/Button";
-import { useCookiesContext } from "../contexts/CookiesContext";
 import { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+
+// Contexts
+import { useCookiesContext } from "../contexts/CookiesContext";
+
+// Components
+import Button, { TextButton } from "../components/Button";
 
 const Cookies = ({ relativeStyles }) => {
   const [toShow, setToShow] = useState("cookies");

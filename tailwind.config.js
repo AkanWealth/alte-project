@@ -1,6 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+
   theme: {
     colors: {
       white: "hsl(0, 0%, 100%)",
@@ -70,7 +71,11 @@ export default {
       raleway: ["Raleway", "system-ui"],
       inter: ["Inter", "sans-serif"],
     },
-    extend: {},
+    extend: {
+      maxWidth: {
+        '4xl': '86rem', // Adding a custom max-width of 85rem
+      },
+    },
   },
   plugins: [],
 };
