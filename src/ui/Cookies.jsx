@@ -4,9 +4,6 @@ import { Link, useLocation } from "react-router-dom";
 // Contexts
 import { useCookiesContext } from "../contexts/CookiesContext";
 
-// Components
-import Button, { TextButton } from "../components/Button";
-
 const Cookies = ({ relativeStyles }) => {
   const [toShow, setToShow] = useState("cookies");
   const { cookiesInitiated, cookiesPreferences, dispatch } =
@@ -39,32 +36,31 @@ const Cookies = ({ relativeStyles }) => {
             preferences below
           </p>
           <div className="flex w-full flex-wrap justify-between gap-3">
-            <Button
-              variant="sec"
-              color="dark"
-              className="text-pry-500"
-              clickHandler={() => {
+            <button
+              className="btn btn-sec--outline"
+              onClick={() => {
                 dispatch({ type: "reject_all" });
                 dispatch({ type: "initiate_cookies" });
               }}
             >
               Decline Non-Essential Cookies
-            </Button>
-            <Button
-              clickHandler={() => {
+            </button>
+            <button
+              className="btn btn-pry"
+              onClick={() => {
                 dispatch({ type: "accept_all" });
                 dispatch({ type: "initiate_cookies" });
               }}
             >
               Accept All Cookies
-            </Button>
+            </button>
           </div>
-          <TextButton
-            clickHandler={() => setToShow("preferences")}
-            className="self-end text-right text-lg font-normal text-pry-500 underline"
+          <button
+            onClick={() => setToShow("preferences")}
+            className="text-btn text-btn--underline text-btn-pry self-end"
           >
             Cookie Preferences
-          </TextButton>
+          </button>
         </div>
       )}
       {toShow === "preferences" && (
@@ -171,31 +167,30 @@ const Cookies = ({ relativeStyles }) => {
             </label>
           </div>
           <div className="flex w-full flex-wrap justify-between gap-3">
-            <TextButton
-              variant="sec"
-              color="dark"
-              className="font-medium text-pry-500"
-              clickHandler={() => {
+            <button
+              className="text-btn text-btn-pry"
+              onClick={() => {
                 dispatch({ type: "reject_all" });
                 dispatch({ type: "initiate_cookies" });
               }}
             >
               Reject all
-            </TextButton>
-            <Button
-              variant="sec"
-              color="dark"
-              className="text-pry-500"
-              clickHandler={() => {
+            </button>
+            <button
+              className="btn btn-sec--outline"
+              onClick={() => {
                 dispatch({ type: "accept_all" });
                 dispatch({ type: "initiate_cookies" });
               }}
             >
               Accept All
-            </Button>
-            <Button clickHandler={() => dispatch({ type: "initiate_cookies" })}>
+            </button>
+            <button
+              className="btn btn-pry"
+              onClick={() => dispatch({ type: "initiate_cookies" })}
+            >
               Confirm my Choices
-            </Button>
+            </button>
           </div>
         </div>
       )}

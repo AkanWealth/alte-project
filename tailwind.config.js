@@ -4,6 +4,7 @@ export default {
 
   theme: {
     colors: {
+      transparent: "transparent",
       white: "hsl(0, 0%, 100%)",
       black: "hsl(0, 0%, 0%)",
       pry: {
@@ -73,7 +74,7 @@ export default {
     },
     extend: {
       maxWidth: {
-        '4xl': '86rem', // Adding a custom max-width of 85rem
+        "4xl": "86rem", // Adding a custom max-width of 85rem
       },
     },
   },

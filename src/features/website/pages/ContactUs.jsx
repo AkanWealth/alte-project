@@ -1,11 +1,8 @@
 import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
-import { isAlpha, isEmail, isMobilePhone } from "validator";
-import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
-
-// Components
-import { IconButton } from "../../../components/Button";
+import { isEmail, isMobilePhone } from "validator";
+import { ArrowRightIcon } from "@heroicons/react/20/solid";
 
 // UIs
 import { ToastMessage } from "../../../ui/ToastNotification";
@@ -182,14 +179,14 @@ const Form = () => {
           </p>
         )}
       </label>
-      <IconButton
+      <button
         type="submit"
-        rightIcon={faArrowRight}
-        className="flex w-full items-center justify-center"
         disabled={isSubmitting}
+        className="btn btn-pry w-full"
       >
         Send Message
-      </IconButton>
+        <ArrowRightIcon className="size-6" />
+      </button>
     </form>
   );
 };

@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import { FreelancerRouteProvider } from "../../../auth/useFreelancerAuth";
+import { FreelancerRouteProvider } from "../auth/useFreelancerAuth";
 
 const FreelancerLayout = () => {
   return (

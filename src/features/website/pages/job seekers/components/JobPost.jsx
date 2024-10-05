@@ -1,7 +1,8 @@
-import { faClock, faLocationDot } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Button from "../../../../../components/Button";
+import { Link } from "react-router-dom";
 import { formatDistanceToNow } from "date-fns";
+import { ClockIcon, MapPinIcon } from "@heroicons/react/24/outline";
+
+// Utils
 import { convertToTitleCase } from "../../../../../utils";
 
 const JobPost = ({ data }) => {
@@ -31,7 +32,7 @@ const JobPost = ({ data }) => {
 
       <div className="mb-3 flex flex-wrap items-center gap-4">
         <p className="inline-flex items-center text-sm text-grey-400">
-          <FontAwesomeIcon icon={faLocationDot} className="mr-2 size-4" />
+          <MapPinIcon className="mr-2 size-4" />
           {location}
         </p>
         <p className="text-sm font-medium text-grey-400">
@@ -62,13 +63,15 @@ const JobPost = ({ data }) => {
         {skills.length > 3 && <li>+{skills.length - 3}</li>}
       </ul>
 
-      <Button link={`/jobseekers/${id}`}>View job</Button>
+      <Link to={`/jobseekers/${id}`} className="btn btn-pry">
+        View job
+      </Link>
 
       <time
         className="mt-6 flex items-center text-xs"
         dateTime={new Date(datePosted).toISOString()}
       >
-        <FontAwesomeIcon icon={faClock} className="mr-2 size-4 text-grey-200" />
+        <ClockIcon className="mr-2 size-4 text-grey-200" />
         {formatDistanceToNow(new Date(datePosted), { addSuffix: true })}
       </time>
     </article>

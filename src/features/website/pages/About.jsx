@@ -1,13 +1,11 @@
-import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { ArrowRightIcon } from "@heroicons/react/20/solid";
 
 // Contexts
 import { useModalContext } from "../../../contexts/ModalContext";
 
-// Components
-import { IconButton } from "../../../components/Button";
-
 // UIs
 import QuoteForm from "../ui/QuoteForm";
+import { SparklesIcon } from "@heroicons/react/24/outline";
 
 const About = () => {
   const { setModalComponent } = useModalContext();
@@ -28,21 +26,22 @@ const About = () => {
               user-friendly designs, we have you covered.
             </p>
             <div className="flex flex-row flex-wrap gap-3 lg:gap-6">
-              <IconButton
-                rightIcon={faArrowRight}
+              <a
                 target="_blank"
                 rel="noreferrer"
-                link="https://calendar.google.com/calendar/appointments/schedules/AcZssZ00GcrPNO72R7ML0RTskXRADvJdJmiBJh_CP03IxNCaTERG0W5huuLvIC1gD9nUZCYDWjJR9qCo?gv=true"
+                href="https://calendar.google.com/calendar/appointments/schedules/AcZssZ00GcrPNO72R7ML0RTskXRADvJdJmiBJh_CP03IxNCaTERG0W5huuLvIC1gD9nUZCYDWjJR9qCo?gv=true"
+                className="btn btn-pry"
               >
                 Book a Discovery Call
-              </IconButton>
-              <IconButton
-                clickHandler={() => setModalComponent(<QuoteForm />)}
-                variant="sec"
-                rightIcon={faArrowRight}
+                <ArrowRightIcon className="size-6" />
+              </a>
+              <button
+                className="btn btn-pry--outline"
+                onClick={() => setModalComponent(<QuoteForm />)}
               >
                 Request a Quote
-              </IconButton>
+                <ArrowRightIcon className="size-6" />
+              </button>
             </div>
           </div>
           <img
@@ -157,11 +156,7 @@ const About = () => {
             <ol className="flex flex-col gap-6 *:grid *:grid-cols-[auto_1fr] *:gap-4 *:lg:gap-8">
               <li>
                 <span className="mt-1 grid size-5 place-content-center rounded-full bg-pry-500 lg:size-10">
-                  <img
-                    src="/icons/sparkles.svg"
-                    alt=""
-                    className="size-3 lg:size-6"
-                  />
+                  <SparklesIcon className="size-3 text-sec-500 lg:size-6" />
                 </span>
                 <p className="font-inter text-base font-normal text-black">
                   <span className="mb-1 block text-xl font-semibold text-pry-500 lg:mb-2 lg:text-3xl">
@@ -173,11 +168,7 @@ const About = () => {
               </li>
               <li>
                 <span className="mt-1 grid size-5 place-content-center rounded-full bg-pry-500 lg:size-10">
-                  <img
-                    src="/icons/sparkles.svg"
-                    alt=""
-                    className="size-3 lg:size-6"
-                  />
+                  <SparklesIcon className="size-3 text-sec-500 lg:size-6" />
                 </span>
                 <p className="font-inter text-base font-normal text-black">
                   <span className="mb-1 block text-xl font-semibold text-pry-500 lg:mb-2 lg:text-3xl">
@@ -189,11 +180,7 @@ const About = () => {
               </li>
               <li>
                 <span className="mt-1 grid size-5 place-content-center rounded-full bg-pry-500 lg:size-10">
-                  <img
-                    src="/icons/sparkles.svg"
-                    alt=""
-                    className="size-3 lg:size-6"
-                  />
+                  <SparklesIcon className="size-3 text-sec-500 lg:size-6" />
                 </span>
                 <p className="font-inter text-base font-normal text-black">
                   <span className="mb-1 block text-xl font-semibold text-pry-500 lg:mb-2 lg:text-3xl">
@@ -205,11 +192,7 @@ const About = () => {
               </li>
               <li>
                 <span className="mt-1 grid size-5 place-content-center rounded-full bg-pry-500 lg:size-10">
-                  <img
-                    src="/icons/sparkles.svg"
-                    alt=""
-                    className="size-3 lg:size-6"
-                  />
+                  <SparklesIcon className="size-3 text-sec-500 lg:size-6" />
                 </span>
                 <p className="font-inter text-base font-normal text-black">
                   <span className="mb-1 block text-xl font-semibold text-pry-500 lg:mb-2 lg:text-3xl">
@@ -221,11 +204,7 @@ const About = () => {
               </li>
               <li>
                 <span className="mt-1 grid size-5 place-content-center rounded-full bg-pry-500 lg:size-10">
-                  <img
-                    src="/icons/sparkles.svg"
-                    alt=""
-                    className="size-3 lg:size-6"
-                  />
+                  <SparklesIcon className="size-3 text-sec-500 lg:size-6" />
                 </span>
                 <p className="font-inter text-base font-normal text-black">
                   <span className="mb-1 block text-xl font-semibold text-pry-500 lg:mb-2 lg:text-3xl">

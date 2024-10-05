@@ -2,21 +2,19 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Controller, useForm } from "react-hook-form";
 import { isEmail, isMobilePhone, isURL } from "validator";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faArrowRight,
-  faClock,
-  faHome,
-  faLocationDot,
-  faXmark,
-} from "@fortawesome/free-solid-svg-icons";
+  ClockIcon,
+  HomeIcon,
+  MapPinIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
+import { ArrowRightIcon } from "@heroicons/react/20/solid";
 import { jobListings } from "../../../../contents/jobLists";
 
 // Contexts
 import { useModalContext } from "../../../../contexts/ModalContext";
 
 // Components
-import Button, { IconButton } from "../../../../components/Button";
 import JobPost from "./components/JobPost";
 
 // Utils
@@ -43,14 +41,14 @@ const ApplicationSubmittedModal = () => {
         received your application and will review it shortly. You will receive
         an email confirmation shortly.
       </p>
-      <Button
-        clickHandler={() => {
+      <button
+        onClick={() => {
           setModalComponent(null);
           navigate("/jobseekers");
         }}
       >
         Return to Jobs
-      </Button>
+      </button>
       <button
         className="absolute right-5 top-5"
         onClick={() => {
@@ -58,7 +56,7 @@ const ApplicationSubmittedModal = () => {
           navigate("/jobseekers");
         }}
       >
-        <FontAwesomeIcon icon={faXmark} className="size-6" />
+        <XMarkIcon className="size-6" />
       </button>
     </div>
   );
@@ -107,8 +105,14 @@ const JobApplyForm = () => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="flex h-full max-h-screen w-full max-w-screen-lg flex-col rounded-3xl bg-white px-7 py-10 font-inter text-xl font-semibold lg:px-28 lg:py-20 lg:text-3xl"
+      className="relative flex h-full max-h-screen w-full max-w-screen-lg flex-col rounded-3xl bg-white px-7 py-10 font-inter text-xl font-semibold lg:px-28 lg:py-20 lg:text-3xl"
     >
+      <button
+        onClick={() => setModalComponent(null)}
+        className="text-gray-500 hover:text-gray-800 absolute right-6 top-6 lg:right-16 lg:top-16"
+      >
+        <XMarkIcon className="size-6" />
+      </button>
       <h2>Join Alte - {currentJob.position}</h2>
       <div className="mt-10 flex flex-col gap-5 overflow-y-scroll text-start lg:gap-8">
         <div className="">
@@ -311,14 +315,14 @@ const JobApplyForm = () => {
             </p>
           )}
         </label>
-        <IconButton
+        <button
           type="submit"
-          rightIcon={faArrowRight}
-          className="flex w-full items-center justify-center"
           disabled={isSubmitting}
+          className="btn btn-pry w-full"
         >
           Submit Application
-        </IconButton>
+          <ArrowRightIcon className="size-6" />
+        </button>
       </div>
     </form>
   );
@@ -357,12 +361,13 @@ const JobSeeker = () => {
                 alt=""
                 className="-mt-5 ml-2 aspect-square w-full max-w-12 lg:-mt-10 lg:ml-5 lg:max-w-28"
               />
-              <IconButton
-                rightIcon={faArrowRight}
-                clickHandler={() => setModalComponent(<JobApplyForm />)}
+              <button
+                className="btn btn-pry"
+                onClick={() => setModalComponent(<JobApplyForm />)}
               >
                 Apply
-              </IconButton>
+                <ArrowRightIcon className="size-6" />
+              </button>
             </div>
             <h1 className="font-inter text-2xl font-bold lg:text-3xl">
               {currentJob.position}
@@ -390,10 +395,7 @@ const JobSeeker = () => {
               </h2>
               <ul className="flex flex-col gap-3 text-sm text-grey-300 lg:text-base">
                 <li className="inline-flex items-start lg:items-center">
-                  <FontAwesomeIcon
-                    icon={faLocationDot}
-                    className="mr-5 size-4 rounded-full bg-pry-50 p-1 lg:size-6 lg:p-2"
-                  />
+                  <MapPinIcon className="mr-5 size-4 rounded-full bg-pry-50 p-1 lg:size-6 lg:p-2" />
                   <span className="inline-flex flex-wrap items-center">
                     <span className="mr-4">Location</span>
                   </span>
@@ -402,10 +404,7 @@ const JobSeeker = () => {
                   </span>
                 </li>
                 <li className="inline-flex items-start lg:items-center">
-                  <FontAwesomeIcon
-                    icon={faClock}
-                    className="mr-5 size-4 rounded-full bg-pry-50 p-1 text-success-500 lg:size-6 lg:p-2"
-                  />
+                  <ClockIcon className="mr-5 size-4 rounded-full bg-pry-50 p-1 text-success-500 lg:size-6 lg:p-2" />
                   <span className="inline-flex flex-wrap items-center">
                     <span className="mr-4">Job posted on</span>
                     <time
@@ -417,10 +416,7 @@ const JobSeeker = () => {
                   </span>
                 </li>
                 <li className="inline-flex items-start lg:items-center">
-                  <FontAwesomeIcon
-                    icon={faClock}
-                    className="mr-5 size-4 rounded-full bg-pry-50 p-1 text-error-500 lg:size-6 lg:p-2"
-                  />
+                  <ClockIcon className="mr-5 size-4 rounded-full bg-pry-50 p-1 text-error-500 lg:size-6 lg:p-2" />
                   <span className="inline-flex flex-wrap items-center">
                     <span className="mr-4">Application Deadline</span>
                     <time
@@ -432,10 +428,7 @@ const JobSeeker = () => {
                   </span>
                 </li>
                 <li className="inline-flex items-start lg:items-center">
-                  <FontAwesomeIcon
-                    icon={faHome}
-                    className="mr-5 size-4 rounded-full bg-pry-50 p-1 lg:size-6 lg:p-2"
-                  />
+                  <HomeIcon className="mr-5 size-4 rounded-full bg-pry-50 p-1 lg:size-6 lg:p-2" />
                   <span className="inline-flex flex-wrap items-center">
                     <span className="mr-4">Work Type</span>
                   </span>
@@ -488,13 +481,13 @@ const JobSeeker = () => {
                 {currentJob.aboutCompany}
               </p>
             </div>
-            <IconButton
-              rightIcon={faArrowRight}
-              clickHandler={() => setModalComponent(<JobApplyForm />)}
-              className="ml-auto"
+            <button
+              className="btn btn-pry ml-auto"
+              onClick={() => setModalComponent(<JobApplyForm />)}
             >
               Apply
-            </IconButton>
+              <ArrowRightIcon className="size-6" />
+            </button>
           </article>
         </main>
         <aside className="col-start-1 col-end-2 row-start-2 row-end-3 h-full p-2 lg:col-start-1 lg:col-end-2 lg:row-start-1 lg:row-end-2 lg:px-4 lg:py-0">

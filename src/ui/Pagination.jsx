@@ -1,10 +1,7 @@
-import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/20/solid";
 
 // Hooks
 import usePagination, { DOTS } from "../hooks/usePagination";
-
-// Components
-import { IconButton, TextButton } from "../components/Button";
 
 const Pagination = ({
   onPageChange,
@@ -35,13 +32,14 @@ const Pagination = ({
   let lastPage = paginationRange[paginationRange.length - 1];
   return (
     <div className="flex w-fit flex-wrap items-center justify-center gap-4">
-      <IconButton
-        leftIcon={faArrowLeft}
-        clickHandler={onPrevious}
+      <button
         disabled={currentPage === 1}
+        className="btn btn-pry"
+        onClick={onPrevious}
       >
+        <ArrowLeftIcon className="size-6" />
         Previous
-      </IconButton>
+      </button>
       {paginationRange.map((pageNumber, index) => {
         if (pageNumber === DOTS) {
           return (
@@ -51,22 +49,23 @@ const Pagination = ({
           );
         }
         return (
-          <TextButton
+          <button
             key={index}
             className={`grid size-8 place-content-center rounded-lg p-3 text-base font-semibold ${pageNumber === currentPage && "bg-sec-500"}`}
-            clickHandler={() => onPageChange(pageNumber)}
+            onClick={() => onPageChange(pageNumber)}
           >
             {pageNumber}
-          </TextButton>
+          </button>
         );
       })}
-      <IconButton
-        rightIcon={faArrowRight}
-        clickHandler={onNext}
+      <button
         disabled={currentPage === lastPage}
+        className="btn btn-pry"
+        onClick={onNext}
       >
         Next
-      </IconButton>
+        <ArrowRightIcon className="size-6" />
+      </button>
     </div>
   );
 };

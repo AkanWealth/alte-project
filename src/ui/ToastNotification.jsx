@@ -1,3 +1,7 @@
+import {
+  CheckCircleIcon,
+  ExclamationCircleIcon,
+} from "@heroicons/react/24/solid";
 import { Toaster } from "react-hot-toast";
 
 export const ToastMessage = ({ title, message }) => {
@@ -31,7 +35,7 @@ const ToastNotification = () => {
 
         // Options for success toasts
         success: {
-          icon: <img className="mt-1" src="/icons/success-icon.svg" />,
+          icon: <CheckCircleIcon className="mt-1 size-6 text-success-500" />,
           style: {
             color: "hsla(0,0%,9%,1)",
             background: "hsla(130,40%,94%,1)",
@@ -41,7 +45,9 @@ const ToastNotification = () => {
 
         // Options for error toasts
         error: {
-          icon: <img className="mt-1" src="/icons/error-icon.svg" />,
+          icon: (
+            <ExclamationCircleIcon className="mt-1 size-6 text-error-500" />
+          ),
           style: {
             color: "hsla(156,45%,2%,1)",
             background: "hsla(0,64%,95%,1)",

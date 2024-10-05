@@ -1,12 +1,10 @@
 import { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { useModalContext } from "../../../contexts/ModalContext";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import ToastNotification, { ToastMessage } from "../../../ui/ToastNotification";
-
+import { XMarkIcon } from "@heroicons/react/24/outline";
 
 const QuoteForm = () => {
   const [formData, setFormData] = useState({
@@ -22,13 +20,13 @@ const QuoteForm = () => {
   const [alertVisible, setAlertVisible] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState([]);
   const handleFileChange = (event) => {
-      const files = event.target.files;
-      setSelectedFiles([...files]);
-    };
+    const files = event.target.files;
+    setSelectedFiles([...files]);
+  };
 
   //const navigate = useNavigate();
   const validate = () => {
-  const newErrors = {};
+    const newErrors = {};
 
     // Full Name validation
     if (!formData.fullName.trim()) {
@@ -50,7 +48,7 @@ const QuoteForm = () => {
 
     // Phone validation
     const phoneRegex = /^[0-9]{11}$/;
-    
+
     if (!formData.phoneNumber.trim()) {
       newErrors.phoneNumber = "Phone Number is required";
     } else if (!phoneRegex.test(formData.phoneNumber)) {
@@ -102,15 +100,14 @@ const QuoteForm = () => {
       await submitForm();
     }
   };
-  
-  
+
   return (
     <div className="relative mx-auto max-h-[75vh] w-full max-w-lg overflow-y-auto rounded-lg bg-white p-6 shadow-lg sm:p-8 lg:max-w-2xl lg:p-10">
       <button
         onClick={() => setModalComponent(null)}
         className="text-gray-500 hover:text-gray-800 absolute right-4 top-4"
       >
-        <FontAwesomeIcon icon={faXmark} size="lg" />
+        <XMarkIcon className="size-7" />
       </button>
 
       {alertVisible && (
@@ -279,45 +276,45 @@ const QuoteForm = () => {
         </div>
 
         <div className="font-raleway">
-      <h3 className="mb-2 font-semibold">3 of 3 - Upload Documents</h3>
-      <div className="border-gray-300 rounded-md border-2 border-dashed p-4 text-center">
-        <div className="mb-3 flex h-full items-center justify-center">
-          <img
-            src="/icons/cloud-icon.png"
-            alt="upload-image"
-            className="h-10 w-auto rounded-lg shadow-md"
-          />
-        </div>
-        <input
-          type="file"
-          accept=".jpeg,.png,.gif,.mp4,.pdf,.psd,.ai,.doc,.ppt"
-          multiple
-          onChange={handleFileChange}
-          className="hidden"
-          id="file-upload"
-        />
-        <label htmlFor="file-upload" className="cursor-pointer">
-          <p className="mb-2">
-            Drag & drop files or{" "}
-            <a className="text-grey-400 underline">Browse</a>
-          </p>
-        </label>
-        <p className="text-xs">
-          Supported formats: JPEG, PNG, GIF, MP4, PDF, PSD, AI, Word, PPT
-        </p>
-      </div>
+          <h3 className="mb-2 font-semibold">3 of 3 - Upload Documents</h3>
+          <div className="border-gray-300 rounded-md border-2 border-dashed p-4 text-center">
+            <div className="mb-3 flex h-full items-center justify-center">
+              <img
+                src="/icons/cloud-icon.svg"
+                alt="upload-image"
+                className="h-10 w-auto rounded-lg shadow-md"
+              />
+            </div>
+            <input
+              type="file"
+              accept=".jpeg,.png,.gif,.mp4,.pdf,.psd,.ai,.doc,.ppt"
+              multiple
+              onChange={handleFileChange}
+              className="hidden"
+              id="file-upload"
+            />
+            <label htmlFor="file-upload" className="cursor-pointer">
+              <p className="mb-2">
+                Drag & drop files or{" "}
+                <a className="text-grey-400 underline">Browse</a>
+              </p>
+            </label>
+            <p className="text-xs">
+              Supported formats: JPEG, PNG, GIF, MP4, PDF, PSD, AI, Word, PPT
+            </p>
+          </div>
 
-      {selectedFiles.length > 0 && (
-        <div className="mt-4">
-          <h4>Uploaded Files:</h4>
-          <ul>
-            {selectedFiles.map((file, index) => (
-              <li key={index}>{file.name}</li>
-            ))}
-          </ul>
+          {selectedFiles.length > 0 && (
+            <div className="mt-4">
+              <h4>Uploaded Files:</h4>
+              <ul>
+                {selectedFiles.map((file, index) => (
+                  <li key={index}>{file.name}</li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
-      )}
-    </div>
 
         <div className="mt-4 flex items-start space-x-2 font-raleway">
           <input
@@ -328,7 +325,7 @@ const QuoteForm = () => {
             onChange={handleInputChange}
           />
 
-          <label className="text-sm font-raleway">
+          <label className="font-raleway text-sm">
             By submitting this form, you agree to our{" "}
             <Link href="/privacy-policy" className="text-sec-500">
               Privacy policy

@@ -6,6 +6,46 @@
   .inner {
     @apply mx-auto w-full max-w-screen-xl;
   }
+
+  .btn {
+    @apply flex w-fit cursor-pointer flex-row items-center justify-center gap-3 rounded-lg px-3 py-2 text-center font-inter text-base font-medium disabled:opacity-40 lg:px-4 lg:py-3 lg:text-lg;
+  }
+
+  .btn--large {
+    @apply w-full;
+  }
+
+  .btn-pry {
+    @apply bg-sec-500 text-pry-900 hover:bg-sec-400 focus:bg-sec-400 active:bg-sec-600;
+  }
+
+  .btn-pry--outline {
+    @apply bg-transparent border border-sec-500 text-white hover:border-sec-400 focus:border-sec-400 active:border-sec-600;
+  }
+
+  .btn-sec {
+    @apply bg-pry-500 text-white hover:bg-pry-400 focus:bg-pry-400 active:bg-pry-600;
+  }
+
+  .btn-sec--outline {
+    @apply bg-transparent border border-pry-500 text-pry-900 hover:border-pry-400 focus:border-pry-400 active:border-pry-600;
+  }
+
+  .text-btn {
+    @apply font-inter text-lg font-normal disabled:opacity-40;
+  }
+
+  .text-btn--underline {
+    @apply underline;
+  }
+
+  .text-btn-pry {
+    @apply text-sec-500 hover:text-sec-400 focus:text-sec-400 active:text-sec-600;
+  }
+
+  .text-btn-sec {
+    @apply text-pry-500 hover:text-pry-400 focus:text-pry-400 active:text-pry-600;
+  }
 }
 
 @layer utilities {

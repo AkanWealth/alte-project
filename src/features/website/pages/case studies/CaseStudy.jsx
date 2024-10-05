@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
 import { caseStudiesContent } from "../../../../contents/caseStudies";
+import { Cog6ToothIcon } from "@heroicons/react/24/outline";
 
 const CaseStudy = () => {
   const { id } = useParams();
@@ -59,11 +60,7 @@ const CaseStudy = () => {
                 <div key={index} className="mb-8">
                   <div className="mb-3 flex items-start">
                     <span className="mr-3 p-2">
-                      <img
-                        src="/icons/settings.svg"
-                        alt="Solution Icon"
-                        className="h-6 w-6 rounded-lg border-black bg-black object-cover shadow-md"
-                      />
+                      <Cog6ToothIcon className="size-6 rounded-lg border-black bg-black object-cover text-sec-500 shadow-md" />
                     </span>
                     <h3 className="text-green-900 font-raleway text-xl font-semibold">
                       {step.title}

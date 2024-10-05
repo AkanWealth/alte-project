@@ -1,5 +1,5 @@
-import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
-import { IconButton } from "../../../components/Button";
+import { Link } from "react-router-dom";
+import { ArrowRightIcon } from "@heroicons/react/20/solid";
 
 const Freelancer = () => {
   return (
@@ -17,23 +17,14 @@ const Freelancer = () => {
               opportunities that match your passion and skills.
             </p>
             <div className="flex flex-row flex-wrap gap-3 lg:gap-6">
-              <IconButton
-                rightIcon={faArrowRight}
-                target="_blank"
-                rel="noreferrer"
-                link="/freelancer/register"
-              >
+              <Link to="/freelancer/register" className="btn btn-pry">
                 Register As a Freelancer
-              </IconButton>
-              <IconButton
-                variant="sec"
-                target="_blank"
-                rel="noreferrer"
-                link="/freelancer/login"
-                rightIcon={faArrowRight}
-              >
+                <ArrowRightIcon className="size-6" />
+              </Link>
+              <Link to="/freelancer/login" className="btn btn-pry--outline">
                 Freelancer Login
-              </IconButton>
+                <ArrowRightIcon className="size-6" />
+              </Link>
             </div>
           </div>
         </div>
@@ -177,14 +168,10 @@ const Freelancer = () => {
                   </div>
 
                   <div className="flex flex-row flex-wrap gap-3 lg:gap-6">
-                    <IconButton
-                      rightIcon={faArrowRight}
-                      target="_blank"
-                      rel="noreferrer"
-                      link="/freelancer/register"
-                    >
+                    <Link to="/freelancer/register" className="btn btn-pry">
                       Register Today
-                    </IconButton>
+                      <ArrowRightIcon className="size-6" />
+                    </Link>
                   </div>
                 </div>
               </div>

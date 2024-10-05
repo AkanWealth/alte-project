@@ -1,13 +1,7 @@
 import { useEffect, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faBars,
-  faChevronDown,
-  faChevronUp,
-  faXmark,
-} from "@fortawesome/free-solid-svg-icons";
+import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/20/solid";
 
 // Contexts
 import { useModalContext } from "../../../contexts/ModalContext";
@@ -15,12 +9,10 @@ import { useModalContext } from "../../../contexts/ModalContext";
 // Hooks
 import useViewport from "../../../hooks/useViewPort";
 
-// Components
-import Button from "../../../components/Button";
-
 // UIs
 import Logo from "../../../ui/Logo";
 import QuoteForm from "./QuoteForm";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 
 const Nav = () => {
   const [inViewport] = useViewport("1024px");
@@ -49,7 +41,7 @@ const Nav = () => {
         className={`${inViewport && "hidden"} h-6 w-[21px] text-white lg:h-fit`}
         onClick={setNavState}
       >
-        <FontAwesomeIcon icon={faBars} className="size-full" />
+        <Bars3Icon className="size-6" />
       </button>
       <AnimatePresence>
         {(inViewport || isOpen) && (
@@ -67,7 +59,7 @@ const Nav = () => {
                 clickHandler={setNavState}
               />
               <button className="size-6 text-pry-500" onClick={setNavState}>
-                <FontAwesomeIcon icon={faXmark} className="size-full" />
+                <XMarkIcon className="size-7" />
               </button>
             </div>
             <div className="flex flex-col gap-7 lg:flex-row lg:items-center lg:gap-10 xl:gap-20">
@@ -100,10 +92,11 @@ const Nav = () => {
                     aria-expanded={openDropdown}
                   >
                     Careers
-                    <FontAwesomeIcon
-                      icon={openDropdown ? faChevronUp : faChevronDown}
-                      className="size-4"
-                    />
+                    {openDropdown ? (
+                      <ChevronUpIcon className="size-4" />
+                    ) : (
+                      <ChevronDownIcon className="size-4" />
+                    )}
                   </button>
                   {openDropdown && (
                     <div className="ml-5 mt-5 rounded-b-xl border border-white lg:absolute lg:top-16 lg:ml-0 lg:mt-0 lg:bg-white lg:p-5 lg:text-grey-900">
@@ -147,12 +140,12 @@ const Nav = () => {
                   Contact Us
                 </NavLink>
               </menu>
-              <Button
-                className="w-full lg:w-auto"
-                clickHandler={() => setModalComponent(<QuoteForm />)}
+              <button
+                className="btn btn-pry w-full lg:w-fit"
+                onClick={() => setModalComponent(<QuoteForm />)}
               >
                 Request a Quote
-              </Button>
+              </button>
             </div>
           </motion.div>
         )}

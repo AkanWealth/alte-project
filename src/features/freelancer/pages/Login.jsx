@@ -2,14 +2,10 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 
 // Auths
-import useFreelancerAuth from "../../../auth/useFreelancerAuth";
-
-// Components
-import Button from "../../../components/Button";
+import useFreelancerAuth from "../auth/useFreelancerAuth";
 
 // UIs
 import ProtectedRoute from "../../../ui/ProtectedRoute";
@@ -124,10 +120,11 @@ const Login = () => {
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-0 top-0 mr-2 h-full"
                   >
-                    <FontAwesomeIcon
-                      icon={showPassword ? faEyeSlash : faEye}
-                      className="size-6"
-                    />
+                    {showPassword ? (
+                      <EyeIcon className="size-6" />
+                    ) : (
+                      <EyeSlashIcon className="size-6" />
+                    )}
                   </button>
                 </div>
               </div>
@@ -152,13 +149,13 @@ const Login = () => {
                 Forgot Password?
               </Link>
             </div>
-            <Button
+            <button
               type="submit"
               disabled={isSubmitting}
-              className="flex w-full items-center justify-center"
+              className="btn btn-pry w-full"
             >
               Log In
-            </Button>
+            </button>
             <p className="mt-4 text-center font-raleway text-base font-normal lg:mt-10">
               Don’t have an account?
               <Link to="/freelancer/register" className="ml-1 text-sec-500">

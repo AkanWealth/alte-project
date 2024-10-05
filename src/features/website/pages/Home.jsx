@@ -1,5 +1,6 @@
+import { Link } from "react-router-dom";
 import { SwiperSlide } from "swiper/react";
-import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { ArrowRightIcon } from "@heroicons/react/20/solid";
 import { TestimonialsContent } from "../../../contents/testimonials";
 import { servicesContent } from "../../../contents/services";
 
@@ -7,7 +8,6 @@ import { servicesContent } from "../../../contents/services";
 import { useModalContext } from "../../../contexts/ModalContext";
 
 // Components
-import { IconButton } from "../../../components/Button";
 import Testimonial from "../components/Testimonial";
 
 // UIs
@@ -32,13 +32,13 @@ const Service = ({ data }) => {
         <p className="pb-9 pt-3 font-raleway text-base font-normal">
           {data.snippet}
         </p>
-        <IconButton
-          link={`/our-services/#${toSlug(data.title)}`}
-          className="mt-auto self-end"
-          rightIcon={faArrowRight}
+        <Link
+          to={`/our-services/#${toSlug(data.title)}`}
+          className="btn btn-pry mt-auto self-end"
         >
           Read More
-        </IconButton>
+          <ArrowRightIcon className="size-6" />
+        </Link>
       </div>
     </div>
   );
@@ -62,21 +62,22 @@ const Home = () => {
               business solutions.
             </p>
             <div className="flex flex-row flex-wrap gap-3 lg:gap-6">
-              <IconButton
-                rightIcon={faArrowRight}
+              <a
                 target="_blank"
                 rel="noreferrer"
-                link="https://calendar.google.com/calendar/appointments/schedules/AcZssZ00GcrPNO72R7ML0RTskXRADvJdJmiBJh_CP03IxNCaTERG0W5huuLvIC1gD9nUZCYDWjJR9qCo?gv=true"
+                href="https://calendar.google.com/calendar/appointments/schedules/AcZssZ00GcrPNO72R7ML0RTskXRADvJdJmiBJh_CP03IxNCaTERG0W5huuLvIC1gD9nUZCYDWjJR9qCo?gv=true"
+                className="btn btn-pry"
               >
                 Book a Discovery Call
-              </IconButton>
-              <IconButton
-                clickHandler={() => setModalComponent(<QuoteForm />)}
-                variant="sec"
-                rightIcon={faArrowRight}
+                <ArrowRightIcon className="size-6" />
+              </a>
+              <button
+                className="btn btn-pry--outline"
+                onClick={() => setModalComponent(<QuoteForm />)}
               >
                 Request a Quote
-              </IconButton>
+                <ArrowRightIcon className="size-6" />
+              </button>
             </div>
           </div>
           <img
@@ -147,7 +148,10 @@ const Home = () => {
               deliver solutions that not only solve problems but also propel
               your business forward.
             </p>
-            <IconButton rightIcon={faArrowRight}>LEARN MORE</IconButton>
+            <Link to="/our-services" className="btn btn-pry">
+              LEARN MORE
+              <ArrowRightIcon className="size-6" />
+            </Link>
           </div>
           <img
             src="/images/home/section-3-consulting.png"

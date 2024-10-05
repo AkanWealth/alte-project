@@ -1,8 +1,11 @@
 import { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link} from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 
 const SignUp = () => {
+  const [showPassword, setShowPassword] = useState(false);
   const [values, setValues] = useState({
     fullName: "",
     email: "",
@@ -166,30 +169,45 @@ const SignUp = () => {
                 </div>
 
                 {/* Password */}
-                <div>
+                <div className="relative">
                   <label
                     htmlFor="password"
                     className="block font-raleway text-sm font-medium text-grey-700"
                   >
                     Password*
                   </label>
+
                   <input
-                    type="password"
+                    type={showPassword ? "text" : "password"}
                     name="password"
                     value={values.password}
                     onChange={handleChange}
-                    className={`mt-1 block w-full rounded-md border px-3 py-2 shadow-sm focus:outline-none ${
+                    className={`mt-1 block w-full rounded-md border px-3 py-2 pr-10 shadow-sm focus:outline-none ${
                       errors.password ? "border-[#DC6662]" : "border-gray-300"
                     }`}
                     placeholder="Enter your password"
                   />
+
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="text-gray-600 absolute inset-y-0 right-3 mt-4 flex items-center"
+                  >
+                    {showPassword ? (
+                      <EyeIcon className="size-6" />
+                    ) : (
+                      <EyeSlashIcon className="size-6" />
+                    )}
+                  </button>
+
+                  {/* Error Message */}
                   {errors.password && (
                     <p className="text-sm text-[#DC6662]">{errors.password}</p>
                   )}
                 </div>
 
                 {/* Confirm Password */}
-                <div>
+                <div className="relative">
                   <label
                     htmlFor="confirm_password"
                     className="block font-raleway text-sm font-medium text-grey-700"
@@ -197,7 +215,7 @@ const SignUp = () => {
                     Confirm Password*
                   </label>
                   <input
-                    type="password"
+                    type={showPassword ? "text" : "password"}
                     name="confirm_password"
                     value={values.confirm_password}
                     onChange={handleChange}
@@ -208,6 +226,18 @@ const SignUp = () => {
                     }`}
                     placeholder="Confirm your password"
                   />
+                  {/* Eye Icon Button */}
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="text-gray-600 absolute inset-y-0 right-3 mt-4 flex items-center"
+                  >
+                     {showPassword ? (
+                      <EyeIcon className="size-6" />
+                    ) : (
+                      <EyeSlashIcon className="size-6" />
+                    )}
+                  </button>
                   {errors.confirm_password && (
                     <p className="text-sm text-[#DC6662]">
                       {errors.confirm_password}
@@ -220,17 +250,14 @@ const SignUp = () => {
                     <input type="checkbox" className="form-checkbox" />
                     <span className="ml-2 font-raleway text-grey-700">
                       I agree to Alte{" "}
-                      <a href="#" className="text-sec-500">
+                      <Link to="/policies/privacy-policy" className="text-sec-500">
                         Terms of service and Privacy Policy
-                      </a>
+                      </Link>
                     </span>
                   </label>
                 </div>
 
-                <button
-                  type="submit"
-                  className="w-full rounded-md bg-sec-500 px-4 py-2 font-raleway font-bold text-black shadow-md"
-                >
+                <button type="submit" className="btn btn-pry w-full">
                   Create Account
                 </button>
               </form>

@@ -1,3 +1,5 @@
+export const jobListings2 = [];
+
 export const jobListings = [
   {
     id: 1,

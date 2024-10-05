@@ -1,11 +1,9 @@
-import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { Link } from "react-router-dom";
+import { ArrowRightIcon } from "@heroicons/react/20/solid";
 import { caseStudiesContent } from "../../../../contents/caseStudies";
 
 // Contexts
 import { useModalContext } from "../../../../contexts/ModalContext";
-
-// Components
-import { IconButton } from "../../../../components/Button";
 
 // UIs
 import QuoteForm from "../../ui/QuoteForm";
@@ -47,12 +45,10 @@ const CaseStudyListing = ({ data, bgColor }) => {
               </span>
             </li>
           </ul>
-          <IconButton
-            link={`/case-studies/${data.id}`}
-            rightIcon={faArrowRight}
-          >
+          <Link to={`/case-studies/${data.id}`} className="btn btn-pry">
             View Case
-          </IconButton>
+            <ArrowRightIcon className="size-6" />
+          </Link>
         </div>
       </div>
     </div>
@@ -75,21 +71,22 @@ const CaseStudies = () => {
               through innovative technology and strategic consulting.
             </p>
             <div className="flex flex-row flex-wrap gap-3 lg:gap-6">
-              <IconButton
-                rightIcon={faArrowRight}
+              <a
                 target="_blank"
                 rel="noreferrer"
-                link="https://calendar.google.com/calendar/appointments/schedules/AcZssZ00GcrPNO72R7ML0RTskXRADvJdJmiBJh_CP03IxNCaTERG0W5huuLvIC1gD9nUZCYDWjJR9qCo?gv=true"
+                href="https://calendar.google.com/calendar/appointments/schedules/AcZssZ00GcrPNO72R7ML0RTskXRADvJdJmiBJh_CP03IxNCaTERG0W5huuLvIC1gD9nUZCYDWjJR9qCo?gv=true"
+                className="btn btn-pry"
               >
                 Book a Discovery Call
-              </IconButton>
-              <IconButton
-                clickHandler={() => setModalComponent(<QuoteForm />)}
-                variant="sec"
-                rightIcon={faArrowRight}
+                <ArrowRightIcon className="size-6" />
+              </a>
+              <button
+                className="btn btn-pry--outline"
+                onClick={() => setModalComponent(<QuoteForm />)}
               >
                 Request a Quote
-              </IconButton>
+                <ArrowRightIcon className="size-6" />
+              </button>
             </div>
           </div>
           <img

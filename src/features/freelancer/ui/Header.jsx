@@ -1,19 +1,38 @@
-import { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Link, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
 import {
-  faBell,
-  faChevronDown,
-  faCog,
-  faSignOutAlt,
-  faUser,
-} from "@fortawesome/free-solid-svg-icons";
+  ArrowRightStartOnRectangleIcon,
+  BellIcon,
+  Cog6ToothIcon,
+  UserIcon,
+} from "@heroicons/react/24/outline";
+import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/20/solid";
+
+// Hooks
+import useViewport from "../../../hooks/useViewPort";
+
+// Contexts
+import { useNotifications } from "../contexts/NotificationsContext";
 
 // Components
 import Logo from "../../../ui/Logo";
-import { Link } from "react-router-dom";
+
+// UIs
+import Notifications from "./Notifications";
 
 const Header = ({ relativeStyles }) => {
   const [showModal, setShowModal] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const { pathname } = useLocation();
+  const currentPath =
+    pathname.replace(/^\/freelancer\/dashboard/, "").replace("/", "") ||
+    "dashboard";
+  const [inViewport] = useViewport("1024px");
+  const { unreadCount } = useNotifications();
+
+  useEffect(() => {
+    setShowNotifications(false);
+  }, [inViewport, setShowNotifications]);
 
   return (
     <header
@@ -21,14 +40,24 @@ const Header = ({ relativeStyles }) => {
     >
       <Logo img="/mobile-nav-logo.png" link="/freelancer/dashboard" />
       <div className="relative flex flex-row items-center gap-8">
-        <p className="hidden font-inter text-2xl font-semibold text-grey-900 lg:block">
-          Dashboard
+        <p className="hidden font-inter text-2xl font-semibold lowercase text-grey-900 first-letter:uppercase lg:block">
+          {currentPath}
         </p>
-        <button className="hidden size-10 rounded-full bg-success-50 lg:ml-auto lg:block">
-          <FontAwesomeIcon
-            icon={faBell}
-            className="m-auto size-6 text-success-500"
-          />
+        <button
+          className="relative hidden size-10 rounded-full bg-success-50 text-success-500 lg:ml-auto lg:block"
+          onClick={() => setShowNotifications((prev) => !prev)}
+        >
+          <BellIcon className="m-auto size-6" />
+          {unreadCount > 0 && (
+            <div
+              className={`${unreadCount <= 0 && "hidden"} absolute -top-2 right-0 grid size-[18px] place-content-center rounded-full bg-error-500 text-center text-[9px] text-white`}
+            >
+              {unreadCount}
+            </div>
+          )}
+          {showNotifications && (
+            <Notifications relativeStyles="absolute right-0 top-[calc(100%+24px)]" />
+          )}
         </button>
         <button
           onClick={() => setShowModal(!showModal)}
@@ -49,7 +78,11 @@ const Header = ({ relativeStyles }) => {
               Unavailable
             </span>
           </p>
-          <FontAwesomeIcon icon={faChevronDown} className="hidden lg:block" />
+          {showModal ? (
+            <ChevronUpIcon className="hidden size-5 lg:block" />
+          ) : (
+            <ChevronDownIcon className="hidden size-5 lg:block" />
+          )}
         </button>
         <div
           className={`${!showModal && "hidden"} absolute right-0 top-[calc(100%+4px)] flex w-full max-w-28 flex-col gap-3 rounded-lg border border-grey-50 bg-white px-3 py-4 shadow-lg`}
@@ -58,19 +91,19 @@ const Header = ({ relativeStyles }) => {
             to="/freelancer/dashboard/profile"
             className="flex w-full items-center gap-2 font-inter text-xs font-medium text-grey-400"
           >
-            <FontAwesomeIcon icon={faUser} className="size-4 text-grey-200" />
+            <UserIcon className="size-4 text-grey-200" />
             Profile
           </Link>
           <Link
             to="/freelancer/dashboard/settings"
             className="flex w-full items-center gap-2 font-inter text-xs font-medium text-grey-400"
           >
-            <FontAwesomeIcon icon={faCog} className="size-4 text-grey-200" />
+            <Cog6ToothIcon className="size-4 text-grey-200" />
             Settings
           </Link>
           <div className="border-t border-grey-400 pt-3">
             <button className="flex w-full items-center gap-2 font-inter text-xs font-medium text-error-500">
-              <FontAwesomeIcon icon={faSignOutAlt} className="size-4" />
+              <ArrowRightStartOnRectangleIcon className="size-4" />
               Logout
             </button>
           </div>

@@ -1,5 +1,5 @@
 import { useLocation } from "react-router-dom";
-import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { ArrowRightIcon } from "@heroicons/react/20/solid";
 import { servicesContent } from "../../../contents/services";
 
 // Contexts
@@ -7,9 +7,6 @@ import { useModalContext } from "../../../contexts/ModalContext";
 
 // Hooks
 import useScrollToAnchor from "../../../hooks/useScrollToAnchor";
-
-// Components
-import { IconButton } from "../../../components/Button";
 
 // UIs
 import QuoteForm from "../ui/QuoteForm";
@@ -71,21 +68,22 @@ const OurServices = () => {
               problems but also propel your business forward.
             </p>
             <div className="flex flex-row flex-wrap gap-3 lg:gap-6">
-              <IconButton
-                rightIcon={faArrowRight}
+              <a
                 target="_blank"
                 rel="noreferrer"
-                link="https://calendar.google.com/calendar/appointments/schedules/AcZssZ00GcrPNO72R7ML0RTskXRADvJdJmiBJh_CP03IxNCaTERG0W5huuLvIC1gD9nUZCYDWjJR9qCo?gv=true"
+                href="https://calendar.google.com/calendar/appointments/schedules/AcZssZ00GcrPNO72R7ML0RTskXRADvJdJmiBJh_CP03IxNCaTERG0W5huuLvIC1gD9nUZCYDWjJR9qCo?gv=true"
+                className="btn btn-pry"
               >
                 Book a Discovery Call
-              </IconButton>
-              <IconButton
-                clickHandler={() => setModalComponent(<QuoteForm />)}
-                variant="sec"
-                rightIcon={faArrowRight}
+                <ArrowRightIcon className="size-6" />
+              </a>
+              <button
+                className="btn btn-pry--outline"
+                onClick={() => setModalComponent(<QuoteForm />)}
               >
                 Request a Quote
-              </IconButton>
+                <ArrowRightIcon className="size-6" />
+              </button>
             </div>
           </div>
           <img

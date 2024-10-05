@@ -1,23 +1,16 @@
-import {
-  faFacebookF,
-  faInstagram,
-  faTwitter,
-} from "@fortawesome/free-brands-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
 const SocialLinks = ({ relativeStyles }) => {
   return (
     <ul
       className={`${relativeStyles} flex flex-row gap-3 text-pry-900 *:grid *:size-10 *:place-content-center *:rounded-full *:bg-sec-500 xl:gap-4`}
     >
       <li>
-        <FontAwesomeIcon icon={faTwitter} />
+        <img src="/icons/twitter.svg" alt="" className="size-6" />
       </li>
       <li>
-        <FontAwesomeIcon icon={faFacebookF} />
+        <img src="/icons/facebook.svg" alt="" className="size-6" />
       </li>
       <li>
-        <FontAwesomeIcon icon={faInstagram} />
+        <img src="/icons/instagram.svg" alt="" className="size-6" />
       </li>
     </ul>
   );

@@ -1,23 +1,24 @@
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Controller, useForm } from "react-hook-form";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faArrowRight,
-  faChevronDown,
-  faCircleXmark,
-  faGlobe,
-  faMagnifyingGlass,
-  faSliders,
-  faXmark,
-} from "@fortawesome/free-solid-svg-icons";
+  GlobeAltIcon,
+  XCircleIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
+import {
+  ArrowRightIcon,
+  MagnifyingGlassIcon,
+  AdjustmentsHorizontalIcon,
+  ChevronUpIcon,
+  ChevronDownIcon,
+} from "@heroicons/react/20/solid";
 import { jobListings } from "../../../../contents/jobLists";
 
 // Contexts
 import { useModalContext } from "../../../../contexts/ModalContext";
 
 // Components
-import Button, { IconButton } from "../../../../components/Button";
 import JobPost from "./components/JobPost";
 
 // UIs
@@ -46,10 +47,7 @@ const FilterTag = ({ tag, handleSetTags }) => {
     <span className="inline-flex items-center gap-2 rounded-lg bg-pry-50 p-2 font-inter text-sm font-normal text-pry-900">
       {tag}
       <button onClick={() => handleSetTags()}>
-        <FontAwesomeIcon
-          icon={faCircleXmark}
-          className="text-base text-error-500"
-        />
+        <XCircleIcon className="size-6 text-base text-error-500" />
       </button>
     </span>
   );
@@ -72,14 +70,14 @@ const ResumeSubmittedModal = () => {
         Thank you for submitting your resume. We will update you on future
         Openings. Make sure you are following us on all social media platforms
       </p>
-      <Button clickHandler={() => setModalComponent(null)}>
+      <button className="btn btn-pry" onClick={() => setModalComponent(null)}>
         Return to Jobs
-      </Button>
+      </button>
       <button
         className="absolute right-5 top-5"
         onClick={() => setModalComponent(null)}
       >
-        <FontAwesomeIcon icon={faXmark} className="size-6" />
+        <XMarkIcon className="size-6" />
       </button>
     </div>
   );
@@ -195,12 +193,10 @@ const ResumeForm = () => {
           </p>
         )}
       </label>
-      <IconButton
-        rightIcon={faArrowRight}
-        className="mt-10 flex w-full items-center justify-center"
-      >
+      <button type="submit" className="btn btn-pry mt-10 w-full">
         Submit Resume
-      </IconButton>
+        <ArrowRightIcon className="size-6" />
+      </button>
     </form>
   );
 };
@@ -334,10 +330,7 @@ const JobSeekers = () => {
                   className="flex w-full flex-row items-center"
                 >
                   <span className="sr-only">Search</span>
-                  <FontAwesomeIcon
-                    icon={faMagnifyingGlass}
-                    className="size-5 text-[hsla(213,13%,59%,1)] lg:size-6"
-                  />
+                  <MagnifyingGlassIcon className="size-5 text-[hsla(213,13%,59%,1)] lg:size-6" />
                   <input
                     type="text"
                     name=""
@@ -353,10 +346,7 @@ const JobSeekers = () => {
                     onClick={() => setOpenFilter(!openFilter)}
                     className="grid place-content-center"
                   >
-                    <FontAwesomeIcon
-                      icon={faSliders}
-                      className="size-5 text-[hsla(213,13%,59%,1)] lg:size-6"
-                    />
+                    <AdjustmentsHorizontalIcon className="size-5 text-[hsla(213,13%,59%,1)] lg:size-6" />
                   </button>
                   {openFilter && (
                     <fieldset className="absolute right-0 top-[calc(100%+8px)] w-max min-w-44 rounded-sm border border-[hsla(216,12%,92%,1)] bg-[hsla(0,0%,100%,1)] shadow-[0px_4px_6px_-1px_hsla(0,0%,0%,0.1)]">
@@ -377,16 +367,17 @@ const JobSeekers = () => {
               </div>
               <fieldset className="relative flex shrink-0 grow basis-[30%] flex-row rounded bg-[hsla(0,0%,100%,1)] px-2 py-2">
                 <div className="relative flex w-full flex-row items-center justify-between">
-                  <span className="font-inter text-sm font-normal text-grey-200 after:absolute after:bottom-0 after:left-0 after:right-0 after:top-0 after:z-[1] after:overflow-hidden after:whitespace-pre after:pt-[5%] after:content-['Job_Category/Industry']"></span>
+                  <span className="font-inter text-sm font-normal text-grey-200 after:absolute after:bottom-0 after:left-0 after:right-0 after:top-0 after:z-[1] after:overflow-hidden after:whitespace-pre after:pt-[2.5%] after:content-['Job_Category/Industry'] lg:text-base"></span>
                   <button
                     type="button"
                     onClick={() => setOpenCategory(!openCategory)}
-                    className="z-[2] grid place-content-center bg-white pl-1"
+                    className="z-[2] grid place-content-center bg-white pl-1 text-grey-200"
                   >
-                    <FontAwesomeIcon
-                      icon={faChevronDown}
-                      className="size-5 text-[hsla(213,13%,59%,1)] lg:size-6"
-                    />
+                    {openCategory ? (
+                      <ChevronUpIcon className="size-7" />
+                    ) : (
+                      <ChevronDownIcon className="size-7" />
+                    )}
                   </button>
                 </div>
                 {openCategory && (
@@ -421,9 +412,9 @@ const JobSeekers = () => {
                 )}
               </fieldset>
             </div>
-            <Button type="submit" className="shrink grow basis-28">
+            <button type="submit" className="btn btn-pry shrink grow basis-28">
               Find Job
-            </Button>
+            </button>
           </form>
           {!!(levels.length + categories.length) && (
             <div className="mt-6 flex flex-wrap gap-4">
@@ -480,7 +471,7 @@ const JobSeekers = () => {
                       checked={jobTypeFilter === "all"}
                       className="hidden"
                     />
-                    <FontAwesomeIcon icon={faGlobe} className="mr-1" />
+                    <GlobeAltIcon className="-mt-px mr-1 inline-block size-4 lg:-mt-1 lg:size-6" />
                     All
                   </label>
                 </li>

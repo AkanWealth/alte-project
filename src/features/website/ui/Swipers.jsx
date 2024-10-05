@@ -1,10 +1,7 @@
 import { useEffect, useState } from "react";
 import "swiper/css";
 import { Swiper, useSwiper } from "swiper/react";
-import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
-
-// Components
-import { IconOnlyButton } from "../../../components/Button";
+import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/20/solid";
 
 const SwiperButtonPrev = () => {
   const [prevDisabled, setPrevDisabled] = useState(false);
@@ -25,12 +22,13 @@ const SwiperButtonPrev = () => {
   }, [swiper]);
 
   return (
-    <IconOnlyButton
-      color="dark"
+    <button
       disabled={prevDisabled}
-      icon={faArrowLeft}
-      clickHandler={() => swiper.slidePrev()}
-    />
+      className="btn btn-sec"
+      onClick={() => swiper.slidePrev()}
+    >
+      <ArrowLeftIcon className="size-6" />
+    </button>
   );
 };
 
@@ -53,12 +51,13 @@ const SwiperButtonNext = () => {
   }, [swiper]);
 
   return (
-    <IconOnlyButton
-      color="dark"
+    <button
       disabled={nextDisabled}
-      icon={faArrowRight}
-      clickHandler={() => swiper.slideNext()}
-    />
+      className="btn btn-sec"
+      onClick={() => swiper.slideNext()}
+    >
+      <ArrowRightIcon className="size-6" />
+    </button>
   );
 };
 

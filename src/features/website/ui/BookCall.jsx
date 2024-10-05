@@ -1,8 +1,5 @@
 import { useLocation } from "react-router-dom";
-import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
-
-// Components
-import { IconButton } from "../../../components/Button";
+import { ArrowRightIcon } from "@heroicons/react/20/solid";
 
 const BookCall = () => {
   const route = useLocation().pathname.slice(1);
@@ -26,14 +23,15 @@ const BookCall = () => {
               </>
             )}
           </h2>
-          <IconButton
-            rightIcon={faArrowRight}
+          <a
             target="_blank"
             rel="noreferrer"
-            link="https://calendar.google.com/calendar/appointments/schedules/AcZssZ00GcrPNO72R7ML0RTskXRADvJdJmiBJh_CP03IxNCaTERG0W5huuLvIC1gD9nUZCYDWjJR9qCo?gv=true"
+            href="https://calendar.google.com/calendar/appointments/schedules/AcZssZ00GcrPNO72R7ML0RTskXRADvJdJmiBJh_CP03IxNCaTERG0W5huuLvIC1gD9nUZCYDWjJR9qCo?gv=true"
+            className="btn btn-pry"
           >
             Book a Discovery Call
-          </IconButton>
+            <ArrowRightIcon className="size-6" />
+          </a>
         </div>
       </div>
     </section>
