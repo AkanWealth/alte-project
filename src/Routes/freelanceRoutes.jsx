@@ -11,6 +11,8 @@ import Dashboard from "../features/freelancer/pages/Dashboard";
 import Projects from "../features/freelancer/pages/Projects";
 import Profile from "../features/freelancer/pages/Profile";
 import Settings from "../features/freelancer/pages/Settings";
+import EditProfile from "../features/freelancer/pages/EditProfile";
+import ProjectCardDetails from "../features/freelancer/pages/ProjectCardDetails";
 
 const freelancerRoutes = {
   path: "freelancer",
@@ -47,6 +49,14 @@ const freelancerRoutes = {
         {
           path: "profile",
           element: <Profile />,
+        },
+        {
+          path: "edit-profile",
+          element: <EditProfile />,
+        },
+        {
+          path: "projects/project-details",
+          element: <ProjectCardDetails />,
         },
         {
           path: "settings",

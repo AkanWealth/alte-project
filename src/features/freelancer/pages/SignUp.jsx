@@ -1,7 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-import { useNavigate, Link} from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useNavigate, Link } from "react-router-dom";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 
 const SignUp = () => {
@@ -232,7 +231,7 @@ const SignUp = () => {
                     onClick={() => setShowPassword(!showPassword)}
                     className="text-gray-600 absolute inset-y-0 right-3 mt-4 flex items-center"
                   >
-                     {showPassword ? (
+                    {showPassword ? (
                       <EyeIcon className="size-6" />
                     ) : (
                       <EyeSlashIcon className="size-6" />
@@ -250,7 +249,10 @@ const SignUp = () => {
                     <input type="checkbox" className="form-checkbox" />
                     <span className="ml-2 font-raleway text-grey-700">
                       I agree to Alte{" "}
-                      <Link to="/policies/privacy-policy" className="text-sec-500">
+                      <Link
+                        to="/policies/privacy-policy"
+                        className="text-sec-500"
+                      >
                         Terms of service and Privacy Policy
                       </Link>
                     </span>

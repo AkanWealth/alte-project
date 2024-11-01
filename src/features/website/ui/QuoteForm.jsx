@@ -327,7 +327,7 @@ const QuoteForm = () => {
 
           <label className="font-raleway text-sm">
             By submitting this form, you agree to our{" "}
-            <Link href="/privacy-policy" className="text-sec-500">
+            <Link href="/policies/privacy-policy" className="text-sec-500">
               Privacy policy
             </Link>
           </label>

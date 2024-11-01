@@ -6,9 +6,11 @@ import { Toaster } from "react-hot-toast";
 
 export const ToastMessage = ({ title, message }) => {
   return (
-    <p className="font-inter text-base font-bold">
-      {title}
-      <span className="mt-2 block text-sm font-normal">{message}</span>
+    <p className="flex w-full flex-col gap-1 text-start font-inter text-base font-bold">
+      <span>{title && title}</span>
+      <span className="mt-2 block text-sm font-normal">
+        {message && message}
+      </span>
     </p>
   );
 };
@@ -31,6 +33,7 @@ const ToastNotification = () => {
           padding: "24px 16px",
           borderWidth: "1px",
           borderRadius: "4px",
+          minWidth: "250px",
         },
 
         // Options for success toasts

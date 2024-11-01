@@ -25,8 +25,7 @@ const Header = ({ relativeStyles }) => {
   const [showNotifications, setShowNotifications] = useState(false);
   const { pathname } = useLocation();
   const currentPath =
-    pathname.replace(/^\/freelancer\/dashboard/, "").replace("/", "") ||
-    "dashboard";
+    pathname.replace(/^\/admin\/?/, "").split("/")[0] || "users";
   const [inViewport] = useViewport("1024px");
   const { unreadCount } = useNotifications();
 
@@ -38,7 +37,7 @@ const Header = ({ relativeStyles }) => {
     <header
       className={`${relativeStyles} grid grid-cols-[auto_1fr] gap-10 px-4 py-5 lg:grid-cols-[210px_1fr] lg:px-10 lg:py-6`}
     >
-      <Logo img="/images/freelancer/altee.png" link="/freelancer/dashboard" />
+      <Logo img="/images/freelancer/altee.png" link="/admin/dashboard" />
       <div className="relative flex flex-row items-center gap-8">
         <p className="hidden font-inter text-2xl font-semibold lowercase text-grey-900 first-letter:uppercase lg:block">
           {currentPath}
@@ -88,14 +87,14 @@ const Header = ({ relativeStyles }) => {
           className={`${!showModal && "hidden"} absolute right-0 top-[calc(100%+4px)] flex w-full max-w-28 flex-col gap-3 rounded-lg border border-grey-50 bg-white px-3 py-4 shadow-lg`}
         >
           <Link
-            to="/freelancer/dashboard/profile"
+            to="/admin/dashboard/profile"
             className="flex w-full items-center gap-2 font-inter text-xs font-medium text-grey-400"
           >
             <UserIcon className="size-4 text-grey-200" />
             Profile
           </Link>
           <Link
-            to="/freelancer/dashboard/settings"
+            to="/admin/dashboard/settings"
             className="flex w-full items-center gap-2 font-inter text-xs font-medium text-grey-400"
           >
             <Cog6ToothIcon className="size-4 text-grey-200" />
