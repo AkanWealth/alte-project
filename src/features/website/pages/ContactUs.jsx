@@ -1,8 +1,12 @@
+import axios from "axios";
 import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import { isEmail, isMobilePhone } from "validator";
 import { ArrowRightIcon } from "@heroicons/react/20/solid";
+
+// Configs
+import { API } from "../../../config";
 
 // UIs
 import { ToastMessage } from "../../../ui/ToastNotification";
@@ -16,15 +20,30 @@ const Form = () => {
     formState: { errors, isSubmitting },
   } = useForm();
 
-  const handleForm = (data) => {
-    console.log(data);
-    reset();
-    toast.success(
-      <ToastMessage
-        title="Success"
-        message="Message sent successfully! We’ll get back to you soon."
-      />,
-    );
+  const handleForm = async (data) => {
+    try {
+      const { status } = await axios.post(`${API}/contact`, data);
+
+      if (status === 200) {
+        reset();
+        toast.success(
+          <ToastMessage
+            title="Success"
+            message="Message sent successfully! We’ll get back to you soon."
+          />,
+        );
+      } else {
+        throw new Error();
+      }
+    } catch (error) {
+      toast.error(
+        <ToastMessage
+          title="Error"
+          message="An Error occurred while sending your request. Please check your email and try again"
+        />,
+      );
+      console.error(error);
+    }
   };
 
   return (

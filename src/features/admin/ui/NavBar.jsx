@@ -16,13 +16,14 @@ import useViewport from "../../../hooks/useViewPort";
 import { useNotifications } from "../contexts/NotificationsContext";
 
 // UIs
-import Notifications from "./Notifications";
+import Notifications from "../../../ui/notifications";
 
 const NavBar = ({ relativeStyles }) => {
   const [showNotifications, setShowNotifications] = useState(false);
   const { pathname } = useLocation();
   const [inViewport] = useViewport("1024px");
-  const { unreadCount } = useNotifications();
+  const notificationsContext = useNotifications();
+  const { unreadCount } = notificationsContext;
 
   useEffect(() => {
     setShowNotifications(false);
@@ -45,7 +46,7 @@ const NavBar = ({ relativeStyles }) => {
             </span>
           </NavLink>
           <NavLink
-            to="job"
+            to="listings"
             className="group order-2 flex flex-col items-center font-inter text-xs font-semibold text-grey-500 lg:flex-row lg:gap-3 lg:border-l-4 lg:border-[transparent] lg:px-9 lg:py-4 lg:text-lg [&.active]:text-success-500 lg:[&.active]:border-pry-500 lg:[&.active]:bg-success-50 lg:[&.active]:text-pry-500"
             onClick={() => setShowNotifications(false)}
           >
@@ -53,7 +54,7 @@ const NavBar = ({ relativeStyles }) => {
             <span
               className={`hidden lg:block ${showNotifications ? "block" : "hidden group-[.active]:block"}`}
             >
-              Job
+              Listings
             </span>
           </NavLink>
           <NavLink
@@ -105,7 +106,10 @@ const NavBar = ({ relativeStyles }) => {
           </button>
         </menu>
         {showNotifications && (
-          <Notifications relativeStyles="fixed inset-x-0 bottom-[72px]" />
+          <Notifications
+            relativeStyles="fixed inset-x-0 bottom-[72px]"
+            context={notificationsContext}
+          />
         )}
       </div>
     </nav>

@@ -233,6 +233,7 @@ const Projects = () => {
         </div>
         <div className="mb-2 grid grid-cols-1 gap-6 md:grid-cols-2">
           <ProjectCard />
+          <ProjectCard />
         </div>
       </div>
     </main>

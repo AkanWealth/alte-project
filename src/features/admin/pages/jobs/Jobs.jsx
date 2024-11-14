@@ -6,23 +6,23 @@ import {
 } from "@heroicons/react/24/outline";
 
 // Contexts
-import { useModalContext } from "../../../contexts/ModalContext";
+import { useModalContext } from "../../../../contexts/ModalContext";
 
 // UIs
-import FreelancerTable from "../ui/Tables/FreelancersTable";
-import Pagination from "../../../ui/Pagination";
-import ExportDataForm from "../ui/Modals/ExportDataForm";
+import JobsTable from "../../ui/listings/Tables/JobsTable";
+import Pagination from "../../../../ui/Pagination";
+import ExportDataForm from "../../ui/ExportDataForm";
 
 // Contents
-import { freelancersData } from "../../../contents/admin";
+import { jobsData } from "../../../../contents/admin";
 
-const Freelancers = () => {
+const Jobs = () => {
   const { setModalComponent } = useModalContext();
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 10;
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = startIndex + pageSize;
-  const currentPageData = freelancersData.slice(startIndex, endIndex);
+  const currentPageData = jobsData.slice(startIndex, endIndex);
 
   const onPageChange = (page) => {
     setCurrentPage(page);
@@ -101,11 +101,11 @@ const Freelancers = () => {
         </button>
       </div>
       <section className="flex flex-col gap-6">
-        <FreelancerTable data={currentPageData} />
+        <JobsTable data={currentPageData} />
         <div className="mx-auto">
           <Pagination
             currentPage={currentPage}
-            totalCount={freelancersData.length}
+            totalCount={jobsData.length}
             pageSize={pageSize}
             onPageChange={onPageChange}
           />
@@ -115,4 +115,4 @@ const Freelancers = () => {
   );
 };
 
-export default Freelancers;
+export default Jobs;

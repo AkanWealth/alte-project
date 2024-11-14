@@ -9,18 +9,18 @@ import {
 } from "@heroicons/react/24/outline";
 
 // Contexts
-import { useModalContext } from "../../../../contexts/ModalContext";
+import { useModalContext } from "../../../../../contexts/ModalContext";
 
 // UIs
-import DeleteUserForm from "../Modals/DeleteUserForm";
-import DeactivateUserForm from "../Modals/DeactivateUserForm";
-import UserFeedbackWidget from "../Modals/UserFeedbackWidget";
+import DeleteUserForm from "../../modals/DeleteUserForm";
+import DeactivateUserForm from "../../modals/DeactivateUserForm";
+import UserFeedbackWidget from "../modals/UserFeedbackWidget";
 
 // Utils
-import { convertToTitleCase } from "../../../../utils";
+import { convertToTitleCase } from "../../../../../utils";
 
 // Contents
-import { freelancersDataTitles } from "../../../../contents/admin";
+import { freelancersDataTitles } from "../../../../../contents/admin";
 
 const FreelancersTable = ({ data }) => {
   const [activeRow, setActiveRow] = useState(null);

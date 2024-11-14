@@ -1,5 +1,6 @@
+import axios from "axios";
 import { useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useLoaderData, useSearchParams } from "react-router-dom";
 import { Controller, useForm } from "react-hook-form";
 import {
   GlobeAltIcon,
@@ -13,7 +14,9 @@ import {
   ChevronUpIcon,
   ChevronDownIcon,
 } from "@heroicons/react/20/solid";
-import { jobListings } from "../../../../contents/jobLists";
+
+// Configs
+import { API } from "../../../../config";
 
 // Contexts
 import { useModalContext } from "../../../../contexts/ModalContext";
@@ -23,6 +26,17 @@ import JobPost from "./components/JobPost";
 
 // UIs
 import Pagination from "../../../../ui/Pagination";
+
+// Loader
+export const loadJobs = async () => {
+  try {
+    const { data } = await axios.get(`${API}/jobs/jobList`);
+    return data;
+  } catch (error) {
+    console.error(error);
+    return error;
+  }
+};
 
 const DropdownItem = ({ register, name, value }) => {
   return (
@@ -202,6 +216,7 @@ const ResumeForm = () => {
 };
 
 const JobSeekers = () => {
+  const jobs = useLoaderData() || [];
   const [openFilter, setOpenFilter] = useState(false);
   const [openCategory, setOpenCategory] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -214,11 +229,11 @@ const JobSeekers = () => {
   const pageSize = 12;
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = startIndex + pageSize;
-  let filteredData = [...jobListings];
+  let filteredData = [...jobs];
 
   switch (jobTypeFilter) {
     case "all":
-      filteredData = [...jobListings];
+      filteredData = [...jobs];
       break;
     case "full-time":
       filteredData = filteredData.filter((data) => data.type === "full-time");
@@ -448,7 +463,7 @@ const JobSeekers = () => {
       </section>
       <section className="px-5 py-12 md:py-24 lg:px-10">
         <div className="inner flex flex-col lg:items-center">
-          {jobListings && jobListings.length > 0 ? (
+          {jobs && jobs.length > 0 ? (
             <>
               <h2 className="mb-4 font-inter text-3xl font-bold lg:mb-10 lg:text-5xl">
                 Latest Job Posts
@@ -550,7 +565,7 @@ const JobSeekers = () => {
           )}
           <div className="mt-8 flex w-full flex-col items-center lg:mt-20">
             <div className="mb-6 w-full bg-sec-50 px-5 py-3 lg:mb-20 lg:px-14 lg:py-10">
-              {jobListings && jobListings.length > 0 ? (
+              {jobs && jobs.length > 0 ? (
                 <>
                   {(searchQuery ||
                     (levels && levels.length > 0) ||
@@ -587,7 +602,7 @@ const JobSeekers = () => {
                 </div>
               )}
             </div>
-            {jobListings.length > 0 && (
+            {jobs.length > 0 && (
               <Pagination
                 currentPage={currentPage}
                 totalCount={filteredData.length}

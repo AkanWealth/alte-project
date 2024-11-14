@@ -13,6 +13,7 @@ const QuoteForm = () => {
     email: "",
     phoneNumber: "",
     policy: false,
+    selectedServices: [],
   });
 
   const [errors, setErrors] = useState({});
@@ -23,6 +24,28 @@ const QuoteForm = () => {
     const files = event.target.files;
     setSelectedFiles([...files]);
   };
+
+  const serviceOptions = [
+    "Website & Software Development",
+    "Mobile App Development",
+    "Product Discovery",
+    "Pitch Deck Creation",
+    "Product Design",
+    "Research and Analysis",
+    "Business Plan Development",
+    "Low Code App Development",
+    "Others",
+  ];
+
+  const handleServiceChange = (service) => {
+    setFormData((prevData) => {
+      const updatedServices = prevData.selectedServices.includes(service)
+        ? prevData.selectedServices.filter((s) => s !== service)
+        : [...prevData.selectedServices, service];
+      return { ...prevData, selectedServices: updatedServices };
+    });
+  };
+
 
   //const navigate = useNavigate();
   const validate = () => {
@@ -73,19 +96,35 @@ const QuoteForm = () => {
   const submitForm = async () => {
     try {
       const response = await axios.post(
-        "https://altes.free.beeceptor.com/request-quote",
-        formData,
+        "https://alte-backend.onrender.com/api/Alte/request-quote",
+        formData
       );
       console.log("Success:", response.data);
+  
+      if (response.data.success) {
+        toast.success(
+          <ToastMessage
+            title="Success!"
+            message={response.data.message || "Your request has been received. A representative will contact you shortly with a quote."}
+          />
+        );
+      } else {
+        toast.error(
+          <ToastMessage
+            title="Request Failed"
+            message={response.data.message || "There was an issue with your request. Please try again."}
+          />
+        );
+      }
       setModalComponent(null);
-      toast.success(
-        <ToastMessage
-          title="Success!"
-          message="Your Request Has Been Received. A representative will contact you shortly with a quote"
-        />,
-      );
     } catch (error) {
       console.error("Error:", error);
+      toast.error(
+        <ToastMessage
+          title="Error"
+          message="An error occurred while submitting your request. Please try again later."
+        />
+      );
     }
   };
   const handleValidation = async (event) => {
@@ -207,61 +246,23 @@ const QuoteForm = () => {
           </h3>
           <p className="mb-2">Which Services are you interested in?*</p>
           <div className="grid grid-cols-1 gap-2 font-raleway text-sm sm:grid-cols-2 lg:grid-cols-3">
-            <div className="rounded-sm border border-black p-4">
-              <label className="flex items-center gap-2">
-                <input type="checkbox" className="form-checkbox" />
-                Website & Software Development
-              </label>
-            </div>
-            <div className="rounded-sm border border-black p-4">
-              <label className="flex items-center gap-2">
-                <input type="checkbox" className="form-checkbox" />
-                Mobile App Development
-              </label>
-            </div>
-            <div className="rounded-sm border border-black p-4">
-              <label className="flex items-center gap-2">
-                <input type="checkbox" className="form-checkbox" />
-                Product Discovery
-              </label>
-            </div>
-            <div className="rounded-sm border border-black p-4">
-              <label className="flex items-center gap-2">
-                <input type="checkbox" className="form-checkbox" />
-                Pitch Deck Creation
-              </label>
-            </div>
-            <div className="rounded-sm border border-black p-4">
-              <label className="flex items-center gap-2">
-                <input type="checkbox" className="form-checkbox" />
-                Product Design
-              </label>
-            </div>
-            <div className="rounded-sm border border-black p-4">
-              <label className="flex items-center gap-2">
-                <input type="checkbox" className="form-checkbox" />
-                Research and Analysis
-              </label>
-            </div>
-            <div className="rounded-sm border border-black p-4">
-              <label className="flex items-center gap-2">
-                <input type="checkbox" className="form-checkbox" />
-                Business Plan Development
-              </label>
-            </div>
-            <div className="rounded-sm border border-black p-4">
-              <label className="flex items-center gap-2">
-                <input type="checkbox" className="form-checkbox" />
-                Low Code App Development
-              </label>
-            </div>
-            <div className="rounded-sm border border-black p-4">
-              <label className="flex items-center gap-2">
-                <input type="checkbox" className="form-checkbox" />
-                Others
-              </label>
-            </div>
+            {serviceOptions.map((service) => (
+              <div key={service} className="rounded-sm border border-black p-4">
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    className="form-checkbox"
+                    checked={formData.selectedServices.includes(service)}
+                    onChange={() => handleServiceChange(service)}
+                  />
+                  {service}
+                </label>
+              </div>
+            ))}
           </div>
+          {errors.selectedServices && (
+            <p className="text-sm text-[#DC6662]">{errors.selectedServices}</p>
+          )}
           <textarea
             placeholder="Specify your Request"
             className="mt-4 w-full rounded-md border p-2"
@@ -327,7 +328,7 @@ const QuoteForm = () => {
 
           <label className="font-raleway text-sm">
             By submitting this form, you agree to our{" "}
-            <Link href="/policies/privacy-policy" className="text-sec-500">
+            <Link to="/policies/privacy-policy" className="text-sec-500">
               Privacy policy
             </Link>
           </label>

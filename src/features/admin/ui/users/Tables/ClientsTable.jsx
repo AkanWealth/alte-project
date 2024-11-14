@@ -7,19 +7,19 @@ import {
 } from "@heroicons/react/24/outline";
 
 // Contexts
-import { useModalContext } from "../../../../contexts/ModalContext";
+import { useModalContext } from "../../../../../contexts/ModalContext";
 
 // Components
-import CopyEmailButton from "../../components/CopyEmailButton";
+import CopyEmailButton from "../../../components/CopyEmailButton";
 
 // UIs
-import DeleteUserForm from "../Modals/DeleteUserForm";
+import DeleteUserForm from "../../modals/DeleteUserForm";
 
 // Utils
-import { convertToTitleCase } from "../../../../utils";
+import { convertToTitleCase } from "../../../../../utils";
 
 // Contents
-import { clientsDataTitles } from "../../../../contents/admin";
+import { clientsDataTitles } from "../../../../../contents/admin";
 import { Link } from "react-router-dom";
 
 const ClientsTable = ({ data }) => {

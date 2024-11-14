@@ -1,4 +1,16 @@
+import { useEffect, useState } from "react";
+
 const VerifyEmail = () => {
+  const [email, setEmail] = useState("");
+
+  useEffect(() => {
+    const storedEmail = localStorage.getItem("userEmail");
+    console.log("Retrieved email from localStorage:", storedEmail);
+    if (storedEmail) {
+      setEmail(storedEmail);
+    }
+  }, []);
+
   return (
     <div className="bg-gray-100 flex h-screen flex-col items-center justify-center">
       <div className="w-full max-w-lg rounded-lg bg-white p-4 text-center">
@@ -18,8 +30,7 @@ const VerifyEmail = () => {
         <p className="mb-12 font-raleway text-grey-600">
           We’ve sent a verification link to your email:{" "}
           <span className="font-semibold text-[#104CD8]">
-            {" "}
-            user@example.com
+            {email || "your email address"}
           </span>
           . <br />
           Please check your inbox and click the link to verify your email

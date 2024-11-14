@@ -14,8 +14,12 @@ import CaseStudies from "../features/website/pages/case studies/CaseStudies";
 import CaseStudy from "../features/website/pages/case studies/CaseStudy";
 import Freelancer from "../features/website/pages/Freelancer";
 import QuoteSuccessPage from "../features/website/pages/QuoteSuccessPage";
-import JobSeekers from "../features/website/pages/job seekers/JobSeekers";
-import JobSeeker from "../features/website/pages/job seekers/JobSeeker";
+import JobSeekers, {
+  loadJobs,
+} from "../features/website/pages/job seekers/JobSeekers";
+import JobSeeker, {
+  getJob,
+} from "../features/website/pages/job seekers/JobSeeker";
 import PrivacyPolicy from "../features/website/pages/policies/PrivacyPolicy";
 import CookiesPolicy from "../features/website/pages/policies/CookiesPolicy";
 
@@ -67,10 +71,12 @@ const websiteRoutes = {
     {
       path: "jobseekers",
       element: <JobSeekers />,
+      loader: loadJobs,
     },
     {
       path: "jobseekers/:id",
       element: <JobSeeker />,
+      loader: getJob,
     },
     {
       path: "policies",

@@ -2,9 +2,9 @@ import { Link, Outlet, useLocation } from "react-router-dom";
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
 
 // Utils;
-import { convertToTitleCase } from "../../../utils";
+import { convertToTitleCase } from "../../../../utils";
 
-const UsersLayout = () => {
+const ListingsLayout = () => {
   const { pathname } = useLocation();
   const currentPath = pathname.split("/").filter((x) => x);
 
@@ -39,4 +39,4 @@ const UsersLayout = () => {
   );
 };
 
-export default UsersLayout;
+export default ListingsLayout;

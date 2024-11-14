@@ -13,10 +13,10 @@ import { useModalContext } from "../../../contexts/ModalContext";
 import { convertToTitleCase } from "../../../utils";
 
 // UIs
-import FreelancersTable from "../ui/Tables/FreelancersTable";
-import ClientsTable from "../ui/Tables/ClientsTable";
-import InternalUsersTable from "../ui/Tables/InternalUsersTable";
-import CreateUserForm from "../ui/Modals/CreateUserForm";
+import FreelancersTable from "../ui/users/tables/FreelancersTable";
+import ClientsTable from "../ui/users/tables/ClientsTable";
+import InternalUsersTable from "../ui/InternalUsersTable";
+import CreateUserForm from "../ui/users/modals/CreateUserForm";
 
 // Contents
 import {

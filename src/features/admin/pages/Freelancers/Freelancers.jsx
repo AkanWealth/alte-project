@@ -6,23 +6,23 @@ import {
 } from "@heroicons/react/24/outline";
 
 // Contexts
-import { useModalContext } from "../../../contexts/ModalContext";
+import { useModalContext } from "../../../../contexts/ModalContext";
 
 // UIs
-import InternalUsersTable from "../ui/InternalUsersTable";
-import Pagination from "../../../ui/Pagination";
-import ExportDataForm from "../ui/ExportDataForm";
+import FreelancerTable from "../../ui/users/Tables/FreelancersTable";
+import Pagination from "../../../../ui/Pagination";
+import ExportDataForm from "../../ui/ExportDataForm";
 
 // Contents
-import { internalUsersData } from "../../../contents/admin";
+import { freelancersData } from "../../../../contents/admin";
 
-const InternalUsers = () => {
+const Freelancers = () => {
   const { setModalComponent } = useModalContext();
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 10;
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = startIndex + pageSize;
-  const currentPageData = internalUsersData.slice(startIndex, endIndex);
+  const currentPageData = freelancersData.slice(startIndex, endIndex);
 
   const onPageChange = (page) => {
     setCurrentPage(page);
@@ -71,41 +71,41 @@ const InternalUsers = () => {
             </li>
             <li>
               <label
-                htmlFor="active"
+                htmlFor="onProject"
                 className="flex flex-row items-center gap-2 font-inter text-base text-grey-900"
               >
                 <input
                   type="checkbox"
-                  name="active"
-                  id="active"
+                  name="onProject"
+                  id="onProject"
                   className="relative aspect-square min-w-5 appearance-none overflow-hidden rounded-md border border-black bg-center after:absolute after:hidden after:size-full after:bg-[url('/icons/check.svg')] after:bg-[50%] after:bg-no-repeat checked:border-sec-500 checked:bg-sec-500 checked:after:inline"
                 />
-                Active
+                On Project
               </label>
             </li>
             <li>
               <label
-                htmlFor="inactive"
+                htmlFor="roles"
                 className="flex flex-row items-center gap-2 font-inter text-base text-grey-900"
               >
                 <input
                   type="checkbox"
-                  name="inactive"
-                  id="inactive"
+                  name="roles"
+                  id="roles"
                   className="relative aspect-square min-w-5 appearance-none overflow-hidden rounded-md border border-black bg-center after:absolute after:hidden after:size-full after:bg-[url('/icons/check.svg')] after:bg-[50%] after:bg-no-repeat checked:border-sec-500 checked:bg-sec-500 checked:after:inline"
                 />
-                Inactive
+                Roles
               </label>
             </li>
           </ul>
         </button>
       </div>
       <section className="flex flex-col gap-6">
-        <InternalUsersTable data={currentPageData} />
+        <FreelancerTable data={currentPageData} />
         <div className="mx-auto">
           <Pagination
             currentPage={currentPage}
-            totalCount={internalUsersData.length}
+            totalCount={freelancersData.length}
             pageSize={pageSize}
             onPageChange={onPageChange}
           />
@@ -115,4 +115,4 @@ const InternalUsers = () => {
   );
 };
 
-export default InternalUsers;
+export default Freelancers;

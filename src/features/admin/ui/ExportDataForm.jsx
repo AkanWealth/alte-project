@@ -3,10 +3,10 @@ import toast from "react-hot-toast";
 import { CalendarIcon, XMarkIcon } from "@heroicons/react/24/outline";
 
 // Contexts
-import { useModalContext } from "../../../../contexts/ModalContext";
+import { useModalContext } from "../../../contexts/ModalContext";
 
 // UIs
-import { ToastMessage } from "../../../../ui/ToastNotification";
+import { ToastMessage } from "../../../ui/ToastNotification";
 
 const ExportDataForm = () => {
   const { setModalComponent } = useModalContext();

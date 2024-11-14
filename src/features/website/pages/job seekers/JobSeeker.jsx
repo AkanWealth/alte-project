@@ -1,5 +1,6 @@
+import axios from "axios";
 import { useEffect, useRef, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useLoaderData, useNavigate, useParams } from "react-router-dom";
 import { Controller, useForm } from "react-hook-form";
 import { isEmail, isMobilePhone, isURL } from "validator";
 import {
@@ -20,6 +21,21 @@ import JobPost from "./components/JobPost";
 // Utils
 import { convertToTitleCase, formatDate } from "../../../../utils";
 
+// Configs
+import { API } from "../../../../config";
+
+// Loader
+export const getJob = async ({ params }) => {
+  try {
+    const { id } = params;
+    const { data } = await axios.get(`${API}/jobs/${id}`);
+    return data;
+  } catch (error) {
+    console.error(error);
+    return error;
+  }
+};
+
 const ApplicationSubmittedModal = () => {
   const { id } = useParams();
   const currentJob = jobListings.find((job) => job.id === Number(id));
@@ -37,11 +53,12 @@ const ApplicationSubmittedModal = () => {
         Application Submitted Successfully!
       </h3>
       <p className="mb-8 w-full max-w-[40ch] text-center font-inter text-base font-normal">
-        Thank you for applying for the {currentJob.position} position. We have
-        received your application and will review it shortly. You will receive
+        Thank you for applying for the {currentJob.position} position. W e have
+        received your application and will review it shortly. You wil l receive
         an email confirmation shortly.
       </p>
       <button
+        type="button"
         onClick={() => {
           setModalComponent(null);
           navigate("/jobseekers");
@@ -50,6 +67,7 @@ const ApplicationSubmittedModal = () => {
         Return to Jobs
       </button>
       <button
+        type="button"
         className="absolute right-5 top-5"
         onClick={() => {
           setModalComponent(null);
@@ -62,9 +80,7 @@ const ApplicationSubmittedModal = () => {
   );
 };
 
-const JobApplyForm = () => {
-  const { id } = useParams();
-  const currentJob = jobListings.find((job) => job.id === Number(id));
+const JobApplyForm = ({ data }) => {
   const {
     register,
     handleSubmit,
@@ -94,9 +110,6 @@ const JobApplyForm = () => {
   };
 
   const onSubmit = async (data) => {
-    console.log("Form Submitted: ", data);
-    console.log("Uploaded Resume: ", resume);
-    // TO SEND AND AWAIT POST REQUEST
     reset();
     setResume(null);
     setModalComponent(<ApplicationSubmittedModal />);
@@ -108,12 +121,13 @@ const JobApplyForm = () => {
       className="relative flex h-full max-h-screen w-full max-w-screen-lg flex-col rounded-3xl bg-white px-7 py-10 font-inter text-xl font-semibold lg:px-28 lg:py-20 lg:text-3xl"
     >
       <button
+        type="button"
         onClick={() => setModalComponent(null)}
         className="text-gray-500 hover:text-gray-800 absolute right-6 top-6 lg:right-16 lg:top-16"
       >
         <XMarkIcon className="size-6" />
       </button>
-      <h2>Join Alte - {currentJob.position}</h2>
+      <h2>Join Alte - {data.position}</h2>
       <div className="mt-10 flex flex-col gap-5 overflow-y-scroll text-start lg:gap-8">
         <div className="">
           <label
@@ -329,8 +343,7 @@ const JobApplyForm = () => {
 };
 
 const JobSeeker = () => {
-  const { id } = useParams();
-  const currentJob = jobListings.find((job) => job.id === Number(id));
+  const job = useLoaderData();
   const asideJobs = jobListings.slice(0, 15);
   const mainRef = useRef(null);
   const [mainHeight, setMainHeight] = useState("100vh");
@@ -357,37 +370,35 @@ const JobSeeker = () => {
           <article className="flex flex-col px-4 lg:px-10">
             <div className="mb-8 flex flex-col items-start gap-6 lg:mb-10 lg:flex-row lg:items-end lg:justify-between">
               <img
-                src={currentJob.companyLogo}
+                src={job.companyLogo}
                 alt=""
                 className="-mt-5 ml-2 aspect-square w-full max-w-12 lg:-mt-10 lg:ml-5 lg:max-w-28"
               />
               <button
                 className="btn btn-pry"
-                onClick={() => setModalComponent(<JobApplyForm />)}
+                onClick={() => setModalComponent(<JobApplyForm data={job} />)}
               >
                 Apply
                 <ArrowRightIcon className="size-6" />
               </button>
             </div>
             <h1 className="font-inter text-2xl font-bold lg:text-3xl">
-              {currentJob.position}
+              {job.position}
             </h1>
             <ul className="mb-6 mt-4 flex flex-wrap gap-4 text-sm lg:gap-8">
               <li
-                className={`rounded-2xl px-2 py-1 ${currentJob.active ? "bg-success-50 text-success-700" : "bg-error-50 text-error-700"}`}
+                className={`rounded-2xl px-2 py-1 ${job.active ? "bg-success-50 text-success-700" : "bg-error-50 text-error-700"}`}
               >
                 <span
-                  className={`mr-2 inline-block size-2 rounded-full ${currentJob.active ? "bg-success-500" : "bg-error-500"}`}
+                  className={`mr-2 inline-block size-2 rounded-full ${job.active ? "bg-success-500" : "bg-error-500"}`}
                 ></span>
-                {currentJob.active ? "Active" : "Inactive"}
+                {job.active ? "Active" : "Inactive"}
               </li>
               <li className="text-sm font-medium text-grey-400">
                 <span className="mr-2 inline-block size-2 rounded-full bg-grey-200 text-base"></span>
-                {currentJob.category}
+                {job.category}
               </li>
-              <li className="rounded-md bg-grey-50 px-2 py-1">
-                {currentJob.level}
-              </li>
+              <li className="rounded-md bg-grey-50 px-2 py-1">{job.level}</li>
             </ul>
             <div>
               <h2 className="mb-6 w-full border-b pb-2 font-raleway text-xl font-bold lg:text-2xl">
@@ -400,7 +411,7 @@ const JobSeeker = () => {
                     <span className="mr-4">Location</span>
                   </span>
                   <span className="text-base font-medium text-black lg:text-lg">
-                    {currentJob.location}
+                    {job.location}
                   </span>
                 </li>
                 <li className="inline-flex items-start lg:items-center">
@@ -408,10 +419,10 @@ const JobSeeker = () => {
                   <span className="inline-flex flex-wrap items-center">
                     <span className="mr-4">Job posted on</span>
                     <time
-                      dateTime={new Date(currentJob.datePosted).toISOString()}
+                      dateTime={new Date(job.datePosted).toISOString()}
                       className="text-base font-medium text-black lg:text-lg"
                     >
-                      {formatDate(currentJob.datePosted)}
+                      {formatDate(job.datePosted)}
                     </time>
                   </span>
                 </li>
@@ -420,10 +431,10 @@ const JobSeeker = () => {
                   <span className="inline-flex flex-wrap items-center">
                     <span className="mr-4">Application Deadline</span>
                     <time
-                      dateTime={new Date(currentJob.deadline).toISOString()}
+                      dateTime={new Date(job.deadline).toISOString()}
                       className="text-base font-medium text-black lg:text-lg"
                     >
-                      {formatDate(currentJob.deadline)}
+                      {formatDate(job.deadline)}
                     </time>
                   </span>
                 </li>
@@ -433,7 +444,7 @@ const JobSeeker = () => {
                     <span className="mr-4">Work Type</span>
                   </span>
                   <span className="text-base font-medium text-black lg:text-lg">
-                    {convertToTitleCase(currentJob.type)}
+                    {convertToTitleCase(job.type)}
                   </span>
                 </li>
               </ul>
@@ -445,20 +456,16 @@ const JobSeeker = () => {
               <h3 className="mb-4 font-inter text-2xl font-medium text-grey-500">
                 About:
               </h3>
-              <p className="mb-8 text-base text-grey-900">
-                {currentJob.aboutJob}
-              </p>
+              <p className="mb-8 text-base text-grey-900">{job.aboutJob}</p>
               <h3 className="mb-4 font-inter text-2xl font-medium text-grey-500">
                 Job Description:
               </h3>
-              <p className="mb-8 text-base text-grey-900">
-                {currentJob.description}
-              </p>
+              <p className="mb-8 text-base text-grey-900">{job.description}</p>
               <h3 className="mb-4 font-inter text-2xl font-medium text-grey-500">
                 Job Responsibility:
               </h3>
               <ol className="mb-8 list-inside list-decimal text-base text-grey-900">
-                {currentJob.responsibilities.map((item, index) => (
+                {job.responsibilities.map((item, index) => (
                   <li key={index}>{item}</li>
                 ))}
               </ol>
@@ -466,7 +473,7 @@ const JobSeeker = () => {
                 Skill Required:
               </h3>
               <ul className="mb-8 flex flex-wrap gap-4 text-base text-grey-900">
-                {currentJob.skills.map((item, index) => (
+                {job.skills.map((item, index) => (
                   <li key={index} className="rounded-md bg-grey-50 px-2 py-1">
                     {item}
                   </li>
@@ -477,9 +484,7 @@ const JobSeeker = () => {
               <h3 className="mb-4 font-inter text-3xl font-bold text-grey-900">
                 About the Company
               </h3>
-              <p className="text-base text-grey-900">
-                {currentJob.aboutCompany}
-              </p>
+              <p className="text-base text-grey-900">{job.aboutCompany}</p>
             </div>
             <button
               className="btn btn-pry ml-auto"

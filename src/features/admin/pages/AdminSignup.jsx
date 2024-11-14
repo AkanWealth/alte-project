@@ -2,131 +2,68 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
-import toast from "react-hot-toast";
-import { ToastMessage } from "../../../ui/ToastNotification";
-import { API } from "../../../config";
 
-const SignUp = () => {
-  const [showPassword, setShowPassword] = useState(false);
-  const [values, setValues] = useState({
-    name: "",
-    email: "",
-    password: "",
-    confirm_password: "",
-  });
+const AdminSignup = () => {
+    const [showPassword, setShowPassword] = useState(false);
+    const [values, setValues] = useState({
+        name: "",
+        email: "",
+        password: "",
+        confirm_password: "",
+      });
+    
+      const [errors, setErrors] = useState({});
+      const [alertVisible, setAlertVisible] = useState(false);
+      const navigate = useNavigate();
+      const handleChange = (event) => {
+        const { name, value } = event.target;
+        setValues({
+          ...values,
+          [name]: value,
+        });
+      };
 
-  const [errors, setErrors] = useState({});
-  const [alertVisible, setAlertVisible] = useState(false);
-  const [isPrivacyChecked, setIsPrivacyChecked] = useState(false);
-  const navigate = useNavigate();
-
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setValues({
-      ...values,
-      [name]: value,
-    });
-  };
-  const handleCheckboxChange = (event) => {
-    setIsPrivacyChecked(event.target.checked);
-  };
-
-  const validateForm = () => {
-    let formErrors = {};
-
-    if (!values.name) {
-      formErrors.name = "Full name is required";
-    }
-
-    if (!values.email) {
-      formErrors.email = "Email is required";
-    } else if (!/\S+@\S+\.\S+/.test(values.email)) {
-      formErrors.email = "Email address is invalid";
-    }
-
-    if (!values.password) {
-      formErrors.password = "Password is required";
-    } else if (values.password.length < 8) {
-      formErrors.password = "Must be 8-12 characters (Upper case, Lower case, Numbers, and symbols)";
-    }
-
-    if (!values.confirm_password) {
-      formErrors.confirm_password = "Enter Password Again";
-    } else if (values.password !== values.confirm_password) {
-      formErrors.confirm_password = "Passwords must match";
-    }
-    if (!isPrivacyChecked) {
-      formErrors.privacy = "You must agree to the terms and privacy policy";
-    }
-
-    console.log("Form Errors:", formErrors); 
-    return formErrors;
-  };
-
-  const submitForm = async () => {
-    try {
-      
-      const response = await axios.post(
-      
-        `${API}/register`,
-
-        {
-          name: values.name,
-          email: values.email,
-          password: values.password,
+    const validateForm = () => {
+        let formErrors = {};
+    
+        if (!values.name) {
+          formErrors.name = "Full name is required";
         }
-      );
-
-      if (response.status === 200) {
-        console.log("Success:", response.data);
-        localStorage.setItem("userEmail", values.email);
-        navigate("/freelancer/verify-email");
-      } else {
-        console.error(
-          "Sign-up failed:",
-          response.data.message || "Unknown error"
-        );
-        toast.error(
-          <ToastMessage
-            title="Signup Failed"
-            message={response.data.message || "Unknown error"}
-          />
-        );
-      }
-    } catch (error) {
-      const errorMessages = error.response?.data || [];
-      let message = "An error occurred. Please try again.";
-  
-      if (Array.isArray(errorMessages) && errorMessages.length > 0) {
-        message = errorMessages.map(err => err.description).join(" ");
-      }
-  
-      toast.error(
-        <ToastMessage
-          title="SignUp Failed"
-          message={message}
-        />
-      );
-  
-      console.error("Error:", error);
-    }
-  };
-
-  const handleValidation = (event) => {
-    event.preventDefault();
-
-    setErrors({});
-  setAlertVisible(false);
-  const validationErrors = validateForm();
-  setErrors(validationErrors);
-
-    if (Object.keys(validationErrors).length > 0) {
-      setAlertVisible(true);
-    } else {
-      setAlertVisible(false);
-      submitForm();
-    }
-  };
+    
+        if (!values.email) {
+          formErrors.email = "Email is required";
+        } else if (!/\S+@\S+\.\S+/.test(values.email)) {
+          formErrors.email = "Email address is invalid";
+        }
+    
+        if (!values.password) {
+          formErrors.password = "Password is required";
+        } else if (values.password.length < 8) {
+          formErrors.password =
+            "Must be 8-12 characters (Upper case, Lower case, Numbers, and symbols)";
+        }
+    
+        if (!values.confirm_password) {
+          formErrors.confirm_password = "Enter Password Again";
+        } else if (values.password !== values.confirm_password) {
+          formErrors.confirm_password = "Passwords must match";
+        }
+    
+        return formErrors;
+      };
+      const handleValidation = async (event) => {
+        event.preventDefault();
+    
+        const validationErrors = validateForm();
+        setErrors(validationErrors);
+    
+        if (Object.keys(validationErrors).length > 0) {
+          setAlertVisible(true);
+        } else {
+          setAlertVisible(false);
+          await submitForm();
+        }
+      };
 
   return (
     <main>
@@ -151,7 +88,8 @@ const SignUp = () => {
                       src="/images/freelancer/error.png"
                       alt="Error Logo"
                       className="mr-2 h-6 w-6"
-                    />
+                    />{" "}
+                    {/* Logo */}
                     <div className="font-raleway">
                       <strong>Error</strong>
                       <p>Complete all fields and try again.</p>
@@ -168,7 +106,7 @@ const SignUp = () => {
                 />
               </div>
               <h2 className="mb-2 text-left font-raleway text-3xl font-bold text-grey-900">
-                Sign up as a Freelancer
+                Sign up as an Admin
               </h2>
               <p className="mb-8 text-left font-raleway text-grey-500">
                 Register to get started on Alte Platform
@@ -178,7 +116,7 @@ const SignUp = () => {
                 {/* Full Name */}
                 <div>
                   <label
-                    htmlFor="name"
+                    htmlFor="fullName"
                     className="block font-raleway text-sm font-medium text-grey-700"
                   >
                     Full name*
@@ -189,7 +127,7 @@ const SignUp = () => {
                     value={values.name}
                     onChange={handleChange}
                     className={`mt-1 block w-full rounded-md border px-3 py-2 shadow-sm focus:outline-none ${
-                      errors.name ? "border-[#DC6662]" : "border-gray-300"
+                      errors.fullName ? "border-[#DC6662]" : "border-gray-300"
                     }`}
                     placeholder="Enter your Full name"
                   />
@@ -273,10 +211,11 @@ const SignUp = () => {
                     }`}
                     placeholder="Confirm your password"
                   />
+                  {/* Eye Icon Button */}
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="text-grey-600 absolute inset-y-0 right-3 mt-4 flex items-center"
+                    className="text-gray-600 absolute inset-y-0 right-3 mt-4 flex items-center"
                   >
                     {showPassword ? (
                       <EyeIcon className="size-6" />
@@ -290,38 +229,22 @@ const SignUp = () => {
                     </p>
                   )}
                 </div>
-                <div className="flex items-start">
-                  <input
-                    type="checkbox"
-                    id="privacy"
-                    checked={isPrivacyChecked}
-                    onChange={() => setIsPrivacyChecked(!isPrivacyChecked)}
-                    className="h-4 w-4 rounded border-gray-300 text-grey-600 focus:ring-indigo-500"
-                  />
-                  <label
-                    htmlFor="privacy"
-                    className="ml-2 font-raleway text-sm font-medium text-grey-700"
-                  >
-                    I agree to Alte’s{" "}
-                    <Link
-                      to="/policies/privacy-policy"
-                      className="text-sec-500 hover:underline"
-                    >
-                      Terms of Service
-                    </Link>{" "}
-                    and{" "}
-                    <Link
-                      to="/policies/privacy-policy"
-                      className="text-sec-500 hover:underline"
-                    >
-                      Privacy Policy
-                    </Link>
-                    *
+
+                <div>
+                  <label className="inline-flex items-center">
+                    <input type="checkbox" className="form-checkbox" />
+                    <span className="ml-2 font-raleway text-grey-700">
+                      I agree to Alte{" "}
+                      <Link
+                        to="/policies/privacy-policy"
+                        className="text-sec-500"
+                      >
+                        Terms of service and Privacy Policy
+                      </Link>
+                    </span>
                   </label>
                 </div>
-                {errors.privacy && (
-                  <p className="text-sm text-[#DC6662]">{errors.privacy}</p>
-                )}
+
                 <button type="submit" className="btn btn-pry w-full">
                   Create Account
                 </button>
@@ -329,19 +252,19 @@ const SignUp = () => {
 
               <p className="text-gray-500 mt-4 text-center text-sm">
                 Already have an account?{" "}
-                <Link
-                  to="/freelancer/login"
+                <a
+                  href="/admin/login"
                   className="font-medium text-sec-500 hover:underline"
                 >
                   Log In
-                </Link>
+                </a>
               </p>
             </div>
           </div>
         </div>
       </section>
     </main>
-  );
-};
+  )
+}
 
-export default SignUp;
+export default AdminSignup

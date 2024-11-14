@@ -1,13 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import axios from "axios";
-import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
-import { API } from "../../../config";
 import { ToastMessage } from "../../../ui/ToastNotification";
 
-const Login = () => {
+const AdminLogin = () => {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const {
@@ -19,41 +17,44 @@ const Login = () => {
     formState: { errors, isSubmitting },
   } = useForm();
 
+  // Check session expiration on page load
+  useEffect(() => {
+    const authExpiration = localStorage.getItem("authExpiration");
+    if (authExpiration && Date.now() > parseInt(authExpiration)) {
+      localStorage.removeItem("isAuthenticated");
+      localStorage.removeItem("authExpiration");
+      navigate("/admin/login");
+    }
+  }, [navigate]);
+
   const handleForm = async (data) => {
     const { email, password } = data;
 
-    const userData = {
-      email: email,
-      password: password,
-    };
+    // Hardcoded credentials
+    const hardcodedEmail = "alte_admin@test.com";
+    const hardcodedPassword = "admin@alte1234";
 
-    try {
-      const response = await axios.post(
-        `${API}/login`,
-        userData
+    if (email === hardcodedEmail && password === hardcodedPassword) {
+      const expirationTime = Date.now() + 3 * 60 * 1000; // 3 minutes
+      localStorage.setItem("isAuthenticated", "true");
+      localStorage.setItem("authExpiration", expirationTime.toString());
+
+      reset();
+      clearErrors();
+      toast.success(
+        <ToastMessage
+          title="Congratulations"
+          message="You have successfully logged in"
+        />
       );
-
-      console.log(response)
-      if (response.status === 200 && response.data.message === "Login successful") {
-        reset();
-        clearErrors();
-        toast.success(
-          <ToastMessage
-            title="Congratulations"
-            message="You have successfully logged in"
-          />
-        );
-        setTimeout(() => navigate("/freelancer/dashboard"), 3000);
-      } else {
-        throw new Error(response.data.message || "Login Failed");
-      }
-    } catch (error) {
-      setError("email", { type: "manual", message: error.response?.data?.message || "Login Failed" });
-      setError("password", { type: "manual", message: error.response?.data?.message || "Login Failed" });
+      navigate("/admin/users");
+    } else {
+      setError("email", { type: "manual", message: "Incorrect email or password" });
+      setError("password", { type: "manual", message: "Incorrect email or password" });
       toast.error(
         <ToastMessage
           title="Login Failed"
-          message={error.response?.data?.message || "Incorrect email or password. Please try again."}
+          message="Incorrect email or password. Please try again."
         />
       );
     }
@@ -75,7 +76,7 @@ const Login = () => {
             Login to your Alte account
           </h1>
           <p className="mt-2 font-inter text-xs font-normal">
-            Enter your Account LogIn details below
+            Enter your Account Correct LogIn details below
           </p>
           <div className="my-6 lg:mt-9">
             <div className="mb-4">
@@ -95,11 +96,9 @@ const Login = () => {
                   required: "Email is required",
                 })}
               />
-              {errors.email && (
-                <p className="mt-2 text-sm text-error-500">{errors.email.message}</p>
-              )}
+              {errors.email && <p className="text-error-500">{errors.email.message}</p>}
             </div>
-            <div className="">
+            <div>
               <label
                 htmlFor="password"
                 className="mb-2 block font-inter text-sm font-medium after:ml-0.5 after:content-['*'] lg:text-xl"
@@ -129,9 +128,7 @@ const Login = () => {
                   )}
                 </button>
               </div>
-              {errors.password && (
-                <p className="mt-2 text-sm text-error-500">{errors.password.message}</p>
-              )}
+              {errors.password && <p className="text-error-500">{errors.password.message}</p>}
             </div>
           </div>
           <div className="mb-4 flex flex-row items-center justify-between gap-4 lg:mb-10">
@@ -163,7 +160,7 @@ const Login = () => {
           </button>
           <p className="mt-4 text-center font-raleway text-base font-normal lg:mt-10">
             Don’t have an account?
-            <Link to="/freelancer/register" className="ml-1 text-sec-500">
+            <Link to="/admin/register" className="ml-1 text-sec-500">
               Sign up
             </Link>
           </p>
@@ -178,4 +175,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default AdminLogin;

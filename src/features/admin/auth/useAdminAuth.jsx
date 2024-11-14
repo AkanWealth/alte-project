@@ -1,6 +1,5 @@
 import { createContext, useContext, useReducer } from "react";
-
-const FreelancerAuthContext = createContext();
+const AdminAuthContext = createContext();
 
 const initialData = {
   isLoggedIn: false,
@@ -9,17 +8,17 @@ const initialData = {
 
 const reducer = (state, action) => {
   switch (action.type) {
-    case "login/user":
+    case "login/admin":
       return {
         ...state,
         isLoggedIn: true,
       };
-    case "logout/user":
+    case "logout/admin":
       return {
         ...state,
         isLoggedIn: false,
       };
-    case "register/user":
+    case "register/admin":
       return {
         ...state,
         isRegistered: true,
@@ -27,7 +26,7 @@ const reducer = (state, action) => {
   }
 };
 
-export const FreelancerRouteProvider = ({ children }) => {
+export const AdminRouteProvider = ({ children }) => {
   const [{ isLoggedIn, isRegistered }, dispatch] = useReducer(
     reducer,
     initialData,
@@ -37,30 +36,31 @@ export const FreelancerRouteProvider = ({ children }) => {
     const { username, password } = userData;
 
     //   FOR DEMO ONLY
-    const valid = username === "user@test.com" && password === "1234";
+    const adminLogin =
+      username === "alte_admin@test.com" && password === "1234@AdminAlte";
 
-    if (valid) dispatch({ type: "login/user" });
+    if (adminLogin) dispatch({ type: "login/admin" });
 
-    return valid;
+    return adminLogin;
   };
 
   const logout = () => {
-    dispatch({ type: "logout/user" });
+    dispatch({ type: "logout/admin" });
   };
 
   const register = (userData) => {
-    dispatch({ type: "register/user" });
+    dispatch({ type: "register/admin" });
   };
-
   return (
-    <FreelancerAuthContext.Provider
+    
+    <AdminAuthContext.Provider
       value={{ isLoggedIn, isRegistered, login, logout, register }}
     >
       {children}
-    </FreelancerAuthContext.Provider>
-  ); 
+    </AdminAuthContext.Provider>
+  );
 };
 
-const useFreelancerAuth = () => useContext(FreelancerAuthContext);
+const useAdminAuth = () => useContext(AdminAuthContext);
 
-export default useFreelancerAuth;
+export default useAdminAuth;

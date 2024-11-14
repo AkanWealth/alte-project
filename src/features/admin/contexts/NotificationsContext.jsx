@@ -59,6 +59,8 @@ const reducer = (state, action) => {
       return state.map((notification) => ({ ...notification, read: true }));
     case "notification/deleted":
       return state.filter((notification) => notification.id !== action.payload);
+    case "all/deleted":
+      return [];
     default:
       return state;
   }
@@ -93,6 +95,10 @@ const NotificationsProvider = ({ children }) => {
     dispatch({ type: "notification/deleted", payload: id });
   };
 
+  const removeAll = () => {
+    dispatch({ type: "all/deleted" });
+  };
+
   return (
     <NotificationsContext.Provider
       value={{
@@ -102,6 +108,7 @@ const NotificationsProvider = ({ children }) => {
         markAsRead,
         markAllAsRead,
         removeNotification,
+        removeAll,
       }}
     >
       {children}

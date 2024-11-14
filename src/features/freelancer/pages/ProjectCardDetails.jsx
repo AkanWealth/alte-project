@@ -188,7 +188,7 @@ const ProjectCardDetails = () => {
         {/* Apply Button */}
         <div className="mt-6">
           <button
-            onClick={() => setModalComponent(<ApplyProjectForm />)} // Open the Application form modal
+            onClick={() => setModalComponent(<ApplyProjectForm />)} 
             className="hover:bg-yellow-600 w-full rounded-lg bg-sec-500 py-2 font-medium text-grey-500"
           >
             Apply for this project

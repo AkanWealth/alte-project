@@ -1,26 +1,30 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import {
   EllipsisVerticalIcon,
-  LockOpenIcon,
+  FlagIcon,
+  PencilIcon,
   TrashIcon,
   UserIcon,
+  UsersIcon,
   XCircleIcon,
 } from "@heroicons/react/24/outline";
 
 // Contexts
-import { useModalContext } from "../../../../contexts/ModalContext";
+import { useModalContext } from "../../../../../contexts/ModalContext";
 
 // UIs
 import DeleteUserForm from "../Modals/DeleteUserForm";
-import DeactivateUserForm from "../Modals/DeactivateUserForm";
+import DeactivateUserForm from "../../Modals/DeactivateUserForm";
+import UserFeedbackWidget from "../Modals/UserFeedbackWidget";
 
 // Utils
-import { convertToTitleCase } from "../../../../utils";
+import { convertToTitleCase } from "../../../../../utils";
 
 // Contents
-import { internalUsersDataTitles } from "../../../../contents/admin";
+import { jobsDataTitles } from "../../../../../contents/admin";
 
-const InternalUsersTable = ({ data }) => {
+const JobsTable = ({ data }) => {
   const [activeRow, setActiveRow] = useState(null);
   const { setModalComponent } = useModalContext();
 
@@ -28,35 +32,38 @@ const InternalUsersTable = ({ data }) => {
     <div className="overflow-x-auto rounded-lg border border-grey-50">
       <table className="w-full">
         <thead>
-          <tr className="bg-grey-50 font-inter text-sm font-semibold text-grey-900 *:px-6 *:py-3">
-            {internalUsersDataTitles.map((title, index) => (
-              <th key={index} className="text-start">
+          <tr className="bg-grey-50 font-inter text-sm font-semibold text-grey-900">
+            {jobsDataTitles.map((title, index) => (
+              <th key={index} className="px-6 py-3 text-start">
                 {convertToTitleCase(title)}
               </th>
             ))}
-            <th></th>
+            <th className="px-6 py-3"></th>
           </tr>
         </thead>
         <tbody className="*:border-t *:border-grey-50 *:font-inter *:text-sm *:font-normal *:text-grey-400">
-          {data.map((data, index) => (
+          {data.map((row, index) => (
             <tr
               key={index}
-              className="*:w-max *:whitespace-nowrap *:px-6 *:py-5 focus-within:bg-sec-50 hover:bg-sec-50"
+              className="whitespace-nowrap *:w-max *:px-6 *:py-5 focus-within:bg-sec-50 hover:bg-sec-50"
             >
-              {Object.entries(data).map(([key, value], index) =>
-                key === "active" ? (
-                  <td key={index}>
-                    <p
-                      className={`w-fit rounded-2xl px-2 py-1 ${value ? "bg-success-50 text-success-700" : "bg-error-50 text-error-700"}`}
+              {Object.entries(row).map(([key, value], i) =>
+                key === "projectTitle" ? (
+                  <td key={i} className="text-start">
+                    <Link to="/admin/listings/jobs/test">{value}</Link>
+                  </td>
+                ) : key === "status" ? (
+                  <td key={i} className="text-start">
+                    <span
+                      className={`rounded-md px-4 py-2 text-grey-900 ${value === "opened" ? "bg-[#FFDF8A]" : value === "draft" ? "bg-[#E2FFCE]" : "bg-[#FAE8E8]"}`}
                     >
-                      <span
-                        className={`mr-2 inline-block size-2 rounded-full ${value ? "bg-success-500" : "bg-error-500"}`}
-                      ></span>
-                      {value ? "Active" : "Inactive"}
-                    </p>
+                      {value}
+                    </span>
                   </td>
                 ) : (
-                  <td key={index}>{value}</td>
+                  <td key={i} className="text-center">
+                    {value}
+                  </td>
                 ),
               )}
               <td className="relative">
@@ -70,12 +77,14 @@ const InternalUsersTable = ({ data }) => {
                 {activeRow === index && (
                   <ul className="absolute right-0 top-[80%] z-10 flex min-w-full flex-col gap-4 rounded-lg border border-grey-50 bg-white py-4 pl-5 pr-6 shadow">
                     <li>
-                      <button className="flex flex-row items-center gap-2 font-inter text-sm font-semibold text-grey-900">
-                        <UserIcon className="size-6 text-grey-200" />
-                        Activate
-                      </button>
+                      <Link
+                        to="/admin/listings/jobs/applications"
+                        className="flex flex-row items-center gap-2 font-inter text-sm font-semibold text-grey-900"
+                      >
+                        <UsersIcon className="size-6 text-grey-200" />
+                        View Applicants
+                      </Link>
                     </li>
-
                     <li>
                       <button
                         className="flex flex-row items-center gap-2 font-inter text-sm font-semibold text-grey-900"
@@ -83,14 +92,8 @@ const InternalUsersTable = ({ data }) => {
                           setModalComponent(<DeactivateUserForm />)
                         }
                       >
-                        <XCircleIcon className="size-6 text-grey-200" />
-                        Deactivate
-                      </button>
-                    </li>
-                    <li>
-                      <button className="flex flex-row items-center gap-2 font-inter text-sm font-semibold text-grey-900">
-                        <LockOpenIcon className="size-6 text-grey-200" />
-                        Reset user password
+                        <PencilIcon className="size-6 text-grey-200" />
+                        Edit Job
                       </button>
                     </li>
                     <li>
@@ -99,7 +102,7 @@ const InternalUsersTable = ({ data }) => {
                         onClick={() => setModalComponent(<DeleteUserForm />)}
                       >
                         <TrashIcon className="size-6" />
-                        Delete User
+                        Delete Job
                       </button>
                     </li>
                   </ul>
@@ -113,4 +116,4 @@ const InternalUsersTable = ({ data }) => {
   );
 };
 
-export default InternalUsersTable;
+export default JobsTable;

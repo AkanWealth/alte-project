@@ -14,15 +14,16 @@ import useViewport from "../../../hooks/useViewPort";
 
 // Contexts
 import { useNotifications } from "../contexts/NotificationsContext";
+import Notifications from "../../../ui/notifications";
 
 // UIs
-import Notifications from "./Notifications";
 
 const NavBar = ({ relativeStyles }) => {
   const [showNotifications, setShowNotifications] = useState(true);
   const { pathname } = useLocation();
   const [inViewport] = useViewport("1024px");
-  const { unreadCount } = useNotifications();
+  const notificationsContext = useNotifications();
+  const { unreadCount } = notificationsContext;
 
   useEffect(() => {
     setShowNotifications(false);
@@ -106,7 +107,10 @@ const NavBar = ({ relativeStyles }) => {
           </button>
         </menu>
         {showNotifications && (
-          <Notifications relativeStyles="fixed inset-x-0 bottom-[72px]" />
+          <Notifications
+            relativeStyles="fixed inset-x-0 bottom-[72px]"
+            context={notificationsContext}
+          />
         )}
       </div>
     </nav>

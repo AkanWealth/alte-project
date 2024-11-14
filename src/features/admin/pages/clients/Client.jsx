@@ -8,7 +8,7 @@ import {
 } from "@heroicons/react/24/outline";
 
 // Components
-import CopyEmailButton from "../components/CopyEmailButton";
+import CopyEmailButton from "../../components/CopyEmailButton";
 
 const Client = () => {
   return (

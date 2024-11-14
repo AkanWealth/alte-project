@@ -2,7 +2,7 @@ import { useState } from "react";
 import { FlagIcon, StarIcon, XMarkIcon } from "@heroicons/react/24/outline";
 
 // Contexts
-import { useModalContext } from "../../../../contexts/ModalContext";
+import { useModalContext } from "../../../../../contexts/ModalContext";
 
 const FlagUser = ({ initialFlagged = false, onFlagToggle }) => {
   const [isFlagged, setIsFlagged] = useState(initialFlagged);

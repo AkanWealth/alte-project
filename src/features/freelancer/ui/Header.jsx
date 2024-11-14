@@ -18,7 +18,7 @@ import { useNotifications } from "../contexts/NotificationsContext";
 import Logo from "../../../ui/Logo";
 
 // UIs
-import Notifications from "./Notifications";
+import Notifications from "../../../ui/notifications";
 
 const Header = ({ relativeStyles }) => {
   const [showModal, setShowModal] = useState(false);
@@ -28,7 +28,8 @@ const Header = ({ relativeStyles }) => {
     pathname.replace(/^\/freelancer\/dashboard/, "").replace("/", "") ||
     "dashboard";
   const [inViewport] = useViewport("1024px");
-  const { unreadCount } = useNotifications();
+  const notificationsContext = useNotifications();
+  const { unreadCount } = notificationsContext;
 
   useEffect(() => {
     setShowNotifications(false);
@@ -43,22 +44,27 @@ const Header = ({ relativeStyles }) => {
         <p className="hidden font-inter text-2xl font-semibold lowercase text-grey-900 first-letter:uppercase lg:block">
           {currentPath}
         </p>
-        <button
-          className="relative hidden size-10 rounded-full bg-success-50 text-success-500 lg:ml-auto lg:block"
-          onClick={() => setShowNotifications((prev) => !prev)}
-        >
-          <BellIcon className="m-auto size-6" />
-          {unreadCount > 0 && (
-            <div
-              className={`${unreadCount <= 0 && "hidden"} absolute -top-2 right-0 grid size-[18px] place-content-center rounded-full bg-error-500 text-center text-[9px] text-white`}
-            >
-              {unreadCount}
-            </div>
-          )}
+        <div className="relative hidden lg:ml-auto lg:block">
+          <button
+            className="size-10 rounded-full bg-success-50 text-success-500"
+            onClick={() => setShowNotifications((prev) => !prev)}
+          >
+            <BellIcon className="m-auto size-6" />
+            {unreadCount > 0 && (
+              <div
+                className={`${unreadCount <= 0 && "hidden"} absolute -top-2 right-0 grid size-[18px] place-content-center rounded-full bg-error-500 text-center text-[9px] text-white`}
+              >
+                {unreadCount}
+              </div>
+            )}
+          </button>
           {showNotifications && (
-            <Notifications relativeStyles="absolute right-0 top-[calc(100%+24px)]" />
+            <Notifications
+              relativeStyles="absolute right-0 top-[calc(100%+24px)]"
+              context={notificationsContext}
+            />
           )}
-        </button>
+        </div>
         <button
           onClick={() => setShowModal(!showModal)}
           className="ml-auto flex flex-row items-center gap-2 lg:m-0"
