@@ -14,7 +14,7 @@ import Listings from "../features/admin/pages/Listings";
 import Content from "../features/admin/pages/Content";
 import Settings from "../features/admin/pages/Settings";
 import Freelancers from "../features/admin/pages/freelancers/Freelancers";
-import Freelancer from "../features/admin/pages/freelancers/Freelancer";
+import { Freelancer } from "../features/admin/pages/freelancers/Freelancer";
 import Clients from "../features/admin/pages/clients/Clients";
 import Client from "../features/admin/pages/clients/Client";
 import InternalUsers from "../features/admin/pages/InternalUsers";
