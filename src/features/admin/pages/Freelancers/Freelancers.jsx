@@ -16,7 +16,7 @@ import ExportDataForm from "../../ui/ExportDataForm";
 // Contents
 import { freelancersData } from "../../../../contents/admin";
 
-export const Freelancers = () => {
+const Freelancers = () => {
   const { setModalComponent } = useModalContext();
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 10;
@@ -115,4 +115,4 @@ export const Freelancers = () => {
   );
 };
 
-// export default Freelancers;
+export default Freelancers;
