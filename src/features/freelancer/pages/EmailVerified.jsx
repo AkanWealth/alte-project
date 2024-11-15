@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { API } from "../../../config";
@@ -6,52 +6,68 @@ import { ToastMessage } from "../../../ui/ToastNotification";
 import toast from "react-hot-toast";
 
 const EmailVerified = () => {
-  const location = useLocation();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const userId = searchParams.get("userId");
+  const token = searchParams.get("token");
   const [isValid, setIsValid] = useState(false);
   const [loading, setLoading] = useState(true);
-
-  // Extract query parameters
-  const queryParams = new URLSearchParams(location.search);
-  const userId = queryParams.get("userId");
-  const token = queryParams.get("token");
 
   useEffect(() => {
     if (!userId || !token) {
       navigate("/freelancer/verify-email");
-      return;
+      return null;
     }
 
     const verifyEmail = async () => {
       try {
-        const response = await axios.get(
-          `${API}/confirm-email`,
-          { userId, token }
-          
-        );
-        console.log(response)
+        const response = await axios.get(`${API}/confirm-email`, {
+          params: { userId, token },
+        });
+        console.log(response);
         toast.success(
           <ToastMessage
             title="Success"
             message="You have successfully verified your email"
-          />
+          />,
         );
-
-        if (response.data.success) {
+        if (
+          response.status === 200 &&
+          response.data.message === "Thank you for confirming your email"
+        ) {
           setIsValid(true);
+          toast.success(
+            <ToastMessage
+              title="Success"
+              message="You have successfully verified your email"
+            />,
+          );
+        } else if (response.data.alreadyVerified) {
+          toast.info(
+            <ToastMessage
+              title="Email Already Verified"
+              message="Your email is already confirmed. Redirecting to login."
+            />,
+          );
+          navigate("/freelancer/login");
         } else {
           toast.error(
             <ToastMessage
               title="Confirm Email Failed"
               message="Incorrect userId & token."
-            />
+            />,
           );
-
           navigate("/freelancer/verify-email");
         }
       } catch (error) {
         console.error("Verification failed:", error);
-        navigate("/error");
+        toast.error(
+          <ToastMessage
+            title="Verification Error"
+            message="Something went wrong. Please try again."
+          />,
+        );
+        navigate("/freelancer/verify-email");
       } finally {
         setLoading(false);
       }

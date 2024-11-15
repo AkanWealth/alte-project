@@ -8,10 +8,10 @@ import { useModalContext } from "../../../contexts/ModalContext";
 import { convertToTitleCase } from "../../../utils";
 
 // UIs
-import ProjectsTable from "../ui/listings/Tables/ProjectsTable";
-import JobsTable from "../ui/listings/Tables/JobsTable";
-import CreateProjectForm from "../ui/listings/Modals/CreateProjectForm";
-import CreateJobForm from "../ui/listings/Modals/CreateJobForm";
+import ProjectsTable from "../ui/listings/tables/ProjectsTable";
+import JobsTable from "../ui/listings/tables/JobsTable";
+import CreateProjectForm from "../ui/listings/modals/CreateProjectForm";
+import CreateJobForm from "../ui/listings/modals/CreateJobForm";
 
 // Contents
 import { jobsRecentData, projectsRecentData } from "../../../contents/admin";

@@ -7,23 +7,23 @@ import UsersLayout from "../features/admin/ui/users/UsersLayout";
 import ListingsLayout from "../features/admin/ui/listings/ListingsLayout";
 
 // Pages
-import Users from "../features/admin/pages/Users";
-import Job from "../features/admin/pages/jobs/Job";
-import Jobs from "../features/admin/pages/jobs/Jobs";
-import Content from "../features/admin/pages/Content";
-import Listings from "../features/admin/pages/Listings";
-import Settings from "../features/admin/pages/Settings";
 import AdminLogin from "../features/admin/pages/AdminLogin";
-import Client from "../features/admin/pages/clients/Client";
 import AdminSignup from "../features/admin/pages/AdminSignup";
+import Users from "../features/admin/pages/Users";
+import Listings from "../features/admin/pages/Listings";
+import Content from "../features/admin/pages/Content";
+import Settings from "../features/admin/pages/Settings";
+import Freelancers from "../features/admin/pages/freelancers/Freelancers";
+import Freelancer from "../features/admin/pages/freelancers/Freelancer";
 import Clients from "../features/admin/pages/clients/Clients";
-import Project from "../features/admin/pages/projects/Project";
+import Client from "../features/admin/pages/clients/Client";
 import InternalUsers from "../features/admin/pages/InternalUsers";
 import Projects from "../features/admin/pages/projects/Projects";
-import Freelancer from "../features/admin/pages/freelancers/Freelancer";
-import Freelancers from "../features/admin/pages/freelancers/Freelancers";
-import JobApplications from "../features/admin/pages/jobs/JobApplications";
+import Project from "../features/admin/pages/projects/Project";
 import ProjectApplications from "../features/admin/pages/projects/ProjectApplications";
+import Jobs from "../features/admin/pages/jobs/Jobs";
+import Job from "../features/admin/pages/jobs/Job";
+import JobApplications from "../features/admin/pages/jobs/JobApplications";
 
 const adminRoutes = {
   path: "admin",

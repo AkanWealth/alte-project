@@ -10,7 +10,7 @@ import {
 import { useModalContext } from "../../../../../contexts/ModalContext";
 
 // UIs
-import DeleteUserForm from "../Modals/DeleteUserForm";
+import DeleteUserForm from "../modals/DeleteUserForm";
 import DeactivateUserForm from "../../modals/DeactivateUserForm";
 
 // Utils

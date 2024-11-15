@@ -14,9 +14,9 @@ import {
 import { useModalContext } from "../../../../../contexts/ModalContext";
 
 // UIs
-import DeleteUserForm from "../Modals/DeleteUserForm";
-import DeactivateUserForm from "../../Modals/DeactivateUserForm";
-import UserFeedbackWidget from "../Modals/UserFeedbackWidget";
+import DeleteUserForm from "../modals/DeleteUserForm";
+import DeactivateUserForm from "../../modals/DeactivateUserForm";
+import UserFeedbackWidget from "../modals/UserFeedbackWidget";
 
 // Utils
 import { convertToTitleCase } from "../../../../../utils";

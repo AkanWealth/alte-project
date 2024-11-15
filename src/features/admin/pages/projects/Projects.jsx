@@ -9,7 +9,7 @@ import {
 import { useModalContext } from "../../../../contexts/ModalContext";
 
 // UIs
-import ProjectsTable from "../../ui/listings/Tables/ProjectsTable";
+import ProjectsTable from "../../ui/listings/tables/ProjectsTable";
 import Pagination from "../../../../ui/Pagination";
 import ExportDataForm from "../../ui/ExportDataForm";
 
