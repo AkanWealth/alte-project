@@ -12,7 +12,7 @@ import {
   UserIcon,
 } from "@heroicons/react/24/outline";
 
-export const Freelancer = () => {
+const Freelancer = () => {
   return (
     <main className="flex flex-col gap-8 lg:gap-10">
       <section className="flex flex-wrap items-center justify-center gap-x-10 gap-y-6 border-b border-grey-100 pb-8 lg:pb-10">
@@ -238,4 +238,4 @@ export const Freelancer = () => {
   );
 };
 
-// export default Freelancer;
+export default Freelancer;
