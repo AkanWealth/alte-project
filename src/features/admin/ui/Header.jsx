@@ -8,8 +8,11 @@ import {
 } from "@heroicons/react/24/outline";
 import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/20/solid";
 
-// Hooks
+// Auths
 import useViewport from "../../../hooks/useViewPort";
+
+// Hooks
+import useAdminAuth from "../auth/useAdminAuth";
 
 // Contexts
 import { useNotifications } from "../contexts/NotificationsContext";
@@ -21,6 +24,7 @@ import Notifications from "../../../ui/notifications";
 // UIs
 
 const Header = ({ relativeStyles }) => {
+  const { logout } = useAdminAuth();
   const [showModal, setShowModal] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const { pathname } = useLocation();
@@ -107,7 +111,10 @@ const Header = ({ relativeStyles }) => {
             Settings
           </Link>
           <div className="border-t border-grey-400 pt-3">
-            <button className="flex w-full items-center gap-2 font-inter text-xs font-medium text-error-500">
+            <button
+              onClick={logout}
+              className="flex w-full items-center gap-2 font-inter text-xs font-medium text-error-500"
+            >
               <ArrowRightStartOnRectangleIcon className="size-4" />
               Logout
             </button>

@@ -1,61 +1,76 @@
-import { createContext, useContext, useReducer } from "react";
+import axios from "axios";
+import { createContext, useContext, useReducer, useEffect } from "react";
+import { useCookies } from "react-cookie";
+
+// Configs
+import { API } from "../../../config";
+
+// Variables
+const cookiesOption = {
+  path: "/",
+  maxAge: 7 * 24 * 60 * 60,
+  secure: true,
+  sameSite: "strict",
+};
+
 const AdminAuthContext = createContext();
 
 const initialData = {
   isLoggedIn: false,
-  isRegistered: false,
 };
 
 const reducer = (state, action) => {
   switch (action.type) {
-    case "login/admin":
+    case "login/user":
       return {
         ...state,
         isLoggedIn: true,
       };
-    case "logout/admin":
+    case "logout/user":
       return {
         ...state,
         isLoggedIn: false,
       };
-    case "register/admin":
-      return {
-        ...state,
-        isRegistered: true,
-      };
+    default:
+      return state;
   }
 };
 
 export const AdminRouteProvider = ({ children }) => {
-  const [{ isLoggedIn, isRegistered }, dispatch] = useReducer(
-    reducer,
-    initialData,
-  );
+  const [{ isLoggedIn }, dispatch] = useReducer(reducer, initialData);
+  const [cookies, setCookie, removeCookie] = useCookies(["AdminSession"]);
+
+  useEffect(() => {
+    if (cookies.AdminSession) {
+      dispatch({ type: "login/user" });
+    }
+  }, [cookies]);
 
   const login = async (userData) => {
-    const { username, password } = userData;
+    try {
+      const { status } = await axios.post(`${API}/Admin/login`, userData);
 
-    //   FOR DEMO ONLY
-    const adminLogin =
-      username === "alte_admin@test.com" && password === "1234@AdminAlte";
-
-    if (adminLogin) dispatch({ type: "login/admin" });
-
-    return adminLogin;
+      if (status === 200) {
+        // Todo: Get token form BE
+        setCookie("AdminSession", "token", cookiesOption);
+        dispatch({ type: "login/user" });
+        return true;
+      } else {
+        throw new Error("Login failed");
+      }
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
   };
 
   const logout = () => {
-    dispatch({ type: "logout/admin" });
+    removeCookie("AdminSession", { path: "/" });
+    dispatch({ type: "logout/user" });
   };
 
-  const register = (userData) => {
-    dispatch({ type: "register/admin" });
-  };
   return (
-    
-    <AdminAuthContext.Provider
-      value={{ isLoggedIn, isRegistered, login, logout, register }}
-    >
+    <AdminAuthContext.Provider value={{ isLoggedIn, login, logout }}>
       {children}
     </AdminAuthContext.Provider>
   );

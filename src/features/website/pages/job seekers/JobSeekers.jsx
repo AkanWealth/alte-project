@@ -104,7 +104,7 @@ const ResumeForm = () => {
     register,
     handleSubmit,
     reset,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     control,
   } = useForm();
 
@@ -123,12 +123,23 @@ const ResumeForm = () => {
     field.onChange(file);
   };
 
-  const onSubmit = (data) => {
-    console.log("Form Submitted: ", data);
-    console.log("Uploaded Resume: ", resume);
-    reset();
-    setResume(null);
-    setModalComponent(<ResumeSubmittedModal />);
+  const onSubmit = async (data) => {
+    try {
+      const formData = new FormData();
+      formData.append("Resume", data.resume);
+
+      const { status } = await axios.post(`${API}/resume`, formData);
+
+      if (status === 200) {
+        reset();
+        setResume(null);
+        setModalComponent(<ResumeSubmittedModal />);
+      } else {
+        throw new Error();
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -207,7 +218,11 @@ const ResumeForm = () => {
           </p>
         )}
       </label>
-      <button type="submit" className="btn btn-pry mt-10 w-full">
+      <button
+        type="submit"
+        disabled={isSubmitting}
+        className="btn btn-pry mt-10 w-full"
+      >
         Submit Resume
         <ArrowRightIcon className="size-6" />
       </button>
@@ -216,7 +231,7 @@ const ResumeForm = () => {
 };
 
 const JobSeekers = () => {
-  const jobs = useLoaderData() || [];
+  const jobs = useLoaderData();
   const [openFilter, setOpenFilter] = useState(false);
   const [openCategory, setOpenCategory] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();

@@ -1,11 +1,17 @@
-import { useState, useEffect } from "react";
-import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
-import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
+
+// Auth
+import useAdminAuth from "../auth/useAdminAuth";
+
+// UIs
 import { ToastMessage } from "../../../ui/ToastNotification";
 
 const AdminLogin = () => {
+  const { isLoggedIn, login } = useAdminAuth();
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const {
@@ -17,48 +23,45 @@ const AdminLogin = () => {
     formState: { errors, isSubmitting },
   } = useForm();
 
-  // Check session expiration on page load
-  useEffect(() => {
-    const authExpiration = localStorage.getItem("authExpiration");
-    if (authExpiration && Date.now() > parseInt(authExpiration)) {
-      localStorage.removeItem("isAuthenticated");
-      localStorage.removeItem("authExpiration");
-      navigate("/admin/login");
-    }
-  }, [navigate]);
-
   const handleForm = async (data) => {
-    const { email, password } = data;
+    try {
+      const { username, password } = data;
+      const auth = await login({ username, password });
 
-    // Hardcoded credentials
-    const hardcodedEmail = "alte_admin@test.com";
-    const hardcodedPassword = "admin@alte1234";
-
-    if (email === hardcodedEmail && password === hardcodedPassword) {
-      const expirationTime = Date.now() + 3 * 60 * 1000; // 3 minutes
-      localStorage.setItem("isAuthenticated", "true");
-      localStorage.setItem("authExpiration", expirationTime.toString());
-
-      reset();
-      clearErrors();
-      toast.success(
-        <ToastMessage
-          title="Congratulations"
-          message="You have successfully logged in"
-        />
-      );
-      navigate("/admin/users");
-    } else {
-      setError("email", { type: "manual", message: "Incorrect email or password" });
-      setError("password", { type: "manual", message: "Incorrect email or password" });
+      if (auth) {
+        reset();
+        clearErrors();
+        toast.success(
+          <ToastMessage
+            title="Congratulations"
+            message="You have successfully logged in"
+          />,
+        );
+        setTimeout(() => navigate("/admin"), 3000);
+      }
+    } catch (error) {
+      console.log(error);
+      setError("username", {
+        type: "manual",
+        message: error.response?.data?.message || "Login Failed",
+      });
+      setError("password", {
+        type: "manual",
+        message: error.response?.data?.message || "Login Failed",
+      });
       toast.error(
         <ToastMessage
           title="Login Failed"
-          message="Incorrect email or password. Please try again."
-        />
+          message={
+            error.response?.data?.message ||
+            "Incorrect username or password. Please try again."
+          }
+        />,
       );
     }
   };
+
+  if (isLoggedIn) return <Navigate to="/admin" />;
 
   return (
     <main className="min-h-screen w-full px-4 pt-14 lg:p-6">
@@ -73,32 +76,36 @@ const AdminLogin = () => {
             className="mb-4 size-16 lg:mb-6"
           />
           <h1 className="font-inter text-2xl font-bold text-grey-900">
-            Login to your Alte account
+            Log In to the Admin Dashboard
           </h1>
           <p className="mt-2 font-inter text-xs font-normal">
-            Enter your Account Correct LogIn details below
+            Kindly change your password after your first login
           </p>
           <div className="my-6 lg:mt-9">
             <div className="mb-4">
               <label
-                htmlFor="email"
+                htmlFor="username"
                 className="mb-2 block font-inter text-sm font-medium after:ml-0.5 after:content-['*'] lg:text-xl"
               >
-                Email
+                Username
               </label>
               <input
-                type="email"
-                id="email"
+                type="text"
+                id="username"
                 className="block w-full rounded-lg border border-grey-400 bg-white p-2.5 font-inter text-sm font-normal text-black outline-none placeholder:text-xs placeholder:text-grey-100 lg:text-xl lg:placeholder:text-sm [&[aria-invalid=true]]:border-error-500"
-                placeholder="Enter your email address"
-                aria-invalid={errors.email ? true : false}
-                {...register("email", {
-                  required: "Email is required",
+                placeholder="Enter your username"
+                aria-invalid={errors.username ? true : false}
+                {...register("username", {
+                  required: "Username is required",
                 })}
               />
-              {errors.email && <p className="text-error-500">{errors.email.message}</p>}
+              {errors.username && (
+                <p className="mt-2 text-sm text-error-500">
+                  {errors.username.message}
+                </p>
+              )}
             </div>
-            <div>
+            <div className="">
               <label
                 htmlFor="password"
                 className="mb-2 block font-inter text-sm font-medium after:ml-0.5 after:content-['*'] lg:text-xl"
@@ -128,7 +135,11 @@ const AdminLogin = () => {
                   )}
                 </button>
               </div>
-              {errors.password && <p className="text-error-500">{errors.password.message}</p>}
+              {errors.password && (
+                <p className="mt-2 text-sm text-error-500">
+                  {errors.password.message}
+                </p>
+              )}
             </div>
           </div>
           <div className="mb-4 flex flex-row items-center justify-between gap-4 lg:mb-10">
@@ -158,15 +169,9 @@ const AdminLogin = () => {
           >
             Log In
           </button>
-          <p className="mt-4 text-center font-raleway text-base font-normal lg:mt-10">
-            Don’t have an account?
-            <Link to="/admin/register" className="ml-1 text-sec-500">
-              Sign up
-            </Link>
-          </p>
         </form>
         <img
-          src="/images/freelancer/login-banner.png"
+          src="/images/admin/login.png"
           alt=""
           className="hidden lg:col-start-1 lg:col-end-2 lg:row-start-1 lg:row-end-2 lg:block"
         />

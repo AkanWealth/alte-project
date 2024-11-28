@@ -1,3 +1,5 @@
+import { Navigate } from "react-router-dom";
+
 // UIs
 import FreelancerLayout from "../features/freelancer/ui/FreelancerLayout";
 import DashboardLayout from "../features/freelancer/ui/DashboardLayout";
@@ -18,6 +20,10 @@ const freelancerRoutes = {
   path: "freelancer",
   element: <FreelancerLayout />,
   children: [
+    {
+      index: true,
+      element: <Navigate to="/freelancer/dashboard" replace />,
+    },
     {
       path: "register",
       element: <SignUp />,
@@ -66,4 +72,5 @@ const freelancerRoutes = {
     },
   ],
 };
+
 export default freelancerRoutes;

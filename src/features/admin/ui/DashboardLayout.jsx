@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { Navigate, Outlet, useLocation } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 
 // Contexts
 import NotificationsProvider from "../contexts/NotificationsContext";
@@ -7,12 +7,7 @@ import NotificationsProvider from "../contexts/NotificationsContext";
 // UIs
 import Header from "./Header";
 import NavBar from "./NavBar";
-
-// Authentication check component
-const ProtectedRoute = ({ children }) => {
-  const isAuthenticated = localStorage.getItem("isAuthenticated") === "true";
-  return isAuthenticated ? children : <Navigate to="/admin/login" />;
-};
+import ProtectedRoute from "./ProtectedRoute";
 
 const DashboardLayout = () => {
   const outletContainer = useRef();
@@ -25,8 +20,8 @@ const DashboardLayout = () => {
   }, [pathname]);
 
   return (
-    <NotificationsProvider>
-      <ProtectedRoute>
+    <ProtectedRoute>
+      <NotificationsProvider>
         <div className="relative grid h-full min-h-screen grid-cols-1 grid-rows-[auto_1fr] lg:grid-cols-[auto_1fr]">
           <Header relativeStyles="col-start-1 col-end-2 row-start-1 row-end-2 lg:col-end-3" />
           <div
@@ -37,8 +32,8 @@ const DashboardLayout = () => {
           </div>
           <NavBar relativeStyles="fixed inset-x-0 bottom-0 lg:relative lg:inset-auto lg:col-start-1 lg:col-end-2 lg:row-start-2 lg:row-end-3" />
         </div>
-      </ProtectedRoute>
-    </NotificationsProvider>
+      </NotificationsProvider>
+    </ProtectedRoute>
   );
 };
 

@@ -1,80 +1,58 @@
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
-import { API } from "../../../config";
-import { ToastMessage } from "../../../ui/ToastNotification";
 import toast from "react-hot-toast";
 
+// Configs
+import { API } from "../../../config";
+
+// UIs
+import { ToastMessage } from "../../../ui/ToastNotification";
+
 const EmailVerified = () => {
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const userId = searchParams.get("userId");
-  const token = searchParams.get("token");
   const [isValid, setIsValid] = useState(false);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  const params = useMemo(() => {
+    return {
+      userId: searchParams.get("userId"),
+      token: searchParams.get("token"),
+    };
+  }, [searchParams]);
 
   useEffect(() => {
-    if (!userId || !token) {
+    if (!params.userId || !params.token) {
       navigate("/freelancer/verify-email");
-      return null;
+      return;
     }
 
     const verifyEmail = async () => {
       try {
-        const response = await axios.get(`${API}/confirm-email`, {
-          params: { userId, token },
+        const { status } = await axios.get(`${API}/confirm-email`, {
+          params,
         });
-        console.log(response);
-        toast.success(
-          <ToastMessage
-            title="Success"
-            message="You have successfully verified your email"
-          />,
-        );
-        if (
-          response.status === 200 &&
-          response.data.message === "Thank you for confirming your email"
-        ) {
+
+        if (status === 200) {
           setIsValid(true);
-          toast.success(
-            <ToastMessage
-              title="Success"
-              message="You have successfully verified your email"
-            />,
-          );
-        } else if (response.data.alreadyVerified) {
-          toast.info(
-            <ToastMessage
-              title="Email Already Verified"
-              message="Your email is already confirmed. Redirecting to login."
-            />,
-          );
-          navigate("/freelancer/login");
-        } else {
-          toast.error(
-            <ToastMessage
-              title="Confirm Email Failed"
-              message="Incorrect userId & token."
-            />,
-          );
-          navigate("/freelancer/verify-email");
         }
       } catch (error) {
-        console.error("Verification failed:", error);
+        console.error(error);
+        setIsValid(false);
         toast.error(
           <ToastMessage
-            title="Verification Error"
-            message="Something went wrong. Please try again."
+            title="Verification Failed"
+            message="Your email verification link is invalid or expired. Please try again."
           />,
         );
-        navigate("/freelancer/verify-email");
       } finally {
         setLoading(false);
       }
     };
 
     verifyEmail();
-  }, [userId, token, navigate]);
+  }, [navigate, params]);
 
   if (loading) return <div>Loading...</div>;
 
@@ -86,11 +64,9 @@ const EmailVerified = () => {
           alt="Email Verified"
           className="mx-auto mb-4 h-40"
         />
-
         <h1 className="mb-2 font-raleway text-3xl font-bold text-grey-900">
           Email Verified!
         </h1>
-
         <p className="mb-6 font-raleway text-lg text-grey-700">
           You are all set!
         </p>
@@ -98,16 +74,26 @@ const EmailVerified = () => {
           Your email has been successfully verified. You can now access your
           account and start exploring opportunities.
         </p>
-
-        <button
-          onClick={() => navigate("/freelancer/login")}
-          className="mb-8 w-full rounded-lg bg-sec-500 px-4 py-2 font-raleway text-grey-500 transition-colors"
-        >
+        <Link to="/freelancer/login" className="btn btn-pry mb-8 w-full">
           Login
-        </button>
+        </Link>
       </div>
     </div>
-  ) : null;
+  ) : (
+    <div className="bg-gray-100 flex h-screen flex-col items-center justify-center">
+      <div className="w-full max-w-lg rounded-lg bg-white p-4 text-center">
+        <h1 className="text-red-600 mb-2 font-raleway text-3xl font-bold">
+          Verification Failed!
+        </h1>
+        <p className="mb-6 font-raleway text-lg text-grey-700">
+          We could not verify your email. Please try again.
+        </p>
+        <Link to="/freelancer/verify-email" className="btn btn-pry mb-8 w-full">
+          Go Back
+        </Link>
+      </div>
+    </div>
+  );
 };
 
 export default EmailVerified;

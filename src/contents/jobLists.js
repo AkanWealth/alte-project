@@ -1,6 +1,43 @@
-export const jobListings2 = [];
-
 export const jobListings = [
+  {
+    id: 1,
+    companyLogo: "/joblistlogo.png",
+    position: "UIUX Designer",
+    location: "Nigeria",
+    category: "Banking & Financial services",
+    type: "full-time",
+    level: "Entry level",
+    active: true,
+    skills: [
+      "UI/UX",
+      "Wireframing",
+      "Prototyping",
+      "User Research",
+      "Interaction Design",
+      "Visual Design",
+      "Usability Testing",
+      "Sketch",
+      "Figma",
+      "Adobe XD",
+    ],
+    datePosted: "2024-09-10T12:00:00Z",
+    deadline: "2024-11-10T12:00:00Z",
+    aboutJob:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id estlaborum.",
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id estlaborum.",
+    responsibilities: [
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.",
+      "Cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+      "Ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in.",
+      "Reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat.",
+    ],
+    aboutCompany:
+      "At Alte Consulting, we offer a full spectrum of digital consulting services, from website and software development to mobile app creation, product discovery, intuitive design, and comprehensive business solutions.",
+  },
+];
+
+export const jobListings2 = [
   {
     id: 1,
     companyLogo: "/joblistlogo.png",

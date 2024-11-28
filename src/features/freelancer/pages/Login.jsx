@@ -1,13 +1,17 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import axios from "axios";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
-import { API } from "../../../config";
+
+// Auth
+import useFreelancerAuth from "../auth/useFreelancerAuth";
+
+// UIs
 import { ToastMessage } from "../../../ui/ToastNotification";
 
 const Login = () => {
+  const { isLoggedIn, login } = useFreelancerAuth();
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const {
@@ -20,44 +24,44 @@ const Login = () => {
   } = useForm();
 
   const handleForm = async (data) => {
-    const { email, password } = data;
-
-    const userData = {
-      email: email,
-      password: password,
-    };
-
     try {
-      const response = await axios.post(
-        `${API}/login`,
-        userData
-      );
+      const { email, password } = data;
+      const auth = await login({ email, password });
 
-      console.log(response)
-      if (response.status === 200 && response.data.message === "Login successful") {
+      if (auth) {
         reset();
         clearErrors();
         toast.success(
           <ToastMessage
             title="Congratulations"
             message="You have successfully logged in"
-          />
+          />,
         );
         setTimeout(() => navigate("/freelancer/dashboard"), 3000);
-      } else {
-        throw new Error(response.data.message || "Login Failed");
       }
     } catch (error) {
-      setError("email", { type: "manual", message: error.response?.data?.message || "Login Failed" });
-      setError("password", { type: "manual", message: error.response?.data?.message || "Login Failed" });
+      console.log(error);
+      setError("email", {
+        type: "manual",
+        message: error.response?.data?.message || "Login Failed",
+      });
+      setError("password", {
+        type: "manual",
+        message: error.response?.data?.message || "Login Failed",
+      });
       toast.error(
         <ToastMessage
           title="Login Failed"
-          message={error.response?.data?.message || "Incorrect email or password. Please try again."}
-        />
+          message={
+            error.response?.data?.message ||
+            "Incorrect email or password. Please try again."
+          }
+        />,
       );
     }
   };
+
+  if (isLoggedIn) return <Navigate to="/freelancer/dashboard" />;
 
   return (
     <main className="min-h-screen w-full px-4 pt-14 lg:p-6">
@@ -96,7 +100,9 @@ const Login = () => {
                 })}
               />
               {errors.email && (
-                <p className="mt-2 text-sm text-error-500">{errors.email.message}</p>
+                <p className="mt-2 text-sm text-error-500">
+                  {errors.email.message}
+                </p>
               )}
             </div>
             <div className="">
@@ -130,7 +136,9 @@ const Login = () => {
                 </button>
               </div>
               {errors.password && (
-                <p className="mt-2 text-sm text-error-500">{errors.password.message}</p>
+                <p className="mt-2 text-sm text-error-500">
+                  {errors.password.message}
+                </p>
               )}
             </div>
           </div>
