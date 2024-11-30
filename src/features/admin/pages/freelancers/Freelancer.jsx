@@ -209,31 +209,6 @@ const Freelancer = () => {
           </ul>
         </div>
       </section>
-      <form>
-        <div className="">
-          <label
-            htmlFor="notes"
-            className="mb-6 flex flex-row items-center gap-2 font-inter text-xl font-bold text-pry-500 lg:mb-8 lg:text-2xl"
-          >
-            <span className="rounded-full bg-pry-500 p-[6px] lg:p-2">
-              <PencilIcon className="size-5 text-sec-500 lg:size-6" />
-            </span>
-            PERSONAL DETAILS
-          </label>
-          <textarea
-            id="notes"
-            rows="4"
-            className="block w-full rounded-lg border border-grey-400 bg-white p-2.5 font-inter text-sm font-normal text-black placeholder:text-xs placeholder:text-grey-100 lg:text-xl lg:placeholder:text-sm [&[aria-invalid=true]]:border-error-500"
-            placeholder="Type your notes"
-          />
-        </div>
-        <button
-          type="submit"
-          className="btn btn-pry ml-auto mt-4 w-full sm:w-fit lg:mt-6"
-        >
-          Save Notes
-        </button>
-      </form>
     </main>
   );
 };

@@ -17,13 +17,17 @@ import Freelancers from "../features/admin/pages/freelancers/Freelancers";
 import Freelancer from "../features/admin/pages/freelancers/Freelancer";
 import Clients from "../features/admin/pages/clients/Clients";
 import Client from "../features/admin/pages/clients/Client";
-import InternalUsers from "../features/admin/pages/InternalUsers";
+import InternalUsers from "../features/admin/pages/internal-users/InternalUsers";
+import InternalUser from "../features/admin/pages/internal-users/InternalUser";
 import Projects from "../features/admin/pages/projects/Projects";
 import Project from "../features/admin/pages/projects/Project";
 import ProjectApplications from "../features/admin/pages/projects/ProjectApplications";
 import Jobs from "../features/admin/pages/jobs/Jobs";
 import Job from "../features/admin/pages/jobs/Job";
 import JobApplications from "../features/admin/pages/jobs/JobApplications";
+import RolesAndPermission from "../features/admin/pages/roles/RolesAndPermission";
+import CreateNewRole from "../features/admin/pages/roles/CreateNewRole";
+import Profile from "../features/admin/pages/Profile";
 
 const adminRoutes = {
   path: "admin",
@@ -74,6 +78,23 @@ const adminRoutes = {
                   path: "internal-users",
                   element: <InternalUsers />,
                 },
+                {
+                  path: "internal-users/:id",
+                  element: <InternalUser />,
+                },
+                {
+                  path: "user-roles-and-permission",
+                  children: [
+                    {
+                      index: true,
+                      element: <RolesAndPermission />,
+                    },
+                    {
+                      path: "create-new-role",
+                      element: <CreateNewRole />,
+                    },
+                  ],
+                },
               ],
             },
           ],
@@ -97,10 +118,6 @@ const adminRoutes = {
                   element: <Project />,
                 },
                 {
-                  path: "projects/applications",
-                  element: <ProjectApplications />,
-                },
-                {
                   path: "projects/applications/:id",
                   element: <ProjectApplications />,
                 },
@@ -111,10 +128,6 @@ const adminRoutes = {
                 {
                   path: "jobs/:id",
                   element: <Job />,
-                },
-                {
-                  path: "jobs/applications",
-                  element: <JobApplications />,
                 },
                 {
                   path: "jobs/applications/:id",
@@ -131,6 +144,10 @@ const adminRoutes = {
         {
           path: "settings",
           element: <Settings />,
+        },
+        {
+          path: "profile",
+          element: <Profile />,
         },
       ],
     },

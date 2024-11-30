@@ -1,24 +1,26 @@
 import { useState } from "react";
 import {
   EllipsisVerticalIcon,
-  LockOpenIcon,
+  KeyIcon,
+  PencilSquareIcon,
   TrashIcon,
-  UserIcon,
-  XCircleIcon,
+  UserMinusIcon,
+  UserPlusIcon,
 } from "@heroicons/react/24/outline";
 
 // Contexts
-import { useModalContext } from "../../../contexts/ModalContext";
+import { useModalContext } from "../../../../../contexts/ModalContext";
 
 // UIs
-import DeleteUserForm from "./modals/DeleteUserForm";
-import DeactivateUserForm from "./modals/DeactivateUserForm";
+import DeleteUserForm from "../../modals/DeleteUserForm";
+import DeactivateUserForm from "../../modals/DeactivateUserForm";
 
 // Utils
-import { convertToTitleCase } from "../../../utils";
+import { convertToTitleCase } from "../../../../../utils";
 
 // Contents
-import { internalUsersDataTitles } from "../../../contents/admin";
+import { internalUsersDataTitles } from "../../../../../contents/admin";
+import { Link } from "react-router-dom";
 
 const InternalUsersTable = ({ data }) => {
   const [activeRow, setActiveRow] = useState(null);
@@ -44,7 +46,13 @@ const InternalUsersTable = ({ data }) => {
               className="*:w-max *:whitespace-nowrap *:px-6 *:py-5 focus-within:bg-sec-50 hover:bg-sec-50"
             >
               {Object.entries(data).map(([key, value], index) =>
-                key === "active" ? (
+                key === "name" ? (
+                  <td key={index}>
+                    <Link to="/admin/users/internal-users/userIdGoesHere">
+                      {value}
+                    </Link>
+                  </td>
+                ) : key === "active" ? (
                   <td key={index}>
                     <p
                       className={`w-fit rounded-2xl px-2 py-1 ${value ? "bg-success-50 text-success-700" : "bg-error-50 text-error-700"}`}
@@ -71,11 +79,10 @@ const InternalUsersTable = ({ data }) => {
                   <ul className="absolute right-0 top-[80%] z-10 flex min-w-full flex-col gap-4 rounded-lg border border-grey-50 bg-white py-4 pl-5 pr-6 shadow">
                     <li>
                       <button className="flex flex-row items-center gap-2 font-inter text-sm font-semibold text-grey-900">
-                        <UserIcon className="size-6 text-grey-200" />
+                        <UserPlusIcon className="size-6 text-grey-200" />
                         Activate
                       </button>
                     </li>
-
                     <li>
                       <button
                         className="flex flex-row items-center gap-2 font-inter text-sm font-semibold text-grey-900"
@@ -83,14 +90,23 @@ const InternalUsersTable = ({ data }) => {
                           setModalComponent(<DeactivateUserForm />)
                         }
                       >
-                        <XCircleIcon className="size-6 text-grey-200" />
+                        <UserMinusIcon className="size-6 text-grey-200" />
                         Deactivate
                       </button>
                     </li>
                     <li>
+                      <Link
+                        to="/admin/users/internal-users/userIdGoesHere"
+                        className="flex flex-row items-center gap-2 font-inter text-sm font-semibold text-grey-900"
+                      >
+                        <PencilSquareIcon className="size-6 text-grey-200" />
+                        Edit User
+                      </Link>
+                    </li>
+                    <li>
                       <button className="flex flex-row items-center gap-2 font-inter text-sm font-semibold text-grey-900">
-                        <LockOpenIcon className="size-6 text-grey-200" />
-                        Reset user password
+                        <KeyIcon className="size-6 text-grey-200" />
+                        Reset password
                       </button>
                     </li>
                     <li>

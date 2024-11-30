@@ -48,7 +48,9 @@ const ClientsTable = ({ data }) => {
               {Object.entries(data).map(([key, value], index) =>
                 key === "businessName" ? (
                   <td key={index}>
-                    <Link to="/admin/users/clients/client">{value}</Link>
+                    <Link to="/admin/users/clients/ClientIdGoesHere">
+                      {value}
+                    </Link>
                   </td>
                 ) : key === "contactDetails" ? (
                   <td key={index}>
@@ -95,10 +97,13 @@ const ClientsTable = ({ data }) => {
                       </button>
                     </li>
                     <li>
-                      <button className="flex flex-row items-center gap-2 font-inter text-sm font-semibold text-grey-900">
+                      <Link
+                        to='to="/admin/users/clients/ClientIdGoesHere"'
+                        className="flex flex-row items-center gap-2 font-inter text-sm font-semibold text-grey-900"
+                      >
                         <UserIcon className="size-6 text-grey-200" />
                         View Client
-                      </button>
+                      </Link>
                     </li>
                     <li>
                       <button className="flex flex-row items-center gap-2 font-inter text-sm font-semibold text-grey-900">

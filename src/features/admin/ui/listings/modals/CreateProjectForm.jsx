@@ -7,18 +7,8 @@ import { useModalContext } from "../../../../../contexts/ModalContext";
 
 // UIs
 import { ToastMessage } from "../../../../../ui/ToastNotification";
-import { isEmail } from "validator";
 
-// Contents
-const systemRoles = [
-  "Super Administrator ",
-  "Administrator",
-  "Content Manager",
-  "Sale/Marketing",
-  "HR Officer",
-];
-
-const CreateProjectForm = () => {
+const CreateProjectForm = ({ edit = false, projectData }) => {
   const { setModalComponent } = useModalContext();
   const {
     register,
@@ -52,7 +42,7 @@ const CreateProjectForm = () => {
         <XMarkIcon className="size-6" />
       </button>
       <h2 className="font-inter text-2xl font-semibold text-pry-500">
-        Create Projects
+        {edit ? "Edit Project" : "Create Project"}
       </h2>
       <p className="mt-2 font-inter text-sm font-normal text-grey-400">
         This information would be used to create Job opportunities for Alte
@@ -271,9 +261,15 @@ const CreateProjectForm = () => {
         <button type="submit" className="btn btn-pry btn--large">
           Save and Publish
         </button>
-        <button type="button" className="btn btn-sec--outline btn--large">
-          Save as Draft
-        </button>
+        {edit ? (
+          <button type="button" className="btn btn-sec--outline btn--large">
+            Cancel
+          </button>
+        ) : (
+          <button type="button" className="btn btn-sec--outline btn--large">
+            Save as Draft
+          </button>
+        )}
       </div>
     </form>
   );

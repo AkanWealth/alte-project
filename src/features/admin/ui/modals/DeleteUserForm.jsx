@@ -29,7 +29,7 @@ const DeleteUserForm = () => {
         <TrashIcon className="size-10 min-w-fit rounded-lg bg-error-100 p-2 text-error-500 lg:size-14 lg:p-4" />
         <div>
           <h2 className="mb-2 font-inter text-xl font-semibold text-grey-900">
-            You are about to delete Anjola Wunmi
+            You are about to delete [UserName]
           </h2>
           <p className="font-inter text-sm font-normal text-grey-300">
             Are you sure you want to delete this user? This action cannot be

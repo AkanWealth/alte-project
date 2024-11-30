@@ -6,15 +6,15 @@ import {
 } from "@heroicons/react/24/outline";
 
 // Contexts
-import { useModalContext } from "../../../contexts/ModalContext";
+import { useModalContext } from "../../../../contexts/ModalContext";
 
 // UIs
-import InternalUsersTable from "../ui/InternalUsersTable";
-import Pagination from "../../../ui/Pagination";
-import ExportDataForm from "../ui/ExportDataForm";
+import InternalUsersTable from "../../ui/users/tables/InternalUsersTable";
+import Pagination from "../../../../ui/Pagination";
+import ExportDataForm from "../../ui/ExportDataForm";
 
 // Contents
-import { internalUsersData } from "../../../contents/admin";
+import { internalUsersData } from "../../../../contents/admin";
 
 const InternalUsers = () => {
   const { setModalComponent } = useModalContext();

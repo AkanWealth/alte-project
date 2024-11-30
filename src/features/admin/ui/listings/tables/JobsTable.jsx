@@ -2,21 +2,17 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import {
   EllipsisVerticalIcon,
-  FlagIcon,
   PencilIcon,
   TrashIcon,
-  UserIcon,
   UsersIcon,
-  XCircleIcon,
 } from "@heroicons/react/24/outline";
 
 // Contexts
 import { useModalContext } from "../../../../../contexts/ModalContext";
 
 // UIs
-import DeleteUserForm from "../modals/DeleteUserForm";
-import DeactivateUserForm from "../../modals/DeactivateUserForm";
-import UserFeedbackWidget from "../modals/UserFeedbackWidget";
+import CreateJobForm from "../modals/CreateJobForm";
+import DeleteJobForm from "../modals/DeleteJobForm";
 
 // Utils
 import { convertToTitleCase } from "../../../../../utils";
@@ -50,7 +46,7 @@ const JobsTable = ({ data }) => {
               {Object.entries(row).map(([key, value], i) =>
                 key === "projectTitle" ? (
                   <td key={i} className="text-start">
-                    <Link to="/admin/listings/jobs/test">{value}</Link>
+                    <Link to="/admin/listings/jobs/JobIdGoesHere">{value}</Link>
                   </td>
                 ) : key === "status" ? (
                   <td key={i} className="text-start">
@@ -89,7 +85,7 @@ const JobsTable = ({ data }) => {
                       <button
                         className="flex flex-row items-center gap-2 font-inter text-sm font-semibold text-grey-900"
                         onClick={() =>
-                          setModalComponent(<DeactivateUserForm />)
+                          setModalComponent(<CreateJobForm edit={true} />)
                         }
                       >
                         <PencilIcon className="size-6 text-grey-200" />
@@ -99,7 +95,7 @@ const JobsTable = ({ data }) => {
                     <li>
                       <button
                         className="flex flex-row items-center gap-2 font-inter text-sm font-semibold text-error-500"
-                        onClick={() => setModalComponent(<DeleteUserForm />)}
+                        onClick={() => setModalComponent(<DeleteJobForm />)}
                       >
                         <TrashIcon className="size-6" />
                         Delete Job

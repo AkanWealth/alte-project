@@ -14,7 +14,7 @@ const UsersLayout = () => {
   return (
     <div className="flex flex-col gap-6">
       <nav>
-        <ul className="flex w-fit flex-row items-center gap-10 font-inter text-xl font-semibold text-grey-300">
+        <ul className="flex w-fit flex-wrap items-center gap-x-10 gap-y-2 font-inter text-base font-semibold text-grey-300 md:text-xl">
           {breadcrumbPath.map((name, index) => {
             const routeTo = `/admin/${breadcrumbPath.slice(0, index + 1).join("/")}`;
             const isLast = index === breadcrumbPath.length - 1;

@@ -110,10 +110,34 @@ const JobApplications = () => {
             <li className="rounded-md bg-grey-50 px-2 py-1">Skill</li>
           </ul>
         </div>
-        <div className="mt-6 flex flex-row gap-4">
+        <div className="my-6 flex flex-row gap-4">
           <button className="btn btn-sec--outline">View CV</button>
           <button className="btn btn-sec">Schedule for Interview</button>
         </div>
+        {/* Add Notes on interviewing stage? */}
+        {/* <form>
+          <div className="">
+            <label
+              htmlFor="notes"
+              className="mb-6 flex flex-row items-center gap-2 font-inter text-xl font-bold text-pry-500 lg:mb-8 lg:text-2xl"
+            >
+              <PencilIcon className="size-5 text-pry-500 lg:size-6" />
+              Add Notes
+            </label>
+            <textarea
+              id="notes"
+              rows="4"
+              className="block w-full rounded-lg border border-grey-400 bg-white p-2.5 font-inter text-sm font-normal text-black placeholder:text-xs placeholder:text-grey-100 lg:text-xl lg:placeholder:text-sm [&[aria-invalid=true]]:border-error-500"
+              placeholder="Type your notes"
+            />
+          </div>
+          <button
+            type="submit"
+            className="btn btn-pry ml-auto mt-4 w-full sm:w-fit lg:mt-6"
+          >
+            Save Notes
+          </button>
+        </form> */}
       </main>
       <aside className="col-start-1 col-end-2 row-start-2 row-end-3 h-full p-2 lg:col-start-1 lg:col-end-2 lg:row-start-1 lg:row-end-2 lg:px-4 lg:py-0">
         <ul

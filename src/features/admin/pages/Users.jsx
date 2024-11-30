@@ -1,5 +1,6 @@
 import { Link, NavLink, useSearchParams } from "react-router-dom";
 import {
+  PlusIcon,
   UserGroupIcon,
   UserIcon,
   UserPlusIcon,
@@ -15,7 +16,7 @@ import { convertToTitleCase } from "../../../utils";
 // UIs
 import FreelancersTable from "../ui/users/tables/FreelancersTable";
 import ClientsTable from "../ui/users/tables/ClientsTable";
-import InternalUsersTable from "../ui/InternalUsersTable";
+import InternalUsersTable from "../ui/users/tables/InternalUsersTable";
 import CreateUserForm from "../ui/users/modals/CreateUserForm";
 
 // Contents
@@ -133,7 +134,7 @@ const Users = () => {
 
   return (
     <main>
-      <div className="flex flex-row items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-2">
         <div>
           <h1 className="font-inter text-2xl font-semibold text-pry-500 lg:text-3xl xl:text-4xl">
             Hi Anjola!
@@ -142,12 +143,17 @@ const Users = () => {
             Good afternoon
           </p>
         </div>
-        <button
-          className="btn btn-pry"
-          onClick={() => setModalComponent(<CreateUserForm />)}
-        >
-          Create User
-        </button>
+        <div className="flex flex-row items-start gap-3 lg:gap-4">
+          <button
+            className="btn btn-pry"
+            onClick={() => setModalComponent(<CreateUserForm />)}
+          >
+            <PlusIcon className="size-5" /> Create New User
+          </button>
+          <Link to="user-roles-and-permission" className="btn btn-sec--outline">
+            Manage Roles
+          </Link>
+        </div>
       </div>
       <ul className="my-5 flex flex-row justify-between gap-6 overflow-x-auto lg:my-10 lg:gap-10">
         <li className="flex min-w-max flex-row items-center gap-10 rounded-xl bg-sec-100 px-4 py-6 lg:px-6 lg:py-8">

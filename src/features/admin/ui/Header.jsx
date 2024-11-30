@@ -74,7 +74,7 @@ const Header = ({ relativeStyles }) => {
         >
           <div className="relative">
             <img
-              src="/images/freelancer/user.png"
+              src="/images/admin/user-img.png"
               alt=""
               className="size-8 rounded-full lg:size-10"
             />
@@ -82,9 +82,8 @@ const Header = ({ relativeStyles }) => {
           </div>
           <p className="hidden flex-col items-start font-inter text-base font-medium lg:flex">
             Patricia Oko
-            <span className="flex flex-row items-center text-xs font-normal text-grey-300">
-              <span className="mr-1 block size-2 rounded-full bg-grey-300"></span>
-              Unavailable
+            <span className="text-xs font-normal text-grey-300">
+              Super Admin
             </span>
           </p>
           {showModal ? (
@@ -97,14 +96,14 @@ const Header = ({ relativeStyles }) => {
           className={`${!showModal && "hidden"} absolute right-0 top-[calc(100%+4px)] flex w-full max-w-28 flex-col gap-3 rounded-lg border border-grey-50 bg-white px-3 py-4 shadow-lg`}
         >
           <Link
-            to="/admin/dashboard/profile"
+            to="/admin/profile"
             className="flex w-full items-center gap-2 font-inter text-xs font-medium text-grey-400"
           >
             <UserIcon className="size-4 text-grey-200" />
-            Profile
+            My Profile
           </Link>
           <Link
-            to="/admin/dashboard/settings"
+            to="/admin/settings"
             className="flex w-full items-center gap-2 font-inter text-xs font-medium text-grey-400"
           >
             <Cog6ToothIcon className="size-4 text-grey-200" />

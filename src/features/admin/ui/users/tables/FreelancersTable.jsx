@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import {
+  BriefcaseIcon,
   EllipsisVerticalIcon,
   FlagIcon,
   TrashIcon,
@@ -15,6 +16,7 @@ import { useModalContext } from "../../../../../contexts/ModalContext";
 import DeleteUserForm from "../../modals/DeleteUserForm";
 import DeactivateUserForm from "../../modals/DeactivateUserForm";
 import UserFeedbackWidget from "../modals/UserFeedbackWidget";
+import AssignProjectForm from "../modals/AssignProjectForm";
 
 // Utils
 import { convertToTitleCase } from "../../../../../utils";
@@ -62,7 +64,9 @@ const FreelancersTable = ({ data }) => {
                       alt=""
                       className="size-8 rounded-full"
                     />
-                    <Link to="/admin/users/freelancers/user">{value}</Link>
+                    <Link to="/admin/users/freelancers/FreelancerIdGoesHere">
+                      {value}
+                    </Link>
                   </td>
                 ) : key === "projectsApplied" ? (
                   <td key={i} className="text-center">
@@ -122,9 +126,21 @@ const FreelancersTable = ({ data }) => {
                       </button>
                     </li>
                     <li>
-                      <button className="flex flex-row items-center gap-2 font-inter text-sm font-semibold text-grey-900">
+                      <Link
+                        to="/admin/users/freelancers/FreelancerIdGoesHere"
+                        className="flex flex-row items-center gap-2 font-inter text-sm font-semibold text-grey-900"
+                      >
                         <UserIcon className="size-6 text-grey-200" />
                         View Profile
+                      </Link>
+                    </li>
+                    <li>
+                      <button
+                        className="flex flex-row items-center gap-2 font-inter text-sm font-semibold text-grey-900"
+                        onClick={() => setModalComponent(<AssignProjectForm />)}
+                      >
+                        <BriefcaseIcon className="size-6 text-grey-200" />
+                        Assign Project
                       </button>
                     </li>
                     <li>

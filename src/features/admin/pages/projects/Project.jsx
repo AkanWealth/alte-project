@@ -6,7 +6,16 @@ import {
   MapPinIcon,
 } from "@heroicons/react/24/outline";
 
+// Contexts
+import { useModalContext } from "../../../../contexts/ModalContext";
+
+// UIs
+import CreateProjectForm from "../../ui/listings/modals/CreateProjectForm";
+import DeleteProjectForm from "../../ui/listings/modals/DeleteProjectForm";
+
 const Project = () => {
+  const { setModalComponent } = useModalContext();
+
   return (
     <main>
       <h1 className="mb-4 font-inter text-2xl font-bold lg:text-3xl">
@@ -102,7 +111,10 @@ const Project = () => {
             </span>
             <span>
               <span className="mr-2">6</span>
-              <Link to="/" className="text-btn--underline text-btn-sec">
+              <Link
+                to="/admin/listings/projects/applications/ProjectIdGoesHere"
+                className="text-btn--underline text-btn-sec"
+              >
                 View
               </Link>
             </span>
@@ -113,7 +125,10 @@ const Project = () => {
             </span>
             <span>
               <span className="mr-2">6</span>
-              <Link to="/" className="text-btn--underline text-btn-sec">
+              <Link
+                to="/admin/listings/projects/applications/ProjectIdGoesHere"
+                className="text-btn--underline text-btn-sec"
+              >
                 View
               </Link>
             </span>
@@ -124,7 +139,10 @@ const Project = () => {
             </span>
             <span>
               <span className="mr-2">6</span>
-              <Link to="/" className="text-btn--underline text-btn-sec">
+              <Link
+                to="/admin/listings/projects/applications/ProjectIdGoesHere"
+                className="text-btn--underline text-btn-sec"
+              >
                 View
               </Link>
             </span>
@@ -135,7 +153,10 @@ const Project = () => {
             </span>
             <span>
               <span className="mr-2">6</span>
-              <Link to="/" className="text-btn--underline text-btn-sec">
+              <Link
+                to="/admin/listings/projects/applications/ProjectIdGoesHere"
+                className="text-btn--underline text-btn-sec"
+              >
                 View
               </Link>
             </span>
@@ -143,10 +164,18 @@ const Project = () => {
         </ul>
       </div>
       <div className="mt-6 flex flex-row gap-4">
-        <button className="btn btn-pry--outline w-full border-error-500 text-error-500 hover:border-error-500">
+        <button
+          className="btn btn-pry--outline w-full border-error-500 text-error-500 hover:border-error-500"
+          onClick={() => setModalComponent(<DeleteProjectForm />)}
+        >
           Delete
         </button>
-        <button className="btn btn-pry w-full">Edit</button>
+        <button
+          className="btn btn-pry w-full"
+          onClick={() => setModalComponent(<CreateProjectForm edit={true} />)}
+        >
+          Edit
+        </button>
       </div>
     </main>
   );

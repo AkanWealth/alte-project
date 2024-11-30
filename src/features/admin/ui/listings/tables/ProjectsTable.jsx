@@ -10,8 +10,8 @@ import {
 import { useModalContext } from "../../../../../contexts/ModalContext";
 
 // UIs
-import DeleteUserForm from "../modals/DeleteUserForm";
-import DeactivateUserForm from "../../modals/DeactivateUserForm";
+import CreateProjectForm from "../modals/CreateProjectForm";
+import DeleteProjectForm from "../modals/DeleteProjectForm";
 
 // Utils
 import { convertToTitleCase } from "../../../../../utils";
@@ -46,7 +46,9 @@ const ProjectsTable = ({ data }) => {
               {Object.entries(row).map(([key, value], i) =>
                 key === "projectTitle" ? (
                   <td key={i} className="text-start">
-                    <Link to="/admin/listings/projects/test">{value}</Link>
+                    <Link to="/admin/listings/projects/ProjectIdGoesHere">
+                      {value}
+                    </Link>
                   </td>
                 ) : key === "status" ? (
                   <td key={i} className="text-start">
@@ -74,7 +76,7 @@ const ProjectsTable = ({ data }) => {
                   <ul className="absolute right-0 top-[80%] z-10 flex min-w-full flex-col gap-4 rounded-lg border border-grey-50 bg-white py-4 pl-5 pr-6 shadow">
                     <li>
                       <Link
-                        to="/admin/listings/projects/applications"
+                        to="/admin/listings/projects/applications/ProjectIdGoesHere"
                         className="flex flex-row items-center gap-2 font-inter text-sm font-semibold text-grey-900"
                       >
                         <UsersIcon className="size-6 text-grey-200" />
@@ -84,9 +86,9 @@ const ProjectsTable = ({ data }) => {
                     <li>
                       <button
                         className="flex flex-row items-center gap-2 font-inter text-sm font-semibold text-grey-900"
-                        // onClick={() =>
-                        //   setModalComponent(<DeactivateUserForm />)
-                        // }
+                        onClick={() =>
+                          setModalComponent(<CreateProjectForm edit={true} />)
+                        }
                       >
                         <PencilIcon className="size-6 text-grey-200" />
                         Edit Project
@@ -95,7 +97,7 @@ const ProjectsTable = ({ data }) => {
                     <li>
                       <button
                         className="flex flex-row items-center gap-2 font-inter text-sm font-semibold text-error-500"
-                        // onClick={() => setModalComponent(<DeleteUserForm />)}
+                        onClick={() => setModalComponent(<DeleteProjectForm />)}
                       >
                         <TrashIcon className="size-6" />
                         Delete Project
