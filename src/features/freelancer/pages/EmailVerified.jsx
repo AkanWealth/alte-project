@@ -30,7 +30,7 @@ const EmailVerified = () => {
 
     const verifyEmail = async () => {
       try {
-        const { status } = await axios.get(`${API}/confirm-email`, {
+        const { status } = await axios.get(`${API}/api/Alte/confirm-email`, {
           params,
         });
 

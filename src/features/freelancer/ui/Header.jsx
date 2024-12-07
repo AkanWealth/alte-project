@@ -24,7 +24,7 @@ import Logo from "../../../ui/Logo";
 import Notifications from "../../../ui/notifications";
 
 const Header = ({ relativeStyles }) => {
-  const { logout } = useFreelancerAuth();
+  const { user, logout } = useFreelancerAuth();
   const [showModal, setShowModal] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const { pathname } = useLocation();
@@ -82,10 +82,10 @@ const Header = ({ relativeStyles }) => {
             <span className="absolute bottom-0 right-0 block size-2 rounded-full bg-success-500 lg:hidden"></span>
           </div>
           <p className="hidden flex-col items-start font-inter text-base font-medium lg:flex">
-            Patricia Oko
+          {user?.name || "Freelancer"}
             <span className="flex flex-row items-center text-xs font-normal text-grey-300">
               <span className="mr-1 block size-2 rounded-full bg-grey-300"></span>
-              Unavailable
+              {user?.isAvailable ? "Available" : "Unavailable"}
             </span>
           </p>
           {showModal ? (

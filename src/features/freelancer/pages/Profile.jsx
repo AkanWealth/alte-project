@@ -25,9 +25,8 @@ const Profile = () => {
             >
               Personal details
             </div>
-
             <div className="border-gray-300 border-l" />
-
+            
             {/* Work Experience Tab */}
             <div
               className={`w-full px-4 py-2 text-sm font-medium ${
@@ -39,9 +38,8 @@ const Profile = () => {
             >
               Work Experience
             </div>
-
             <div className="border-gray-300 border-l" />
-
+            
             {/* Documents Tab */}
             <div
               className={`w-full px-4 py-2 text-sm font-medium ${
@@ -55,6 +53,7 @@ const Profile = () => {
             </div>
           </div>
         </div>
+
         {/* Content based on the active tab */}
         <div className="mt-4">
           {activeTab === "personalDetails" && <ProfileSection />}

@@ -8,12 +8,12 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 
 const QuoteForm = () => {
   const [formData, setFormData] = useState({
-    fullName: "",
-    businessName: "",
-    email: "",
-    phoneNumber: "",
-    policy: false,
-    selectedServices: [],
+    FullName: "",
+    CompanyName: "",
+    Email: "",
+    PhoneNumber: "",
+    SelectedServices: [],
+    Document: null // For file upload
   });
 
   const [errors, setErrors] = useState({});
@@ -39,10 +39,10 @@ const QuoteForm = () => {
 
   const handleServiceChange = (service) => {
     setFormData((prevData) => {
-      const updatedServices = prevData.selectedServices.includes(service)
-        ? prevData.selectedServices.filter((s) => s !== service)
-        : [...prevData.selectedServices, service];
-      return { ...prevData, selectedServices: updatedServices };
+      const updatedServices = prevData.SelectedServices.includes(service)
+        ? prevData.SelectedServices.filter((s) => s !== service)
+        : [...prevData.SelectedServices, service];
+      return { ...prevData, SelectedServices: updatedServices };
     });
   };
 
@@ -52,30 +52,30 @@ const QuoteForm = () => {
     const newErrors = {};
 
     // Full Name validation
-    if (!formData.fullName.trim()) {
-      newErrors.fullName = "Full Name is required";
+    if (!formData.FullName.trim()) {
+      newErrors.FullName = "Full Name is required";
     }
 
     // Business Name validation
-    if (!formData.businessName.trim()) {
-      newErrors.businessName = "Business Name is required";
+    if (!formData.CompanyName.trim()) {
+      newErrors.CompanyName = "Business Name is required";
     }
 
     // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!formData.email.trim()) {
-      newErrors.email = "Email is required";
-    } else if (!emailRegex.test(formData.email)) {
-      newErrors.email = "Enter a valid email address";
+    if (!formData.Email.trim()) {
+      newErrors.Email = "Email is required";
+    } else if (!emailRegex.test(formData.Email)) {
+      newErrors.Email = "Enter a valid email address";
     }
 
     // Phone validation
     const phoneRegex = /^[0-9]{11}$/;
 
-    if (!formData.phoneNumber.trim()) {
-      newErrors.phoneNumber = "Phone Number is required";
-    } else if (!phoneRegex.test(formData.phoneNumber)) {
-      newErrors.phoneNumber = "Enter a valid 11-digit phone number";
+    if (!formData.PhoneNumber.trim()) {
+      newErrors.PhoneNumber = "Phone Number is required";
+    } else if (!phoneRegex.test(formData.PhoneNumber)) {
+      newErrors.PhoneNumber = "Enter a valid 11-digit phone number";
     }
     if (!formData.policy) {
       newErrors.policy = "You must agree to the terms and privacy policy";
@@ -95,13 +95,35 @@ const QuoteForm = () => {
 
   const submitForm = async () => {
     try {
+      const formDataToSubmit = new FormData();
+    
+      // Add text fields
+      formDataToSubmit.append('FullName', formData.FullName);
+      formDataToSubmit.append('CompanyName', formData.CompanyName);
+      formDataToSubmit.append('Email', formData.Email);
+      formDataToSubmit.append('PhoneNumber', formData.PhoneNumber);
+      
+      // Add services
+      formData.SelectedServices.forEach((service, index) => {
+        formDataToSubmit.append(`SelectedServices[${index}]`, service);
+      });
+  
+      // Add file if exists
+      if (selectedFiles.length > 0) {
+        formDataToSubmit.append('Document', selectedFiles[0]);
+      }
+  
       const response = await axios.post(
         "https://alte-backend.onrender.com/api/Alte/request-quote",
-        formData
+        formData,{
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
       );
       console.log("Success:", response.data);
   
-      if (response.data.success) {
+      if (response.status === 200) {
         toast.success(
           <ToastMessage
             title="Success!"
@@ -183,59 +205,59 @@ const QuoteForm = () => {
             <input
               type="text"
               placeholder="Full Name*"
-              name="fullName"
-              value={formData.fullName}
+              name="FullName"
+              value={formData.FullName}
               onChange={handleInputChange}
               className={`w-full rounded-md border p-2 ${
-                errors.fullName ? "border-[#DC6662]" : "border-gray-300"
+                errors.FullName ? "border-[#DC6662]" : "border-gray-300"
               }`}
             />
-            {errors.fullName && (
-              <p className="text-sm text-[#DC6662]">{errors.fullName}</p>
+            {errors.FullName && (
+              <p className="text-sm text-[#DC6662]">{errors.FullName}</p>
             )}
 
             <input
               type="text"
-              name="businessName"
+              name="CompanyName"
               placeholder="Business Name*"
               className={`w-full rounded-md border p-2 ${
-                errors.businessName ? "border-[#DC6662]" : "border-gray-300"
+                errors.CompanyName ? "border-[#DC6662]" : "border-gray-300"
               }`}
-              value={formData.businessName}
+              value={formData.CompanyName}
               onChange={handleInputChange}
             />
-            {errors.businessName && (
-              <p className="text-sm text-[#DC6662]">{errors.businessName}</p>
+            {errors.CompanyName && (
+              <p className="text-sm text-[#DC6662]">{errors.CompanyName}</p>
             )}
 
             <input
               type="email"
-              name="email"
+              name="Email"
               placeholder="Email Address*"
               className={`w-full rounded-md border p-2 ${
                 errors.email ? "border-[#DC6662]" : "border-gray-300"
               }`}
-              value={formData.email}
+              value={formData.Email}
               onChange={handleInputChange}
             />
-            {errors.email && (
-              <p className="text-sm text-[#DC6662]">{errors.email}</p>
+            {errors.Email && (
+              <p className="text-sm text-[#DC6662]">{errors.Email}</p>
             )}
             <input
               type="tel"
-              name="phoneNumber"
+              name="PhoneNumber"
               placeholder="Phone Number*"
-              value={formData.phoneNumber}
+              value={formData.PhoneNumber}
               onChange={handleInputChange}
               onInput={(e) => {
                 e.target.value = e.target.value.replace(/[^0-9]/g, ""); // Prevent non-numeric input
               }}
               className={`w-full rounded-md border p-2 ${
-                errors.phoneNumber ? "border-[#DC6662]" : "border-gray-300"
+                errors.PhoneNumber ? "border-[#DC6662]" : "border-gray-300"
               }`}
             />
-            {errors.phoneNumber && (
-              <p className="text-sm text-[#DC6662]">{errors.phoneNumber}</p>
+            {errors.PhoneNumber && (
+              <p className="text-sm text-[#DC6662]">{errors.PhoneNumber}</p>
             )}
           </div>
         </div>
@@ -252,7 +274,7 @@ const QuoteForm = () => {
                   <input
                     type="checkbox"
                     className="form-checkbox"
-                    checked={formData.selectedServices.includes(service)}
+                    checked={formData.SelectedServices.includes(service)}
                     onChange={() => handleServiceChange(service)}
                   />
                   {service}
@@ -260,8 +282,8 @@ const QuoteForm = () => {
               </div>
             ))}
           </div>
-          {errors.selectedServices && (
-            <p className="text-sm text-[#DC6662]">{errors.selectedServices}</p>
+          {errors.SelectedServices && (
+            <p className="text-sm text-[#DC6662]">{errors.SelectedServices}</p>
           )}
           <textarea
             placeholder="Specify your Request"

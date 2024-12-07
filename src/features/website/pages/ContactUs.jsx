@@ -22,7 +22,14 @@ const Form = () => {
 
   const handleForm = async (data) => {
     try {
-      const { status } = await axios.post(`${API}/contact`, data);
+      console.log('Sending data to:', `${API}/contact`);
+      console.log('Data:', data);
+      
+      const { status } = await axios.post(`${API}/api/Alte/contact`, data, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
 
       if (status === 200) {
         reset();

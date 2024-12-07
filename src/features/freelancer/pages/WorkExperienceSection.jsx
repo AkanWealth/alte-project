@@ -4,9 +4,14 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import ToastNotification, { ToastMessage } from "../../../ui/ToastNotification";
 import "react-datepicker/dist/react-datepicker.css";
+import useFreelancerAuth from "../auth/useFreelancerAuth";
+import { API } from "../../../config";
+import axios from "axios";
+
 
 const WorkExperienceSection = () => {
   const [experiences, setExperiences] = useState([{}]);
+  const { user } = useFreelancerAuth(); 
   const {
     register,
     handleSubmit,
@@ -26,15 +31,68 @@ const WorkExperienceSection = () => {
     setExperiences(updatedExperiences);
   };
 
-  const onSubmit = (data) => {
-    console.log(data);
-    toast.success(
-      <ToastMessage
-        title="Work Experience Saved"
-        message="Your work experience has been successfully created"
-      />,
-    ); // Handle form submission
-    reset(); // Reset the form after submission
+  const onSubmit = async (data) => {
+    try {
+      // Assuming you have the user ID from somewhere (e.g., context, prop, or state)
+      const userId = user?.id; // Replace with actual user ID retrieval method
+  
+      // Separate out the experiences from the form data
+      const { experiences } = data;
+  
+      // Prepare the experiences data
+      const formattedExperiences = experiences.map(exp => ({
+        jobTitle: exp.jobTitle,
+        companyName: exp.company,
+        startDate: exp.startDate ? new Date(exp.startDate).toISOString() : null,
+        endDate: exp.endDate ? new Date(exp.endDate).toISOString() : null, // Make endDate nullable for current job
+        isCurrentJob: exp.currentJob || false
+      }));
+  
+      let response;
+      if (experiences.length === 1) {
+        // If only one experience, use the single endpoint
+        response = await axios.post(`${API}/api/Alte/WorkExperiences/single/${userId}`, 
+          formattedExperiences[0],
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            }
+          }
+        );
+      } else {
+        // If multiple experiences, use the multiple endpoint
+        response = await axios.post(`${API}/api/Alte/WorkExperiences/freelancer/${userId}`, 
+          {
+            experiences: formattedExperiences
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            }
+          }
+        );
+      }
+      
+  
+      // Success toast
+      toast.success(
+        <ToastMessage
+          title="Work Experience Saved"
+          message="Your work experience has been successfully created"
+        />
+      );
+  
+      // Reset the form
+      reset();
+    } catch (error) {
+      // Error toast
+      toast.error(
+        <ToastMessage
+          title="Error"
+          message={error.message || "Failed to save work experiences"}
+        />
+      );
+    }
   };
 
   return (

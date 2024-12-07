@@ -23,7 +23,7 @@ const VerifyEmail = () => {
 
   const resendLink = async () => {
     try {
-      const { status } = await axios.post(`${API}/resend-verification`, {
+      const { status } = await axios.post(`${API}/api/Alte/resend-verification`, {
         email,
       });
 

@@ -1,10 +1,18 @@
-import { useState } from "react";
+import { useEffect,useState } from "react";
 import { Link, NavLink, useSearchParams } from "react-router-dom";
 import toast from "react-hot-toast";
-
+import useFreelancerAuth from "../auth/useFreelancerAuth";
+import axios from "axios";
+axios.defaults.withCredentials = true;
 // UIs
 import { ToastMessage } from "../../../ui/ToastNotification";
 import { BellIcon } from "@heroicons/react/24/outline";
+
+// Configs
+import { API } from "../../../config";
+import { useReducedMotion } from "framer-motion";
+
+
 
 // Contents
 const tabContent = {
@@ -46,20 +54,46 @@ const appliedContent = [
 ];
 
 const DashboardBanner = () => {
-  const [isAvailable, setIsAvailable] = useState(false);
+  const { user,updateUserAvailability } = useFreelancerAuth(); 
+  const [isAvailable, setIsAvailable] = useState(user?.isAvailable || false);
 
-  const handleToggle = () => {
-    setIsAvailable(!isAvailable);
-    toast.success(
-      <ToastMessage message="Your work availability has been successfully saved." />,
-    );
+  useEffect(() => {
+    setIsAvailable(user?.isAvailable || false);
+  }, [user]);
+
+  const handleToggle = async () => {
+    const updatedAvailability = !isAvailable;
+    
+    try {
+      const success = await updateUserAvailability(updatedAvailability);
+      
+      if (success) {
+        setIsAvailable(updatedAvailability);
+        toast.success(
+          <ToastMessage message="Your work availability has been successfully updated." />
+        );
+      } else {
+        toast.error(
+          <ToastMessage message="Failed to update availability." />
+        );
+      }
+    } catch (error) {
+      console.error("Error updating availability:", error);
+      toast.error(
+        <ToastMessage message="An error occurred while updating availability." />
+      );
+    }
+
   };
+
+
+  const firstName = user?.name.split(' ')[0];
 
   return (
     <section className="dashboard-banner-gradient flex w-full flex-row items-center justify-between gap-2 rounded-2xl px-5 py-4 font-inter text-white shadow-lg lg:p-8">
       <div>
         <h1 className="mb-1 text-lg font-semibold text-sec-50 lg:text-3xl">
-          Hello, Patricia
+          Hello, {firstName || "Freelancer"} 
         </h1>
         <p className="text-xs font-normal text-sec-50 lg:text-base">
           Welcome to your dashboard
@@ -191,8 +225,26 @@ const activeTabClasses =
   "font-medium lg:font-semibold text-grey-900 after:absolute after:inset-x-0 after:-bottom-px after:h-px after:bg-grey-900";
 
 const Dashboard = () => {
+  const { user, isLoggedIn } = useFreelancerAuth();
   const [searchParams] = useSearchParams();
   const currentTab = searchParams.get("tab") || "applied";
+
+  useEffect(() => {
+    console.log("Dashboard user:", user);
+    console.log("Is Logged In:", isLoggedIn);
+  }, [user, isLoggedIn]);
+
+  // if (!user) {
+  //   return <div>Loading or No User</div>;
+  // }
+
+  // Perform side effects when user and isLoggedIn change
+  // useEffect(() => {
+  //   if (isLoggedIn && user) {
+  //     console.log("User data available for dashboard:", user);
+  //     // Fetch additional data if necessary
+  //   }
+  // }, [isLoggedIn, user]);
 
   return (
     <main className="flex flex-col gap-6 lg:gap-12">

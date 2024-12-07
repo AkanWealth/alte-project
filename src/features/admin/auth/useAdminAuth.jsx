@@ -48,7 +48,7 @@ export const AdminRouteProvider = ({ children }) => {
 
   const login = async (userData) => {
     try {
-      const { status } = await axios.post(`${API}/Admin/login`, userData);
+      const { status } = await axios.post(`${API}/api/Alte/Admin/login`, userData);
 
       if (status === 200) {
         // Todo: Get token form BE
