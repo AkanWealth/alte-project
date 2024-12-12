@@ -43,11 +43,11 @@ const Login = () => {
       console.log(error);
       setError("email", {
         type: "manual",
-        message: error.response?.data?.message || "Login Failed",
+        // message: error.response?.data?.message || "Login Failed",
       });
       setError("password", {
         type: "manual",
-        message: error.response?.data?.message || "Login Failed",
+        // message: error.response?.data?.message || "Login Failed",
       });
       toast.error(
         <ToastMessage

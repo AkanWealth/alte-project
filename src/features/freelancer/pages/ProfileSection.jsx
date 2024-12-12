@@ -156,7 +156,7 @@ const ProfileSection = () => {
           <div className="flex justify-center">
             <div
               className="border-gray-300 mx-8 hidden border-l md:block"
-              style={{ height: "400px" }}
+              style={{ height: "450px" }}
             ></div>
           </div>
 

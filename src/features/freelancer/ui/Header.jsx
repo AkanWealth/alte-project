@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import {
   ArrowRightStartOnRectangleIcon,
   BellIcon,
@@ -35,9 +35,70 @@ const Header = ({ relativeStyles }) => {
   const notificationsContext = useNotifications();
   const { unreadCount } = notificationsContext;
 
-  useEffect(() => {
-    setShowNotifications(false);
-  }, [inViewport, setShowNotifications]);
+// References for notification and user modal
+const notificationButtonRef = useRef(null);
+const notificationDropdownRef = useRef(null);
+const userButtonRef = useRef(null);
+const userModalRef = useRef(null);
+
+// Handle clicks outside of notification and user modal
+useEffect(() => {
+  const handleClickOutside = (event) => {
+    // // Check if click is outside notification dropdown
+    // if (
+    //   showNotifications &&
+    //   notificationButtonRef.current &&
+    //   notificationDropdownRef.current &&
+    //   !notificationButtonRef.current.contains(event.target) &&
+    //   !notificationDropdownRef.current.contains(event.target)
+    // ) {
+    //   setShowNotifications(false);
+    // }
+
+    // Check if click is outside user modal
+    if (
+      showModal &&
+      userButtonRef.current &&
+      userModalRef.current &&
+      !userButtonRef.current.contains(event.target) &&
+      !userModalRef.current.contains(event.target)
+    ) {
+      setShowModal(false);
+    }
+  };
+
+  // Add event listener
+  document.addEventListener('mousedown', handleClickOutside);
+
+  // Cleanup event listener
+  return () => {
+    document.removeEventListener('mousedown', handleClickOutside);
+  };
+}, [showModal]);
+
+useEffect(() => {
+  const handleClickOutside = (event) => {
+    // Check if dropdown ref and notification button ref exist
+    if (
+      notificationDropdownRef.current &&
+      notificationButtonRef.current &&
+      !notificationDropdownRef.current.contains(event.target) &&
+      !notificationButtonRef.current.contains(event.target)
+    ) {
+      setShowNotifications(false);
+    }
+  };
+
+  document.addEventListener("mousedown", handleClickOutside);
+
+  return () => {
+    document.removeEventListener("mousedown", handleClickOutside);
+  };
+}, [showNotifications]);
+
+useEffect(() => {
+  setShowNotifications(false);
+}, [inViewport]);
 
   return (
     <header
@@ -50,6 +111,7 @@ const Header = ({ relativeStyles }) => {
         </p>
         <div className="relative hidden lg:ml-auto lg:block">
           <button
+            ref={notificationButtonRef}
             className="size-10 rounded-full bg-success-50 text-success-500"
             onClick={() => setShowNotifications((prev) => !prev)}
           >
@@ -64,12 +126,16 @@ const Header = ({ relativeStyles }) => {
           </button>
           {showNotifications && (
             <Notifications
+              ref={notificationDropdownRef}
               relativeStyles="absolute right-0 top-[calc(100%+24px)]"
               context={notificationsContext}
+              onClose={() => setShowNotifications(false)}
+              
             />
           )}
         </div>
         <button
+          ref={userButtonRef}
           onClick={() => setShowModal(!showModal)}
           className="ml-auto flex flex-row items-center gap-2 lg:m-0"
         >
@@ -95,6 +161,7 @@ const Header = ({ relativeStyles }) => {
           )}
         </button>
         <div
+          ref={userModalRef}
           className={`${!showModal && "hidden"} absolute right-0 top-[calc(100%+4px)] flex w-full max-w-28 flex-col gap-3 rounded-lg border border-grey-50 bg-white px-3 py-4 shadow-lg`}
         >
           <Link

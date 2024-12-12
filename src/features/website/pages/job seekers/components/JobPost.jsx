@@ -5,6 +5,7 @@ import { ClockIcon, MapPinIcon } from "@heroicons/react/24/outline";
 // Utils
 import { convertToTitleCase } from "../../../../../utils";
 
+
 const JobPost = ({ data }) => {
   const {
     id,
@@ -18,11 +19,14 @@ const JobPost = ({ data }) => {
     skills,
     datePosted,
   } = data;
+
+
+
   return (
     <article className="flex w-full max-w-80 flex-col justify-between rounded-2xl bg-white px-6 py-6 font-inter font-normal shadow-[0px_1px_3px_0px_hsla(0,0%,0%,0.1)] lg:px-8 lg:py-6">
       <figure>
         <img
-          src={companyLogo}
+          src={'/joblistlogo.png'}
           alt={`${position} logo`}
           className="mb-6 size-16 rounded-xl"
         />

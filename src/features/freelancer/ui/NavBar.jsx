@@ -15,10 +15,11 @@ import useViewport from "../../../hooks/useViewPort";
 // Contexts
 import { useNotifications } from "../contexts/NotificationsContext";
 import Notifications from "../../../ui/notifications";
-
+import useFreelancerAuth from "../auth/useFreelancerAuth";
 // UIs
 
 const NavBar = ({ relativeStyles }) => {
+  const { user, logout } = useFreelancerAuth();
   const [showNotifications, setShowNotifications] = useState(true);
   const { pathname } = useLocation();
   const [inViewport] = useViewport("1024px");
@@ -101,7 +102,9 @@ const NavBar = ({ relativeStyles }) => {
               Notifications
             </span>
           </button>
-          <button className="order-6 hidden flex-row items-center gap-3 px-9 py-4 font-inter text-lg font-semibold text-error-500 lg:flex">
+          <button 
+          onClick={logout}
+          className="order-6 hidden flex-row items-center gap-3 px-9 py-4 font-inter text-lg font-semibold text-error-500 lg:flex">
             <ArrowRightStartOnRectangleIcon className="size-6" />
             <span className="block">Logout</span>
           </button>

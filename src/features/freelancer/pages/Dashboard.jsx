@@ -33,24 +33,24 @@ const tabContent = {
 };
 
 const appliedContent = [
-  {
-    projectId: "1232",
-    projectTitle: "Frontend Developer for E-commerce Website",
-    timeApplied: "Applied 3w ago",
-    status: "Under review",
-  },
-  {
-    projectId: "1232",
-    projectTitle: "Frontend Developer for E-commerce Website",
-    timeApplied: "Applied 3w ago",
-    status: "Application viewed 3 hours ago",
-  },
-  {
-    projectId: "1232",
-    projectTitle: "Frontend Developer for E-commerce Website",
-    timeApplied: "Applied 3w ago",
-    status: "Application viewed 3 hours ago",
-  },
+  // {
+  //   projectId: "1232",
+  //   projectTitle: "Frontend Developer for E-commerce Website",
+  //   timeApplied: "Applied 3w ago",
+  //   status: "Under review",
+  // },
+  // {
+  //   projectId: "1232",
+  //   projectTitle: "Frontend Developer for E-commerce Website",
+  //   timeApplied: "Applied 3w ago",
+  //   status: "Application viewed 3 hours ago",
+  // },
+  // {
+  //   projectId: "1232",
+  //   projectTitle: "Frontend Developer for E-commerce Website",
+  //   timeApplied: "Applied 3w ago",
+  //   status: "Application viewed 3 hours ago",
+  // },
 ];
 
 const DashboardBanner = () => {

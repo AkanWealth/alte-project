@@ -88,9 +88,20 @@ export const FreelancerRouteProvider = ({ children }) => {
         throw new Error("Login failed");
       }
     } catch (error) {
-      console.error(error);
-      return false;
+      if (error.response) {
+        // Server responded with an error status
+        throw new Error( 
+          "Incorrect email or password"
+        );
+      } else if (error.request) {
+        // Request was made but no response received
+        throw new Error("No response from server. Please check your connection.");
+      } else {
+        // Something else went wrong
+        throw new Error("Login failed. Please try again.");
+      }
     }
+    
   };
 
   const logout = () => {

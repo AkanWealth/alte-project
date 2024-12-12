@@ -6,15 +6,69 @@ import {
 } from "@heroicons/react/24/outline";
 import toast from "react-hot-toast";
 import ToastNotification, { ToastMessage } from "../../../ui/ToastNotification";
+import { API } from "../../../config";
+import useFreelancerAuth from "../auth/useFreelancerAuth";
+
 
 const DocumentSection = () => {
+  const { user } = useFreelancerAuth(); 
   const [resumeFiles, setResumeFiles] = useState([]);
+  const [isUploading, setIsUploading] = useState(false);
   const [certificateFiles, setCertificateFiles] = useState([]);
 
   // Handle multiple resume uploads
   const handleResumeUpload = (e) => {
     const files = Array.from(e.target.files);
     setResumeFiles((prevFiles) => [...prevFiles, ...files]); // Add new resumes to the existing list
+  };
+  const uploadResume = async () => {
+    // Validate files
+    if (resumeFiles.length === 0) {
+      toast.error('Please select a resume to upload');
+      return;
+    }
+
+    // Get the first file (or you can modify to handle multiple files)
+    const resumeFile = resumeFiles[0];
+
+    // Validate file type
+    const allowedExtensions = ['.pdf', '.doc', '.docx'];
+    const fileExtension = '.' + resumeFile.name.split('.').pop()?.toLowerCase();
+    
+    if (!allowedExtensions.includes(fileExtension)) {
+      toast.error('Invalid file type. Only PDF and Word documents are allowed.');
+      return;
+    }
+
+    // Create FormData
+    const formData = new FormData();
+    formData.append('Resume', resumeFile);
+
+    try {
+      setIsUploading(true);
+      
+      // Replace with your actual user ID mechanism
+      const userId = user?.id; 
+      
+      // Replace with your actual API endpoint
+      const response = await axios.post(`${API}/api/Alte/WorkExperiences/resume/${userId}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+
+      // Success handling
+      toast.success(response.data.message);
+      
+      // Optional: Clear uploaded files after successful upload
+      setResumeFiles([]);
+    } catch (error) {
+      // Error handling
+      const errorMessage = error.response?.data || 'Failed to upload resume';
+      toast.error(errorMessage);
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   // Handle multiple certificate uploads
@@ -105,6 +159,16 @@ const DocumentSection = () => {
               </button>
             </div>
           ))}
+          {/* Upload Button */}
+          {resumeFiles.length > 0 && (
+            <button 
+              onClick={uploadResume}
+              disabled={isUploading}
+              className="mt-4 w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 disabled:opacity-50"
+            >
+              {isUploading ? 'Uploading...' : 'Upload Resume'}
+            </button>
+          )}
         </div>
 
         {/* Certificate Upload Section */}

@@ -30,7 +30,7 @@ import Pagination from "../../../../ui/Pagination";
 // Loader
 export const loadJobs = async () => {
   try {
-    const { data } = await axios.get(`${API}/jobs/jobList`);
+    const { data } = await axios.get(`${API}/api/Alte/jobs/jobList`);
     return data;
   } catch (error) {
     console.error(error);
