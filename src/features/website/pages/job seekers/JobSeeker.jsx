@@ -28,7 +28,7 @@ import { API } from "../../../../config";
 export const getJob = async ({ params }) => {
   try {
     const { id } = params;
-    const { data } = await axios.get(`${API}/jobs/${id}`);
+    const { data } = await axios.get(`${API}/api/Alte/jobs/${id}`);
     return data;
   } catch (error) {
     console.error(error);
@@ -94,26 +94,83 @@ const JobApplyForm = ({ data }) => {
 
   const handleFileUpload = (e, field) => {
     const file = e.target.files[0];
+    // if (file) {
+    //   setResume(file);
+    //   field.onChange(file);
+    // }
     if (file) {
-      setResume(file);
-      field.onChange(file);
+      // Validate file type
+      const allowedExtensions = ['.pdf', '.doc', '.docx'];
+      const fileExtension = '.' + file.name.split('.').pop().toLowerCase();
+      
+      if (allowedExtensions.includes(fileExtension)) {
+        setResume(file);
+        field.onChange(file);
+      } else {
+        // Show an error message about invalid file type
+        alert('Please upload PDF, DOC, or DOCX files only.');
+      }
     }
   };
 
   const handleDrop = (e, field) => {
     e.preventDefault();
+    // const file = e.dataTransfer.files[0];
+    // if (file) {
+    //   setResume(file);
+    //   field.onChange(file);
+    // }
     const file = e.dataTransfer.files[0];
     if (file) {
-      setResume(file);
-      field.onChange(file);
+      // Validate file type
+      const allowedExtensions = ['.pdf', '.doc', '.docx'];
+      const fileExtension = '.' + file.name.split('.').pop().toLowerCase();
+      
+      if (allowedExtensions.includes(fileExtension)) {
+        setResume(file);
+        field.onChange(file);
+      } else {
+        // Show an error message about invalid file type
+        alert('Please upload PDF, DOC, or DOCX files only.');
+      }
     }
   };
 
-  const onSubmit = async (data) => {
-    reset();
-    setResume(null);
-    setModalComponent(<ApplicationSubmittedModal />);
-  };
+  // const onSubmit = async (data) => {
+  //   reset();
+  //   setResume(null);
+  //   setModalComponent(<ApplicationSubmittedModal />);
+  // };
+
+  const onSubmit = async (formData) => {
+    
+      // Create FormData for file upload
+      const formDataToSubmit = new FormData();
+      
+      // Append all form fields
+      formDataToSubmit.append('JobId', data.id);
+      formDataToSubmit.append('FullName', formData.fullName);
+      formDataToSubmit.append('Email', formData.email);
+      formDataToSubmit.append('PhoneNumber', formData.phoneNumber);
+      formDataToSubmit.append('InterestStatement', formData.reason);
+      formDataToSubmit.append('PortfolioUrl', formData.portfolio);
+      
+      // Append resume file
+      if (resume) {
+        formDataToSubmit.append('resume', resume);
+      }
+
+      // Submit application
+      const response = await axios.post(`${API}/api/Alte/jobs/Apply`, formDataToSubmit, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+       
+      });
+      console.log("response", response.data);
+      reset();
+      setResume(null);
+      setModalComponent(<ApplicationSubmittedModal />);};
 
   return (
     <form
@@ -488,7 +545,7 @@ const JobSeeker = () => {
             </div>
             <button
               className="btn btn-pry ml-auto"
-              onClick={() => setModalComponent(<JobApplyForm />)}
+              onClick={() => setModalComponent(<JobApplyForm data={job} />)}
             >
               Apply
               <ArrowRightIcon className="size-6" />

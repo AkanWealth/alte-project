@@ -124,8 +124,21 @@ const ProfileSection = () => {
             {profile?.linkedIn && profile?.portfolio && (
               <div className="mt-4 mb-6">
                 <h3 className="font-medium text-grey-100">LINKS</h3>
-                <h3 className="font-semibold mtext-grey-500 t-1">
-                  {profile.linkedIn} {profile.portfolio}
+                <h3 className="flex mtext-grey-500 t-1">
+                  <a href={profile.portfolio} target="_blank" rel="noopener noreferrer" className="flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6">
+                      <path d="M10 14a4 4 0 0 1 0-5.66l2.34-2.34a4 4 0 0 1 5.66 5.66l-1 1" />
+                      <path d="M14 10a4 4 0 0 1 0 5.66l-2.34 2.34a4 4 0 0 1-5.66-5.66l1-1" />
+                    </svg>
+
+                  </a>
+                  <a href={profile.linkedIn} target="_blank" rel="noopener noreferrer" className="flex items-center">
+                    <svg className="h-6 w-6 text-blue-500" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                      <path d="M19.5 0h-15A4.5 4.5 0 0 0 0 4.5v15A4.5 4.5 0 0 0 4.5 24h15a4.5 4.5 0 0 0 4.5-4.5v-15A4.5 4.5 0 0 0 19.5 0zm-11 18h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+                    </svg>
+                  </a>
+
+
                 </h3>
               </div>
             )}
@@ -134,7 +147,7 @@ const ProfileSection = () => {
                 <h3 className="font-medium text-grey-100">RATE</h3>
                 <h3 className="font-semibold mtext-grey-500 t-1">{profile?.rate || '-'}</h3>
               </div>)}
-            {profile?.skills && profile.skills.length > 0 &&(
+            {profile?.skills && profile.skills.length > 0 && (
               <div className="mt-4 mb-6">
                 <h3 className="font-medium text-grey-100">SKILL</h3>
                 <div className="flex flex-wrap gap-2">
@@ -168,29 +181,29 @@ const ProfileSection = () => {
             </div>
             <div className="mb-6">
               <h3 className="font-semibold text-grey-500">ABOUT ME</h3>
-              <p className="text-normal font-medium mt-1">{profile?.about || '-'}</p>
+              <p className="text-normal text-justify mt-1">{profile?.about || '-'}</p>
             </div>
             <div className="mb-6">
               <h3 className="font-semibold text-grey-500">Time Zone</h3>
-              <p className="text-normal font-medium mt-1">{profile?.timezone || '-'}</p>
+              <p className="text-normal text-justify mt-1">{profile?.timezone || '-'}</p>
             </div>
-            {profile?.language && profile.language.length > 0 &&(
-            <div className="mb-6">
-              <h3 className="font-semibold text-grey-500">Languages</h3>
-              <div className="flex flex-wrap gap-2">
-                {profile?.language && profile.language.length > 0
-                  ? profile.language.map((language, index) => (
-                    <span
-                      key={index}
-                      className="text-normal"
-                    >
-                      {language}
-                    </span>
-                  ))
-                  : '-'
-                }
-              </div>
-            </div>)}
+            {profile?.language && profile.language.length > 0 && (
+              <div className="mb-6">
+                <h3 className="font-semibold text-grey-500">Languages</h3>
+                <div className="flex flex-wrap gap-2">
+                  {profile?.language && profile.language.length > 0
+                    ? profile.language.map((language, index) => (
+                      <span
+                        key={index}
+                        className="text-normal"
+                      >
+                        {language}
+                      </span>
+                    ))
+                    : '-'
+                  }
+                </div>
+              </div>)}
           </div>
         </div>
       )}

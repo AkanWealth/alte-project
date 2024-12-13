@@ -12,10 +12,14 @@ import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import ApplyProjectForm from "./ApplyProjectForm";
 import { useModalContext } from "../../../contexts/ModalContext";
+import { useLocation } from "react-router-dom";
+
 
 const ProjectCardDetails = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { setModalComponent } = useModalContext();
+  const location = useLocation();
+  const { projectDetails, projectId } = location.state || {};
 
   useEffect(() => {
     setIsModalOpen(true);
@@ -38,7 +42,13 @@ const ProjectCardDetails = () => {
         console.error("Error generating PDF:", error);
       });
   };
-
+  const getDaysSincePosted = (postedDate) => {
+    const today = new Date();
+    const posted = new Date(postedDate);
+    const diffTime = Math.abs(today.getTime() - posted.getTime());
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays;
+  };
   return (
     <div className="bg-gray-50 mt-8 min-h-screen p-4">
       <Link to="/freelancer/dashboard/projects">
@@ -90,10 +100,10 @@ const ProjectCardDetails = () => {
           <div className="flex items-start justify-between">
             <div>
               <h2 className="text-gray-900 text-xl font-semibold lg:text-2xl">
-                Frontend Developer for E-commerce Website
+                {projectDetails.title}
               </h2>
               <div className="text-gray-500 mt-1 text-sm">
-                Posted 5 days ago
+                Posted {getDaysSincePosted(projectDetails.postedDate)} days ago
               </div>
             </div>
             <div className="border-gray-300 rounded-lg border p-1">
@@ -105,14 +115,14 @@ const ProjectCardDetails = () => {
           <div className="mt-4 flex flex-wrap items-center gap-4 whitespace-nowrap">
             <div className="text-gray-500 flex items-center">
               <ClockIcon className="mr-1 h-5 w-5" />
-              <span className="text-sm lg:text-base">3 months</span>
+              <span className="text-sm lg:text-base">{projectDetails.duration}</span>
             </div>
             <div className="text-gray-500 flex items-center">
               <MapPinIcon className="h-5 w-5" />
-              <span className="text-sm lg:text-base">Remote</span>
+              <span className="text-sm lg:text-base">{projectDetails.location}</span>
             </div>
             <div className="text-green-800 whitespace-nowrap rounded-full bg-success-50 px-3 py-1 text-sm lg:text-base">
-              $2,000 - $4,000
+              {projectDetails.salaryRange}
             </div>
           </div>
 
@@ -120,12 +130,7 @@ const ProjectCardDetails = () => {
           <div className="mt-6">
             <h3 className="text-lg font-semibold">Overview</h3>
             <p className="text-gray-600 mt-2 text-justify text-sm lg:text-base">
-              We are seeking a skilled frontend developer to create a responsive
-              and user-friendly e-commerce platform. The ideal candidate should
-              be proficient in HTML, CSS, and JavaScript, with experience in
-              building modern web applications using frameworks like React. You
-              will work closely with our design team to implement UI/UX best
-              practices and ensure a seamless user experience.
+              {projectDetails.overview}
             </p>
           </div>
 
@@ -134,11 +139,7 @@ const ProjectCardDetails = () => {
             <h3 className="text-lg font-semibold">Project Requirements</h3>
             <h4 className="text-md mt-4 font-medium">Responsibilities</h4>
             <ul className="mt-2 list-none space-y-2">
-              {[
-                "Develop and maintain the front end of the e-commerce website.",
-                "Collaborate with the backend team for integration.",
-                "Ensure mobile responsiveness and accessibility.",
-              ].map((responsibility, index) => (
+              {projectDetails.projectRequirement?.map((responsibility, index) => (
                 <li key={index} className="flex items-start gap-2">
                   <span className="text-green-500 mt-1">
                     <CheckCircleIcon className="h-5 w-5" />
@@ -155,12 +156,7 @@ const ProjectCardDetails = () => {
           <div className="mt-6">
             <h4 className="text-md font-medium">Skills Required</h4>
             <div className="mt-2 flex flex-wrap gap-2">
-              {[
-                "HTML, CSS, JavaScript",
-                "Version control with Git",
-                "Knowledge of RESTful APIs",
-                "Sprint Planning",
-              ].map((skill, index) => (
+              {projectDetails.skills?.map((skill, index) => (
                 <span
                   key={index}
                   className="text-gray-700 rounded-full bg-grey-50 px-3 py-1 text-sm"
@@ -188,7 +184,7 @@ const ProjectCardDetails = () => {
         {/* Apply Button */}
         <div className="mt-6">
           <button
-            onClick={() => setModalComponent(<ApplyProjectForm />)} 
+            onClick={() => setModalComponent(<ApplyProjectForm />)}
             className="hover:bg-yellow-600 w-full rounded-lg bg-sec-500 py-2 font-medium text-grey-500"
           >
             Apply for this project

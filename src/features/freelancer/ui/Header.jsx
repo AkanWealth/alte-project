@@ -106,7 +106,7 @@ useEffect(() => {
     >
       <Logo img="/images/freelancer/altee.png" link="/freelancer/dashboard" />
       <div className="relative flex flex-row items-center gap-8">
-        <p className="hidden font-inter text-2xl font-semibold lowercase text-grey-900 first-letter:uppercase lg:block">
+        <p className="hidden font-inter text-xl font-semibold lowercase text-grey-900 first-letter:uppercase lg:block">
           {currentPath}
         </p>
         <div className="relative hidden lg:ml-auto lg:block">

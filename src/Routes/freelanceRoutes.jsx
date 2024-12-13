@@ -15,6 +15,8 @@ import Profile from "../features/freelancer/pages/Profile";
 import Settings from "../features/freelancer/pages/Settings";
 import EditProfile from "../features/freelancer/pages/EditProfile";
 import ProjectCardDetails from "../features/freelancer/pages/ProjectCardDetails";
+import ForgotPassword from "../features/freelancer/pages/ForgotPassword";
+import ResetPassword from "../features/freelancer/pages/ResetPassword";
 
 const freelancerRoutes = {
   path: "freelancer",
@@ -41,6 +43,14 @@ const freelancerRoutes = {
       element: <Login />,
     },
     {
+      path: "forgot-password",
+      element: <ForgotPassword />,
+    },
+    {
+      path: "reset-password",
+      element: <ResetPassword />,
+    },
+    {
       path: "dashboard",
       element: <DashboardLayout />,
       children: [
@@ -61,7 +71,7 @@ const freelancerRoutes = {
           element: <EditProfile />,
         },
         {
-          path: "projects/project-details",
+          path: "projects/project-details/:id",
           element: <ProjectCardDetails />,
         },
         {
