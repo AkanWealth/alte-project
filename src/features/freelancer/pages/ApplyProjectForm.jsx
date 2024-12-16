@@ -1,24 +1,73 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ArrowDownTrayIcon, PaperClipIcon } from "@heroicons/react/24/outline";
 import { useModalContext } from "../../../contexts/ModalContext";
 import SuccessMessage from "./SuccessMessage";
+import { API } from "../../../config";
+import axios from 'axios';
 
-const ApplyProjectForm = () => {
+import toast from "react-hot-toast";
+import ToastNotification, { ToastMessage } from "../../../ui/ToastNotification";
+
+
+
+const ApplyProjectForm = ({user, projectId}) => {
+  // const { user } = useFreelancerAuth(); 
   const [selectedResume, setSelectedResume] = useState("resume1");
   const [documents, setDocuments] = useState([
-    { id: "resume1", name: "Demilade Omotayo CV.pdf", uploaded: "3 weeks ago" },
+    // { id: "resume1", name: "Demilade Omotayo CV.pdf", uploaded: "3 weeks ago" },
   ]);
   const [availability, setAvailability] = useState("");
   const [termsAccepted, setTermsAccepted] = useState(false);
   const { setModalComponent } = useModalContext();
+  const [newResume, setNewResume] = useState(null);
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [errors, setErrors] = useState({}); 
   const [isSubmitted, setIsSubmitted] = useState(false);
 
+
+
+  useEffect(() => {
+    const fetchUserResumes = async () => {
+      try {
+        // Replace with actual user ID retrieval method
+        const userId = user?.id;
+        const response = await axios.get(`${API}/api/Alte/WorkExperiences/resume/${userId}`);
+
+        console.log(response.data)
+        setDocuments(response.data);
+      } catch (error) {
+        console.error('Error fetching resumes:', error);
+        // Optional: Add error handling UI
+      }
+    };
+
+    fetchUserResumes();
+  }, []);
+
+
   const handleFileChange = (event) => {
-    const files = event.target.files;
-    processFiles(files);
+    const file = event.target.files[0];
+    if (file) {
+      // Create a preview object for the new resume
+      const newResumePreview = {
+        id: 'new-resume',
+        originalFileName: file.name,
+        uploadDate: new Date().toISOString(),
+        isNewUpload: true
+      };
+
+      setNewResume(file);
+      
+      // Add the new resume to the documents list
+      setDocuments(prevDocs => [
+        ...prevDocs, 
+        newResumePreview
+      ]);
+
+      // Select the new resume
+      setSelectedResume(newResumePreview.id);
+    }
   };
 
   const handleDrop = (event) => {
@@ -62,27 +111,93 @@ const ApplyProjectForm = () => {
     return Object.keys(newErrors).length === 0; 
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!validateForm()) {
-      return; 
+      return;
     }
 
-    setIsSubmitted(true); 
-    setModalComponent(<SuccessMessage onClose={handleCloseModal} />)
+    try {
+      // Prepare form data
+      const formData = new FormData();
+      formData.append('projectCardId', projectId);
+      
+      // If it's a new resume, append the file
+      if (newResume && selectedResume === 'new-resume') {
+        formData.append('NewResume', newResume);
+      } else {
+        // Otherwise, use the selected resume ID
+        formData.append('SelectedResumeId', selectedResume);
+      }
+      
+      formData.append('Availability', availability);
+
+      // Submit application
+      const response = await axios.post(
+        `${API}/api/Alte/ProjectApplication/sumbitApplication/${user.id}`, 
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }
+      )
+      // Handle successful submission
+      console.log(response.data.message)
+      toast.success(response.data.message);
+      // Close modal or redirect as needed
+    } catch (error) {
+      console.error('Application submission error:', error);
+      toast.error(error.response?.data?.message || 'Failed to submit application');
+    }
+  };
+
+
+  const handleDownload = async (resumeId) => {
+    try {
+      const response = await axios.get(
+        `${API}/api/Alte/WorkExperiences/resume/download/${user.id}/${resumeId}`, 
+        {
+          responseType: 'blob' // Important for file downloads
+        }
+      );
+  
+      // Create a link element to trigger download
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'resume.pdf'); // Or dynamically get filename
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (error) {
+      console.error('Download failed:', error);
+      toast.error('Failed to download resume');
+    }
   };
 
   const handleCloseModal = () => {
     setIsSubmitted(false)
     setModalComponent(null)
   };
+  const getDaysSincePosted = (postedDate) => {
+    const today = new Date();
+    const posted = new Date(postedDate);
+    const diffTime = Math.abs(today.getTime() - posted.getTime());
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    if (diffDays < 1) {
+      return "just now";
+    }
+
+    return diffDays;
+  };
 
   return (
     <div className="bg-gray-100 flex min-h-screen items-center justify-center">
       <form
         onSubmit={handleSubmit}
-        className="w-full max-w-lg space-y-6 rounded-lg bg-white p-6 shadow-md"
+        className="w-full max-w-lg space-y-6 rounded-lg bg-white p-6 shadow-md max-h-[90vh] overflow-y-auto"
       >
         <h1 className="text-xl font-bold">
           Application - Frontend Developer for E-commerce Website
@@ -96,27 +211,33 @@ const ApplyProjectForm = () => {
           <div className="space-y-2">
             {documents.map((doc) => (
               <div
-                key={doc.id}
+                key={doc.resumeId}
                 className={`flex items-center justify-between rounded-lg border p-4 ${
-                  selectedResume === doc.id
+                  selectedResume === doc.resumeId
                     ? "border-green-500"
                     : "border-gray-300"
                 }`}
-                onClick={() => handleResumeSelection(doc.id)}
+                onClick={() => handleResumeSelection(doc.resumeId)}
               >
                 <img src="/images/freelancer/pdf.png" className="h-8 w-8" />
                 <span>
-                  <h3>{doc.name}</h3>
-                  <h6>{doc.uploaded}</h6>
+                  <h3>{doc.originalFileName}</h3>
+                  <h6>{`Uploaded ${getDaysSincePosted(doc.uploadDate)} days ago`}</h6>
                 </span>
-                <ArrowDownTrayIcon className="h-5 w-5" />
-                <input
-                  type="radio"
-                  name="resume"
-                  checked={selectedResume === doc.id}
-                  readOnly
-                  className="ml-2"
-                />
+                <ArrowDownTrayIcon className="h-5 w-5"
+                onClick={(e) => {
+                  e.stopPropagation(); // Prevent triggering row selection
+                  handleDownload(doc.resumeId);
+                }}  />
+                {!doc.isNewUpload && (
+                  <input
+                    type="radio"
+                    name="resume"
+                    checked={selectedResume === doc.resumeId}
+                    readOnly
+                    className="ml-2"
+                  />
+                )}
               </div>
             ))}
           </div>

@@ -13,17 +13,41 @@ import html2canvas from "html2canvas";
 import ApplyProjectForm from "./ApplyProjectForm";
 import { useModalContext } from "../../../contexts/ModalContext";
 import { useLocation } from "react-router-dom";
+import useFreelancerAuth from "../auth/useFreelancerAuth";
 
 
 const ProjectCardDetails = () => {
+  const { user } = useFreelancerAuth(); 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { setModalComponent } = useModalContext();
   const location = useLocation();
   const { projectDetails, projectId } = location.state || {};
 
   useEffect(() => {
-    setIsModalOpen(true);
-  }, []);
+    const checkProfileCompletion = async () => {
+      try {
+        // Check work experiences
+        const workExperienceResponse = await axios.get(`${API}/api/Alte/WorkExperiences/freelancer/${user.id}`);
+        const workExperiences = workExperienceResponse.data;
+
+        // Check resumes
+        const resumeResponse = await axios.get(`${API}/api/Alte/WorkExperiences/resume/${user.id}`);
+        const resumes = resumeResponse.data;
+
+        // If both work experiences and resumes exist, hide the modal
+        if (workExperiences.length > 0 && resumes.length > 0) {
+          setIsModalOpen(false);
+        }
+      } catch (error) {
+        console.error("Error checking profile completion:", error);
+        // Keep modal open in case of error
+      }
+    };
+
+    if (user?.id) {
+      checkProfileCompletion();
+    }
+  }, [user]);
   const handleDownloadPDF = () => {
     const input = document.getElementById("pdf-content");
 
@@ -42,6 +66,9 @@ const ProjectCardDetails = () => {
         console.error("Error generating PDF:", error);
       });
   };
+
+
+  
   const getDaysSincePosted = (postedDate) => {
     const today = new Date();
     const posted = new Date(postedDate);
@@ -184,7 +211,7 @@ const ProjectCardDetails = () => {
         {/* Apply Button */}
         <div className="mt-6">
           <button
-            onClick={() => setModalComponent(<ApplyProjectForm />)}
+            onClick={() => setModalComponent(<ApplyProjectForm user={user}   projectId={projectDetails.id} />)}
             className="hover:bg-yellow-600 w-full rounded-lg bg-sec-500 py-2 font-medium text-grey-500"
           >
             Apply for this project

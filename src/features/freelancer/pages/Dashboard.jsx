@@ -123,10 +123,52 @@ const DashboardBanner = () => {
 };
 
 const ProfileCompletionWidget = () => {
+  const { user } = useFreelancerAuth();
+  const [profileCompletion, setProfileCompletion] = useState({
+    basicInfo: false,
+    resume: false,
+    workExperience: false
+  });
+  const [completionPercentage, setCompletionPercentage] = useState(30);
+
+  useEffect(() => {
+    const checkProfileCompletion = async () => {
+      if (!user?.id) return;
+
+      try {
+        // Check work experiences
+        const workExperienceResponse = await axios.get(`${API}/api/Alte/WorkExperiences/freelancer/${user.id}`);
+        const workExperiences = workExperienceResponse.data;
+
+        // Check resumes
+        const resumeResponse = await axios.get(`${API}/api/Alte/WorkExperiences/resume/${user.id}`);
+        const resumes = resumeResponse.data;
+
+        // Update profile completion state
+        setProfileCompletion(prev => ({
+          ...prev,
+          basicInfo: user?.name && user?.email, // Basic check for basic info
+          resume: resumes && resumes.length > 0,
+          workExperience: workExperiences && workExperiences.length > 0
+        }));
+      } catch (error) {
+        console.error("Error checking profile completion:", error);
+      }
+    };
+
+    checkProfileCompletion();
+  }, [user]);
+
+  // Calculate completion percentage
+  useEffect(() => {
+    const completedItems = Object.values(profileCompletion).filter(Boolean).length;
+    const percentage = completedItems === 3 ? 100 : (30 * completedItems);
+    setCompletionPercentage(percentage);
+  }, [profileCompletion]);
   return (
     <div className="w-full rounded-md border border-grey-50 bg-white p-8 shadow-xl lg:w-1/2">
       <h2 className="text-lg font-semibold">
-        Your Profile is <span className="font-bold">30% complete</span>
+        Your Profile is <span className="font-bold">{completionPercentage}% complete</span>
       </h2>
 
       {/* Completion Checklist */}
@@ -143,6 +185,8 @@ const ProfileCompletionWidget = () => {
         <div className="flex items-center space-x-4">
           <input
             type="checkbox"
+            checked={profileCompletion.resume}
+            readOnly
             className="form-checkbox h-4 w-4 text-pry-500"
           />
           <span>Add Resume and Cover Letter</span>
@@ -150,6 +194,8 @@ const ProfileCompletionWidget = () => {
         <div className="flex items-center space-x-4">
           <input
             type="checkbox"
+            checked={profileCompletion.workExperience}
+            readOnly
             className="form-checkbox h-4 w-4 text-pry-500"
           />
           <span>Add Work Experience</span>
@@ -191,6 +237,62 @@ const TabEmptyState = ({ tab }) => {
 };
 
 const AppliedTab = () => {
+  const { user } = useFreelancerAuth();
+  const [appliedContent, setAppliedContent] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchUserApplications = async () => {
+      if (!user?.id) {
+        setIsLoading(false);
+        return;
+      }
+
+      try {
+        const response = await axios.get(`${API}/api/Alte/ProjectApplication/getUserApplications/${user.id}`);
+        
+        // Transform the response to match the expected format
+        const transformedApplications = response.data.map(application => ({
+          projectTitle: application.projectTitle,
+          timeApplied: formatTimeApplied(application.applicationDate),
+          status: application.applicationStatus
+        }));
+
+        setAppliedContent(transformedApplications);
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Error fetching user applications:", error);
+        setIsLoading(false);
+      }
+    };
+
+    fetchUserApplications();
+  }, [user]);
+
+  // Helper function to format the time applied
+  const formatTimeApplied = (applicationDate) => {
+    if (!applicationDate) return "Applied recently";
+    
+    const appliedDate = new Date(applicationDate);
+    const currentDate = new Date();
+    const diffTime = Math.abs(currentDate - appliedDate);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    if (diffDays < 1) return "Applied today";
+    if (diffDays === 1) return "Applied 1 day ago";
+    if (diffDays < 7) return `Applied ${diffDays} days ago`;
+    if (diffDays < 30) return `Applied ${Math.floor(diffDays / 7)} weeks ago`;
+    return `Applied ${Math.floor(diffDays / 30)} months ago`;
+  };
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center p-4">
+        Loading applications...
+      </div>
+    );
+  }
+
   if (appliedContent.length <= 0) return <TabEmptyState tab="applied" />;
 
   return (

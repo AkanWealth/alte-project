@@ -38,11 +38,7 @@ const ForgotPassword = () => {
             />
           );
 
-          // setTimeout(() => {
-          //   navigate('/freelancer/reset-password', { 
-          //     state: { email: email } // Optional: pass email to reset password page
-          //   });
-          // }, 2000); 
+          
 
           return; 
         }

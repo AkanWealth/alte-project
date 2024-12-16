@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   CloudArrowDownIcon,
   DocumentIcon,
@@ -8,6 +8,7 @@ import toast from "react-hot-toast";
 import ToastNotification, { ToastMessage } from "../../../ui/ToastNotification";
 import { API } from "../../../config";
 import useFreelancerAuth from "../auth/useFreelancerAuth";
+import axios from "axios";
 
 
 const DocumentSection = () => {
@@ -15,6 +16,15 @@ const DocumentSection = () => {
   const [resumeFiles, setResumeFiles] = useState([]);
   const [isUploading, setIsUploading] = useState(false);
   const [certificateFiles, setCertificateFiles] = useState([]);
+  const [isUploadingCertificate, setIsUploadingCertificate] = useState(false);
+
+  useEffect(() => {
+    console.log("Current resume files:", resumeFiles);
+  }, [resumeFiles]);
+
+  // useEffect(() => {
+  //   console.log("Current certificate files:", certificateFiles);
+  // }, [certificateFiles]);
 
   // Handle multiple resume uploads
   const handleResumeUpload = (e) => {
@@ -23,13 +33,19 @@ const DocumentSection = () => {
   };
   const uploadResume = async () => {
     // Validate files
-    if (resumeFiles.length === 0) {
+    console.log("Upload Resume initiated");
+    console.log("Current resume files:", resumeFiles);
+
+    // Comprehensive file validation
+    if (!resumeFiles || resumeFiles.length === 0) {
+      console.error("No files found for upload");
       toast.error('Please select a resume to upload');
       return;
     }
 
-    // Get the first file (or you can modify to handle multiple files)
+    // Get the first file
     const resumeFile = resumeFiles[0];
+    console.log("File to be uploaded:", resumeFile);
 
     // Validate file type
     const allowedExtensions = ['.pdf', '.doc', '.docx'];
@@ -47,20 +63,20 @@ const DocumentSection = () => {
     try {
       setIsUploading(true);
       
-      // Replace with your actual user ID mechanism
+      
       const userId = user?.id; 
       
-      // Replace with your actual API endpoint
+      
       const response = await axios.post(`${API}/api/Alte/WorkExperiences/resume/${userId}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       });
-
+      console.log("Current resume files:", response);
       // Success handling
       toast.success(response.data.message);
       
-      // Optional: Clear uploaded files after successful upload
+      
       setResumeFiles([]);
     } catch (error) {
       // Error handling
@@ -68,6 +84,7 @@ const DocumentSection = () => {
       toast.error(errorMessage);
     } finally {
       setIsUploading(false);
+      
     }
   };
 
@@ -89,6 +106,61 @@ const DocumentSection = () => {
     e.preventDefault();
     const files = Array.from(e.dataTransfer.files);
     setCertificateFiles((prevFiles) => [...prevFiles, ...files]);
+  };
+  const allowedCertificateExtensions = ['.pdf', '.doc', '.docx', '.jpg', '.jpeg', '.png'];
+
+  // Create a file validation function for certificates
+  const validateCertificateFileType = (file) => {
+    const fileExtension = '.' + file.name.split('.').pop()?.toLowerCase();
+    return allowedCertificateExtensions.includes(fileExtension);
+  };
+  useEffect(() => {
+    console.log("Current certificate files:", certificateFiles);
+  }, [certificateFiles]);
+  
+  const uploadCertificate = async () => {
+    console.log("Upload Resume initiated");
+    console.log("Current resume files:", certificateFiles);
+    if (certificateFiles.length === 0) {
+      toast.error('Please select a certificate to upload');
+      return;
+    }
+
+    const certificateFile = certificateFiles[0];
+    if (!validateCertificateFileType(certificateFile)) {
+      toast.error('Invalid file type. Only PDF and Word documents are allowed.');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('Certificate', certificateFile);
+
+    try {
+      setIsUploadingCertificate(true);
+      const userId = user?.id;
+
+      if (!userId) {
+        throw new Error('User ID not found');
+      }
+
+      const response = await axios.post(
+        `${API}/api/Alte/WorkExperiences/certificate/${userId}`, 
+        formData, 
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }
+      );
+
+      toast.success(response.data.message || 'Certificate uploaded successfully');
+      setCertificateFiles([]);
+    } catch (error) {
+      const errorMessage = error.response?.data || error.message || 'Failed to upload certificate';
+      toast.error(errorMessage);
+    } finally {
+      setIsUploadingCertificate(false);
+    }
   };
 
   // Remove individual resume file
@@ -164,7 +236,7 @@ const DocumentSection = () => {
             <button 
               onClick={uploadResume}
               disabled={isUploading}
-              className="mt-4 w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 disabled:opacity-50"
+              className="mt-4 btn btn-pry w-full"
             >
               {isUploading ? 'Uploading...' : 'Upload Resume'}
             </button>
@@ -219,6 +291,26 @@ const DocumentSection = () => {
               </button>
             </div>
           ))}
+
+{/* Certificate Upload Button */}
+{certificateFiles.length > 0 && (
+            <button 
+              onClick={uploadCertificate}
+              disabled={isUploadingCertificate}
+              className="mt-4 btn btn-pry w-full"
+            >
+              {isUploadingCertificate ? 'Uploading...' : 'Upload Certificate'}
+            </button>
+          )}
+         
+          {/* <button 
+            onClick={uploadResume}
+            disabled={isUploading}
+            className="btn btn-pry w-full"
+          >
+            {isUploading ? 'Uploading...' : 'Upload Resume'}
+          </button> */}
+
         </div>
       </div>
     </div>
