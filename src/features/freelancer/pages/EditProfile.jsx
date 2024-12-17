@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from 'react-router-dom';
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import toast from "react-hot-toast";
@@ -36,6 +37,7 @@ const EditProfile = () => {
   const [languages, setLanguages] = useState([]);
   const [skillsInput, setSkillsInput] = useState("");
   const [languageInput, setLanguageInput] = useState("");
+  const navigate = useNavigate(); 
 
   const {
     register,
@@ -184,12 +186,13 @@ const EditProfile = () => {
         toast.success(<ToastMessage title="Profile Updated" message="Your profile has been successfully updated." />);
       } else {
         // Create new profile
-        await axios.post(`${API}/api/Alte/freelancer/dashboard/edit-profile`, formData, {
+        await axios.post(`${API}/api/Alte/freelancer/dashboard/edit-profile/${user?.id}`, formData, {
           headers: { "Content-Type": "application/json" },
         });
         toast.success(<ToastMessage title="Profile Created" message="Your profile has been successfully created." />);
+        navigate('/profile');
       }
-
+      
       reset();
       setSkills([]);
       setLanguages([]);
