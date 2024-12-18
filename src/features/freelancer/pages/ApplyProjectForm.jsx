@@ -147,6 +147,8 @@ const ApplyProjectForm = ({user, projectId}) => {
       console.log(response.data.message)
       toast.success(response.data.message);
       // Close modal or redirect as needed
+
+      setModalComponent(null)
     } catch (error) {
       console.error('Application submission error:', error);
       toast.error(error.response?.data?.message || 'Failed to submit application');

@@ -1,4 +1,4 @@
-import { useEffect,useState } from "react";
+import { useEffect,useState} from "react";
 import { Link, NavLink, useSearchParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import useFreelancerAuth from "../auth/useFreelancerAuth";
@@ -165,6 +165,10 @@ const ProfileCompletionWidget = () => {
     const percentage = completedItems === 3 ? 100 : (30 * completedItems);
     setCompletionPercentage(percentage);
   }, [profileCompletion]);
+
+  const handleUpdateProfile = () => {
+    navigate('/profile'); // Adjust the route as needed
+  };
   return (
     <div className="w-full rounded-md border border-grey-50 bg-white p-8 shadow-xl lg:w-1/2">
       <h2 className="text-lg font-semibold">
@@ -207,7 +211,9 @@ const ProfileCompletionWidget = () => {
       </p>
 
       {/* Update Profile Button */}
-      <button className="mt-36 w-full rounded-md bg-sec-500 py-2 font-raleway text-grey-500">
+      <button
+      onClick={handleUpdateProfile}
+      className="mt-36 w-full rounded-md bg-sec-500 py-2 font-raleway text-grey-500">
         Update Profile
       </button>
     </div>
@@ -257,7 +263,8 @@ const AppliedTab = () => {
           timeApplied: formatTimeApplied(application.applicationDate),
           status: application.applicationStatus
         }));
-
+        const applicationCount = response.data.length;
+        // console.log("application count", applicationCount)
         setAppliedContent(transformedApplications);
         setIsLoading(false);
       } catch (error) {
@@ -364,7 +371,7 @@ const Dashboard = () => {
                     to="?tab=applied"
                     className={currentTab === "applied" && activeTabClasses}
                   >
-                    Applied (0)
+                    Applied ({appliedContent.length})
                   </NavLink>
                 </li>
                 <li className="relative px-2 py-1">

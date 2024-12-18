@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import React, { useState,useMemo } from 'react';
+import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import { XMarkIcon,EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
-
+import toast from "react-hot-toast";
 import { API } from "../../../config";
+import { ToastMessage } from "../../../ui/ToastNotification";
+
+
 
 const PasswordResetSuccessModal = () => {
     const navigate = useNavigate();
@@ -51,6 +54,7 @@ const ResetPassword = () => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [searchParams] = useSearchParams();
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -58,9 +62,24 @@ const ResetPassword = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     // Parse URL parameters
-    const queryParams = new URLSearchParams(location.search);
-    const userId = queryParams.get('userId');
-    const token = queryParams.get('token');
+    // const queryParams = new URLSearchParams(location.search);
+    // const userId = queryParams.get('userId');
+    // const token = queryParams.get('token');
+    const params = useMemo(() => {
+        const userId = searchParams.get("userId");
+        const token = searchParams.get("token");
+        
+        // Additional validation
+        if (!userId || !token) {
+            console.error("Missing userId or token in URL");
+        }
+    
+        return {
+            userId,
+            token,
+            newPassword: password
+        };
+    }, [searchParams, password]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -78,21 +97,65 @@ const ResetPassword = () => {
             setError('Password must be 8-12 characters with uppercase, lowercase, numbers, and symbols');
             return;
         }
+        console.log("Token Details:", {
+            userId: searchParams.get("userId"),
+            token: searchParams.get("token"),
+            tokenLength: params.token?.length
+        });
 
         try {
             setIsLoading(true);
             const response = await axios.post(`${API}/api/Alte/reset-password`, {
-                userId,
-                token,
+                userId: searchParams.get("userId"),
+                token: searchParams.get("token"),
                 newPassword: password
+            }, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
             });
-
+            
+            console.log("Full response:", response);
+            console.log("Response data:", response.data);
             // Show success modal or redirect
             setModalComponent(<PasswordResetSuccessModal />);
         } catch (err) {
             // Handle error
-            setError(err.response?.data?.message || 'Failed to reset password');
-        } finally {
+            console.error("Full error:", err);
+        
+        // More detailed error logging
+        if (err.response) {
+            
+            console.error("Error response data:", err.response.data);
+            console.error("Error status:", err.response.status);
+            
+           
+            toast.error(
+                <ToastMessage
+                  title="Reset Failed"
+                  message={err.response.data.message || "Failed to reset password. Please try again."}
+                />,
+            );
+        } else if (err.request) {
+            
+            console.error("No response received:", err.request);
+            toast.error(
+                <ToastMessage
+                  title="Network Error"
+                  message="No response from server. Please check your internet connection."
+                />,
+            );
+        } else {
+           
+            console.error("Error setting up request:", err.message);
+            toast.error(
+                <ToastMessage
+                  title="Error"
+                  message="An unexpected error occurred. Please try again."
+                />,
+            );
+        }
+    } finally {
             setIsLoading(false);
         }
     };
@@ -123,7 +186,7 @@ const ResetPassword = () => {
                     </div>
                     <form onSubmit={handleSubmit}>
                         {error && (
-                            <div className="mb-4 text-red-600 text-sm text-center">
+                            <div className="mb-4 text-error-500 text-sm text-center">
                                 {error}
                             </div>
                         )}

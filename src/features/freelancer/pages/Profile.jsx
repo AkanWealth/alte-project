@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import ProfileSection from "./ProfileSection";
 import WorkExperienceSection from "./WorkExperienceSection";
 import DocumentSection from "./DocumentSection";
+import { useLocation } from "react-router-dom";
 
 const Profile = () => {
   const [activeTab, setActiveTab] = useState("personalDetails");

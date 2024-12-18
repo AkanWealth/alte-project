@@ -1,12 +1,17 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
+import { API } from "../../../config";
 
 // UIs
 import { ToastMessage } from "../../../ui/ToastNotification";
+import axios from "axios";
+import useFreelancerAuth from "../auth/useFreelancerAuth";
+
 
 const PasswordUpdateForm = () => {
+  const { user } = useFreelancerAuth();
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const {
@@ -19,16 +24,31 @@ const PasswordUpdateForm = () => {
   const handleForm = async (data) => {
     const { currentPassword, newPassword } = data;
 
-    toast.success(
-      <ToastMessage
-        title="Password Updated"
-        message="Your password has been successfully been updated."
-      />,
-    );
+    try {
+      await axios.post(`${API}/api/Alte/Notification/change-password`, {
+        userId: user?.id,
+        currentPassword,
+        newPassword
+      });
 
-    reset();
+      toast.success(
+        <ToastMessage
+          title="Password Updated"
+          message="Your password has been successfully updated."
+        />
+      );
+
+      reset();
+    } catch (error) {
+      const errorMessage = error.response?.data?.message || "Failed to update password";
+      toast.error(
+        <ToastMessage
+          title="Password Update Failed"
+          message={errorMessage}
+        />
+      );
+    }
   };
-
   return (
     <form
       onSubmit={handleSubmit(handleForm)}
@@ -108,6 +128,63 @@ const PasswordUpdateForm = () => {
 };
 
 const Settings = () => {
+  const {user} = useFreelancerAuth();
+  const [notificationSettings, setNotificationSettings] = useState({
+    enableProjectAlerts: false,
+    enableProjectApplicationNotifications: false,
+    enableAllNotifications: false,
+  });
+  const userId = user?.id; // Replace with dynamic user ID (e.g., from context/auth)
+
+  // Fetch User Notification Settings (Optional: Preload Existing Data)
+  useEffect(() => {
+    const fetchNotificationSettings = async () => {
+      try {
+        const userId = user?.id;
+        const { data } = await axios.get(`${API}/api/Alte/Notification/notification-settings/${userId}`);
+        console.log("response", data);
+        setNotificationSettings({
+          enableProjectAlerts: data.enableProjectAlerts,
+          enableProjectApplicationNotifications: data.enableProjectApplicationNotifications,
+          enableAllNotifications: data.enableAllNotifications,
+        });
+      } catch (error) {
+        console.error(error.message);
+      }
+    };
+
+    fetchNotificationSettings();
+  }, []);
+
+  const handleSaveSettings = async () => {
+    try {
+      await axios.post(
+        `${API}/api/Alte/Notification/notification-settings`,
+        {
+          userId,
+          ...notificationSettings
+        }
+      );
+      
+      toast.success('Notification settings updated successfully');
+    } catch (error) {
+      console.error('Failed to update notification settings', error);
+      toast.error(error.response?.data?.message || 'Failed to update notification settings');
+    }
+  };
+
+
+  // Handle Checkbox Changes
+  const handleCheckboxChange = (e) => {
+    const { id, checked } = e.target;
+    const updatedSettings = {
+      ...notificationSettings,
+      [id]: checked,
+    };
+
+    setNotificationSettings(updatedSettings);
+  };
+  
   return (
     <main className="flex flex-wrap justify-between gap-10 bg-[hsla(165,100%,99%,1)]">
       <section className="w-full max-w-xl">
@@ -135,6 +212,13 @@ const Settings = () => {
                 type="checkbox"
                 id="projectAlerts"
                 className="peer sr-only"
+                checked={notificationSettings.enableProjectAlerts}
+                onChange={(e) =>
+                  setNotificationSettings({
+                    ...notificationSettings,
+                    enableProjectAlerts: e.target.checked,
+                  })
+                }
               />
               <span className="shadow-[0px_3px_1px_0px_hsla(0, 0%, 0%, 0.06),0px_3px_8px_0px_hsla(0, 0%, 0%, 0.15),0px_0px_0px_1px_hsla(0, 0%, 0%, 0.04)] absolute left-[2px] top-[2px] size-4 rounded-full bg-white transition-all peer-checked:start-[calc(100%-18px)] lg:size-7 lg:peer-checked:start-[calc(100%-30px)]"></span>
             </label>
@@ -156,6 +240,13 @@ const Settings = () => {
                 type="checkbox"
                 id="projectUpdates"
                 className="peer sr-only"
+                checked={notificationSettings.enableProjectApplicationNotifications}
+                onChange={(e) =>
+                  setNotificationSettings({
+                    ...notificationSettings,
+                    enableProjectApplicationNotifications: e.target.checked,
+                  })
+                }
               />
               <span className="shadow-[0px_3px_1px_0px_hsla(0, 0%, 0%, 0.06),0px_3px_8px_0px_hsla(0, 0%, 0%, 0.15),0px_0px_0px_1px_hsla(0, 0%, 0%, 0.04)] absolute left-[2px] top-[2px] size-4 rounded-full bg-white transition-all peer-checked:start-[calc(100%-18px)] lg:size-7 lg:peer-checked:start-[calc(100%-30px)]"></span>
             </label>
@@ -177,11 +268,24 @@ const Settings = () => {
                 type="checkbox"
                 id="allNotifications"
                 className="peer sr-only"
+                checked={notificationSettings.enableAllNotifications}
+                onChange={(e) =>
+                  setNotificationSettings({
+                    ...notificationSettings,
+                    enableAllNotifications: e.target.checked,
+                  })
+                }
               />
               <span className="shadow-[0px_3px_1px_0px_hsla(0, 0%, 0%, 0.06),0px_3px_8px_0px_hsla(0, 0%, 0%, 0.15),0px_0px_0px_1px_hsla(0, 0%, 0%, 0.04)] absolute left-[2px] top-[2px] size-4 rounded-full bg-white transition-all peer-checked:start-[calc(100%-18px)] lg:size-7 lg:peer-checked:start-[calc(100%-30px)]"></span>
             </label>
           </div>
         </div>
+        <button
+          onClick={handleSaveSettings}
+          className="mt-4 btn btn-pry w-full lg:w-auto"
+        >
+          Save Notification Settings
+        </button>
       </section>
       <section className="w-full max-w-lg rounded-2xl bg-white p-6">
         <h2 className="font-inter text-base font-semibold text-grey-900 lg:text-xl">

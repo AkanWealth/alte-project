@@ -15,6 +15,7 @@ import useFreelancerAuth from "../auth/useFreelancerAuth";
 import useViewport from "../../../hooks/useViewPort";
 
 // Contexts
+// import { useNotifications } from "../contexts/NotificationsContext";
 import { useNotifications } from "../contexts/NotificationsContext";
 
 // Components
@@ -100,6 +101,13 @@ useEffect(() => {
   setShowNotifications(false);
 }, [inViewport]);
 
+const name = user?.name || "Freelancer";
+  const initials = name
+    .split(" ")
+    .map(word => word[0])
+    .join("");
+
+
   return (
     <header
       className={`${relativeStyles} grid grid-cols-[auto_1fr] gap-10 px-4 py-5 lg:grid-cols-[210px_1fr] lg:px-10 lg:py-6`}
@@ -140,11 +148,14 @@ useEffect(() => {
           className="ml-auto flex flex-row items-center gap-2 lg:m-0"
         >
           <div className="relative">
-            <img
+            {/* <img
               src="/images/freelancer/user.png"
               alt=""
               className="size-8 rounded-full lg:size-10"
-            />
+            /> */}
+             <div className="flex size-8 rounded-full lg:size-10 items-center justify-center rounded-full bg-black text-xl text-white">
+              {initials}
+            </div>
             <span className="absolute bottom-0 right-0 block size-2 rounded-full bg-success-500 lg:hidden"></span>
           </div>
           <p className="hidden flex-col items-start font-inter text-base font-medium lg:flex">

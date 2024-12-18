@@ -184,18 +184,19 @@ const EditProfile = () => {
           headers: { "Content-Type": "application/json" },
         });
         toast.success(<ToastMessage title="Profile Updated" message="Your profile has been successfully updated." />);
+        navigate('/freelancer/dashboard/profile');
       } else {
         // Create new profile
         await axios.post(`${API}/api/Alte/freelancer/dashboard/edit-profile/${user?.id}`, formData, {
           headers: { "Content-Type": "application/json" },
         });
         toast.success(<ToastMessage title="Profile Created" message="Your profile has been successfully created." />);
-        navigate('/profile');
+        navigate('/freelancer/dashboard/profile');
       }
       
-      reset();
-      setSkills([]);
-      setLanguages([]);
+      // reset();
+      // setSkills([]);
+      // setLanguages([]);
     } catch (error) {
       console.error("Error submitting profile:", error);
       toast.error(
@@ -259,7 +260,7 @@ const EditProfile = () => {
             >
               <option value="">Select your role</option>
               <option value="Developer">Developer</option>
-              <option value="desiDesignergner">Designer</option>
+              <option value="Designer">Designer</option>
               <option value="Manager">Manager</option>
             </select>
             {errors.role && (

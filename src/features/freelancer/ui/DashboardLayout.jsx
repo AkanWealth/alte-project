@@ -2,6 +2,7 @@ import { Outlet } from "react-router-dom";
 
 // Contexts
 import NotificationsProvider from "../contexts/NotificationsContext";
+import useFreelancerAuth from "../auth/useFreelancerAuth";
 
 // UIs
 import Header from "./Header";
@@ -9,9 +10,11 @@ import NavBar from "./NavBar";
 import ProtectedRoute from "./ProtectedRoute";
 
 const DashboardLayout = () => {
+  const {user} = useFreelancerAuth();
+  console.log("userId", user?.id);
   return (
     <ProtectedRoute>
-      <NotificationsProvider>
+      <NotificationsProvider userId={user?.id}>
         <div className="relative grid h-full min-h-screen grid-cols-1 grid-rows-[auto_1fr] lg:grid-cols-[auto_1fr]">
           <Header relativeStyles="col-start-1 col-end-2 row-start-1 row-end-2 lg:col-end-3" />
           <div className="col-start-1 col-end-2 row-start-2 row-end-3 h-full overflow-y-auto bg-[hsla(165,100%,99%,1)] px-4 py-6 pb-24 lg:col-start-2 lg:col-end-3 lg:max-h-[calc(100vh-104px)] lg:border-t lg:border-grey-200 lg:px-10 lg:py-10 lg:pb-12">

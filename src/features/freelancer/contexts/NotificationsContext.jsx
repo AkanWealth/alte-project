@@ -1,53 +1,57 @@
 import React, { forwardRef, useState, useEffect } from 'react';
 import { createContext, useContext, useReducer } from "react";
+import axios from 'axios';
+import { API } from "../../../config";
 
 const NotificationsContext = createContext();
 
 export const useNotifications = () => useContext(NotificationsContext);
 
 const initialNotifications = [
-  {
-    id: "1",
-    message: "Application Submitted Successfully",
-    details:
-      "Your application for the Frontend Developer for E-commerce Website project has been submitted.",
-    timestamp: "2023-07-21T10:00:00",
-    read: true,
-  },
-  {
-    id: "2",
-    message: "New Project Alert",
-    details: "Check out the UX Designer for Mobile App project and apply now.",
-    timestamp: "2023-07-21T10:00:00",
-    read: false,
-  },
-  {
-    id: "3",
-    message: "Application Status Updated",
-    details:
-      "You have an update on your application for the Backend Developer position for the Fintech Platform project. Check your email for details.",
-    timestamp: "2023-07-21T10:00:00",
-    read: true,
-  },
-  {
-    id: "4",
-    message: "Application Status Updated",
-    details:
-      "You’ve been scheduled for an interview based on your application for the Fintech Platform project. Check your email for the interview details ",
-    timestamp: "2023-07-21T10:00:00",
-    read: false,
-  },
-  {
-    id: "5",
-    message: "Don&apos;t Forget to Apply",
-    details: "You saved the Digital Marketing Specialist project.",
-    timestamp: "2023-07-21T10:00:00",
-    read: false,
-  },
+  // {
+  //   id: "1",
+  //   message: "Application Submitted Successfully",
+  //   details:
+  //     "Your application for the Frontend Developer for E-commerce Website project has been submitted.",
+  //   timestamp: "2023-07-21T10:00:00",
+  //   read: true,
+  // },
+  // {
+  //   id: "2",
+  //   message: "New Project Alert",
+  //   details: "Check out the UX Designer for Mobile App project and apply now.",
+  //   timestamp: "2023-07-21T10:00:00",
+  //   read: false,
+  // },
+  // {
+  //   id: "3",
+  //   message: "Application Status Updated",
+  //   details:
+  //     "You have an update on your application for the Backend Developer position for the Fintech Platform project. Check your email for details.",
+  //   timestamp: "2023-07-21T10:00:00",
+  //   read: true,
+  // },
+  // {
+  //   id: "4",
+  //   message: "Application Status Updated",
+  //   details:
+  //     "You’ve been scheduled for an interview based on your application for the Fintech Platform project. Check your email for the interview details ",
+  //   timestamp: "2023-07-21T10:00:00",
+  //   read: false,
+  // },
+  // {
+  //   id: "5",
+  //   message: "Don&apos;t Forget to Apply",
+  //   details: "You saved the Digital Marketing Specialist project.",
+  //   timestamp: "2023-07-21T10:00:00",
+  //   read: false,
+  // },
 ];
 
 const reducer = (state, action) => {
   switch (action.type) {
+    case "notification/loaded": // Add this case
+      return action.payload;
     case "notification/added":
       return [action.payload, ...state];
     case "notification/read":
@@ -154,33 +158,93 @@ export const Notifications = forwardRef(({ context, onClose }, ref) => {
 // Add display name for better debugging
 Notifications.displayName = 'Notifications';
 
-const NotificationsProvider = ({ children }) => {
+const NotificationsProvider = ({ children, userId }) => {
   const [notifications, dispatch] = useReducer(reducer, initialNotifications);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+console.log("contextUserid",userId )
+  // Fetch notifications when component mounts or userId changes
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      if (!userId) return;
+
+      setIsLoading(true);
+      
+        const response = await axios.get(`${API}/api/Alte/Notification/notifications/${userId}`);
+        console.log("notificcation", response.data);
+        dispatch({ 
+          type: "notification/loaded", 
+          payload: response.data.map(notification => ({
+            id: notification.id,
+            message: notification.message,
+            details: notification.details,
+            timestamp: notification.createdAt,
+            read: notification.status === 1 // Assuming 1 is read status
+          }))
+        });
+        setError(null);
+        setIsLoading(false);
+    };
+
+    fetchNotifications();
+  }, [userId]);
 
   const unreadCount = notifications.filter((n) => !n.read).length;
 
-  const addNotification = (notification) => {
-    dispatch({
-      type: "notification/added",
-      payload: {
-        ...notification,
-        id: Date.now().toString(),
-        timestamp: new Date().toISOString(),
-        read: false,
-      },
-    });
+  const addNotification = async (notification) => {
+    try {
+      // You might want to send a POST request to your backend to create a notification
+      const response = await axios.post(`/api/Alte/Notification/create`, {
+        userId: userId,
+        message: notification.message,
+        details: notification.details
+      });
+
+      dispatch({
+        type: "notification/added",
+        payload: {
+          ...notification,
+          id: response.data.id, // Assuming backend returns the new notification's ID
+          timestamp: new Date().toISOString(),
+          read: false,
+        },
+      });
+    } catch (error) {
+      console.error('Failed to add notification', error);
+    }
   };
 
-  const markAsRead = (id) => {
-    dispatch({ type: "notification/read", payload: id });
+  const markAsRead = async (id) => {
+    try {
+      await axios.patch(`${API}/api/Alte/Notification/notifications/${id}/status`, { 
+        newStatus: 1 // Assuming 1 is read status 
+      });
+
+      dispatch({ type: "notification/read", payload: id });
+    } catch (error) {
+      console.error('Failed to mark notification as read', error);
+    }
   };
 
-  const markAllAsRead = () => {
-    dispatch({ type: "all/read" });
+  const markAllAsRead = async () => {
+    try {
+      // You might need to add an endpoint for this in your backend
+      await axios.put(`/api/Alte/Notification/mark-all-read/${userId}`);
+
+      dispatch({ type: "all/read" });
+    } catch (error) {
+      console.error('Failed to mark all notifications as read', error);
+    }
   };
 
-  const removeNotification = (id) => {
-    dispatch({ type: "notification/deleted", payload: id });
+  const removeNotification = async (id) => {
+    try {
+      await axios.delete(`${API}/api/Alte/Notification/notifications/${id}`);
+
+      dispatch({ type: "notification/deleted", payload: id });
+    } catch (error) {
+      console.error('Failed to remove notification', error);
+    }
   };
 
   return (
@@ -188,6 +252,8 @@ const NotificationsProvider = ({ children }) => {
       value={{
         notifications,
         unreadCount,
+        isLoading,
+        error,
         addNotification,
         markAsRead,
         markAllAsRead,

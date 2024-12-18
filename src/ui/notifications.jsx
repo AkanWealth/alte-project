@@ -5,6 +5,8 @@ import {
   PencilSquareIcon,
   TrashIcon,
 } from "@heroicons/react/24/outline";
+// import { useNotifications } from "../contexts/NotificationsContext";
+import { useNotifications } from "../features/freelancer/contexts/NotificationsContext";
 
 const EmptyNotifications = () => {
   return (
@@ -25,8 +27,34 @@ const Notification = ({ data, context }) => {
   const { id, message, details, read, timestamp } = data;
   const { markAsRead, removeNotification } = context;
   const date = parseISO(timestamp);
+  const {
+    notifications,
+    unreadCount,
+    markAllAsRead,
+    removeAll,
+    isLoading,
+    error
+  } = useNotifications();
+
+  // Optional: Handle loading and error states
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-full">
+        Loading notifications...
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex justify-center items-center h-full text-error-500">
+        Error loading notifications: {error.message}
+      </div>
+    );
+  }
 
   return (
+
     <article className="flex w-full flex-row items-start gap-3">
       <div className="relative aspect-square w-8">
         <img
