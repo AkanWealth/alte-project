@@ -1,5 +1,5 @@
 import { useEffect,useState} from "react";
-import { Link, NavLink, useSearchParams } from "react-router-dom";
+import { Link, NavLink, useSearchParams,useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import useFreelancerAuth from "../auth/useFreelancerAuth";
 import axios from "axios";

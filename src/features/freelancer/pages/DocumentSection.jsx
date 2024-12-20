@@ -3,6 +3,7 @@ import {
   CloudArrowDownIcon,
   DocumentIcon,
   XCircleIcon,
+  CalendarIcon,
 } from "@heroicons/react/24/outline";
 import toast from "react-hot-toast";
 import ToastNotification, { ToastMessage } from "../../../ui/ToastNotification";
@@ -17,15 +18,68 @@ const DocumentSection = () => {
   const [isUploading, setIsUploading] = useState(false);
   const [certificateFiles, setCertificateFiles] = useState([]);
   const [isUploadingCertificate, setIsUploadingCertificate] = useState(false);
+  const [userResumes, setUserResumes] = useState([]);
+  const [isLoadingResumes, setIsLoadingResumes] = useState(false);
+  const [isDeletingResume, setIsDeletingResume] = useState(false);
 
   useEffect(() => {
     console.log("Current resume files:", resumeFiles);
   }, [resumeFiles]);
 
-  // useEffect(() => {
-  //   console.log("Current certificate files:", certificateFiles);
-  // }, [certificateFiles]);
+  useEffect(() => {
+    if (user?.id) {
+      fetchUserResumes();
+    }
+  }, [user?.id]);
 
+  const fetchUserResumes = async () => {
+    setIsLoadingResumes(true);
+    try {
+      const response = await axios.get(`${API}/api/Alte/WorkExperiences/resume/${user?.id}`);
+      if (response.data) {
+        setUserResumes(response.data);
+      } else {
+        setUserResumes([]);
+      }
+    } catch (error) {
+      // Only show error toast if it's not a 404 (no resumes found)
+      if (error.response?.status !== 404) {
+        const errorMessage = error.response?.data || 'Error fetching resumes';
+        toast.error(errorMessage);
+      }
+      setUserResumes([]);
+    } finally {
+      setIsLoadingResumes(false);
+    }
+  };
+
+
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    });
+  };
+  const handleDeleteResume = async (resumeId) => {
+    if (!user?.id || !resumeId || isDeletingResume) return;
+
+    try {
+      setIsDeletingResume(true);
+      await axios.delete(`${API}/api/Alte/WorkExperiences/resume/${user?.id}/${resumeId}`);
+      
+      // Update the local state to remove the deleted resume
+      setUserResumes(prevResumes => prevResumes.filter(resume => resume.resumeId !== resumeId));
+      
+      toast.success("Resume deleted successfully");
+    } catch (error) {
+      const errorMessage = error.response?.data || 'Failed to delete resume';
+      toast.error(errorMessage);
+      console.error('Error deleting resume:', error);
+    } finally {
+      setIsDeletingResume(false);
+    }
+  };
   // Handle multiple resume uploads
   const handleResumeUpload = (e) => {
     const files = Array.from(e.target.files);
@@ -80,8 +134,8 @@ const DocumentSection = () => {
       setResumeFiles([]);
     } catch (error) {
       // Error handling
-      const errorMessage = error.response?.data || 'Failed to upload resume';
-      toast.error(errorMessage);
+      // const errorMessage = error.response?.data || 'Failed to upload resume';
+      // toast.error(errorMessage);
     } finally {
       setIsUploading(false);
       
@@ -177,6 +231,45 @@ const DocumentSection = () => {
     );
   };
 
+  const ResumeList = () => {
+    // Only render if we have resumes and aren't in a loading state
+    if (isLoadingResumes || userResumes.length === 0) {
+      return null;
+    }
+  
+    return (
+      <div className="mt-6">
+        <h4 className="text-lg font-medium mb-3">Uploaded Resumes</h4>
+        <div className="space-y-3">
+          {userResumes.map((resume) => (
+            <div 
+              key={resume.resumeId} 
+              className="flex items-center justify-between p-3 bg-white rounded-lg border border-gray-200"
+            >
+              <div className="flex items-center space-x-3">
+                <DocumentIcon className="h-6 w-6 text-gray-500" />
+                <div>
+                  <p className="text-sm font-medium text-gray-700">{resume.originalFileName}</p>
+                  <div className="flex items-center space-x-2 text-xs text-gray-500">
+                    <CalendarIcon className="h-4 w-4" />
+                    <span>{formatDate(resume.uploadDate)}</span>
+                  </div>
+                </div>
+              </div>
+              <button
+                className="text-red-500 ml-4 font-semibold disabled:opacity-50"
+                onClick={() => handleDeleteResume(resume.resumeId)}
+                disabled={isDeletingResume}
+              >
+                <XCircleIcon className="h-6 w-6 text-error-400 hover:text-error-500 transition-colors" />
+              </button>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="mx-auto max-w-4xl rounded-lg bg-[#FBFFFE] p-6">
       <ToastNotification />
@@ -241,6 +334,7 @@ const DocumentSection = () => {
               {isUploading ? 'Uploading...' : 'Upload Resume'}
             </button>
           )}
+          <ResumeList />
         </div>
 
         {/* Certificate Upload Section */}
